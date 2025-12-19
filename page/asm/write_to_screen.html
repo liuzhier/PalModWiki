@@ -1,0 +1,58 @@
+<pre> 
+seg012:003D ; =============== S U B R O U T I N E =======================================
+seg012:003D
+seg012:003D ; Attributes: bp-based frame
+seg012:003D
+seg012:003D proc            write_to_screen far     ; CODE XREF: inventory_Equip+491↑P
+seg012:003D                                         ; select_thurgy+5FA↑P
+seg012:003D                                         ; select_thurgy+60F↑P
+seg012:003D                                         ; sub_494C+F5↑P
+seg012:003D                                         ; select_item_with_filter+5CD↑P
+seg012:003D                                         ; select_item_with_filter+5E2↑P
+seg012:003D                                         ; show_fbp+A9↑P
+seg012:003D                                         ; sub_118F4+3DD↑P
+seg012:003D                                         ; crossFadeOut+134↑P
+seg012:003D                                         ; show_role_status+6A1↑P
+seg012:003D                                         ; begin_scene+52C↑P
+seg012:003D
+seg012:003D arg_0           = dword ptr  6
+seg012:003D
+seg012:003D                 push    bp
+seg012:003E                 mov     bp, sp
+seg012:0040                 push    ds
+seg012:0041                 push    es
+seg012:0042                 push    si
+seg012:0043                 push    di
+seg012:0044                 cld
+seg012:0045                 mov     ax, 0A000h
+seg012:0048                 mov     es, ax
+seg012:004A                 assume es:nothing
+seg012:004A
+seg012:004A loc_2862A:
+seg012:004A                 xor     di, di
+seg012:004C                 lds     si, [bp+arg_0]
+seg012:004F
+seg012:004F loc_2862F:
+seg012:004F                 mov     dx, ds
+seg012:0051                 mov     ax, si
+seg012:0053
+seg012:0053 loc_28633:
+seg012:0053                 shr     ax, 4
+seg012:0056                 add     dx, ax
+seg012:0058
+seg012:0058 loc_28638:
+seg012:0058                 mov     ds, dx
+seg012:005A                 and     si, 0Fh         ; 对齐
+seg012:005D                 mov     cx, 16000
+seg012:0060                 rep movsd
+seg012:0063                 pop     di
+seg012:0064
+seg012:0064 loc_28644:
+seg012:0064                 pop     si
+seg012:0065                 pop     es
+seg012:0066                 assume es:nothing
+seg012:0066                 pop     ds
+seg012:0067                 pop     bp
+seg012:0068                 retf    4
+seg012:0068 endp            write_to_screen
+</pre> 

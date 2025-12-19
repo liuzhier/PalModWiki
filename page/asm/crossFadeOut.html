@@ -1,0 +1,201 @@
+<pre> 
+seg001:8B62 ; =============== S U B R O U T I N E =======================================
+seg001:8B62
+seg001:8B62 ; Attributes: bp-based frame
+seg001:8B62
+seg001:8B62 ; int __stdcall __far crossFadeOut(int, __int32 times)
+seg001:8B62 proc            crossFadeOut far        ; CODE XREF: show_fbp+94↑P
+seg001:8B62                                         ; ClearWithEffect_internal+72↑P
+seg001:8B62
+seg001:8B62 src_offset      = dword ptr -26h
+seg001:8B62 length          = dword ptr -22h
+seg001:8B62 time_counter    = word ptr -1Eh
+seg001:8B62 div6_remain     = word ptr -1Ch
+seg001:8B62 max_times       = word ptr -1Ah
+seg001:8B62 var_18          = dword ptr -18h
+seg001:8B62 src             = byte ptr -14h
+seg001:8B62 times           = dword ptr  6
+seg001:8B62 argu_gap        = word ptr  0Ah
+seg001:8B62
+seg001:8B62                 mov     cx, 14h
+seg001:8B65                 mov     bx, 0
+seg001:8B68                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:8B6D                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:8B70                 xor     bx, bx
+seg001:8B72                 add     bx, [si+0Ah]
+seg001:8B75                 mov     es, [word ptr si+2]
+seg001:8B78                 mov     ax, es
+seg001:8B7A                 mov     [word ptr bp+src], ax
+seg001:8B7D                 mov     [word ptr bp+var_18], 0FFFCh
+seg001:8B82                 mov     [word ptr bp+var_18+2], 0
+seg001:8B87                 lea     bx, [bp+src]
+seg001:8B8A                 push    ds
+seg001:8B8B                 pop     es
+seg001:8B8C                 push    es              ; int
+seg001:8B8D                 push    bx              ; src
+seg001:8B8E                 lea     bx, [bp+var_18]
+seg001:8B91                 push    ds
+seg001:8B92                 pop     es
+seg001:8B93                 push    es
+seg001:8B94                 push    bx              ; length
+seg001:8B95                 mov     bx, offset xms_handle_40K_backup
+seg001:8B98                 push    ds
+seg001:8B99                 pop     es
+seg001:8B9A                 push    es
+seg001:8B9B                 push    bx              ; dst_handle
+seg001:8B9C                 call    XMS_CopyBlockToXMS
+seg001:8BA1                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:8BA4                 xor     bx, bx
+seg001:8BA6                 add     bx, [si+0Ah]
+seg001:8BA9                 mov     es, [word ptr si+2]
+seg001:8BAC                 push    es
+seg001:8BAD                 push    bx
+seg001:8BAE                 call    read_from_screen
+seg001:8BB3                 mov     si, [word ptr bp+times+2]
+seg001:8BB6                 mov     ax, [si]
+seg001:8BB8                 mov     [bp+max_times], ax
+seg001:8BBB                 xor     ax, ax
+seg001:8BBD                 jmp     begin
+seg001:8BC0 ; ---------------------------------------------------------------------------
+seg001:8BC0
+seg001:8BC0 some_loop:                              ; CODE XREF: crossFadeOut+124↓j
+seg001:8BC0                 mov     cx, 6
+seg001:8BC3                 cwd
+seg001:8BC4                 idiv    cx
+seg001:8BC6                 mov     [bp+div6_remain], dx
+seg001:8BC9                 cmp     cx, [bp+time_counter]
+seg001:8BCC                 jg      short desault
+seg001:8BCE                 jmp     becomesame?
+seg001:8BD1 ; ---------------------------------------------------------------------------
+seg001:8BD1
+seg001:8BD1 desault:                                ; CODE XREF: crossFadeOut+6A↑j
+seg001:8BD1                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:8BD4                 xor     bx, bx
+seg001:8BD6                 add     bx, [si+0Ah]
+seg001:8BD9                 mov     es, [word ptr si+2]
+seg001:8BDC                 push    es
+seg001:8BDD                 push    bx              ; src
+seg001:8BDE                 mov     si, offset DDIM_screen_buf
+seg001:8BE1                 xor     bx, bx
+seg001:8BE3                 add     bx, [si+0Ah]
+seg001:8BE6                 mov     es, [word ptr si+2]
+seg001:8BE9                 push    es
+seg001:8BEA                 push    bx              ; dst
+seg001:8BEB                 mov     bx, [word ptr bp+times]
+seg001:8BEE                 push    ds
+seg001:8BEF                 pop     es
+seg001:8BF0                 push    es
+seg001:8BF1                 push    bx              ; times
+seg001:8BF2                 mov     bx, [bp+div6_remain]
+seg001:8BF5                 shl     bx, 1
+seg001:8BF7                 mov     si, offset DDIM_fadegap_031524
+seg001:8BFA                 add     bx, [si+0Ah]
+seg001:8BFD                 mov     es, [word ptr si+2]
+seg001:8C00                 push    es
+seg001:8C01                 push    bx              ; gap
+seg001:8C02                 call    crossFade_assimilate
+seg001:8C07                 jmp     next
+seg001:8C0A ; ---------------------------------------------------------------------------
+seg001:8C0A
+seg001:8C0A becomesame?:                            ; CODE XREF: crossFadeOut+6C↑j
+seg001:8C0A                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:8C0D                 xor     bx, bx
+seg001:8C0F                 add     bx, [si+0Ah]
+seg001:8C12                 mov     es, [word ptr si+2]
+seg001:8C15                 push    es
+seg001:8C16                 push    bx              ; src
+seg001:8C17                 mov     si, offset DDIM_screen_buf
+seg001:8C1A                 xor     bx, bx
+seg001:8C1C                 add     bx, [si+0Ah]
+seg001:8C1F                 mov     es, [word ptr si+2]
+seg001:8C22                 push    es
+seg001:8C23                 push    bx              ; dst
+seg001:8C24                 mov     bx, [word ptr bp+times]
+seg001:8C27                 push    ds
+seg001:8C28                 pop     es
+seg001:8C29                 push    es
+seg001:8C2A                 push    bx              ; times
+seg001:8C2B                 mov     bx, [bp+div6_remain]
+seg001:8C2E                 shl     bx, 1
+seg001:8C30                 mov     si, offset DDIM_fadegap_031524
+seg001:8C33                 add     bx, [si+0Ah]
+seg001:8C36                 mov     es, [word ptr si+2]
+seg001:8C39                 push    es
+seg001:8C3A                 push    bx              ; gap
+seg001:8C3B                 call    crossFade_desalt
+seg001:8C40
+seg001:8C40 next:                                   ; CODE XREF: crossFadeOut+A5↑j
+seg001:8C40                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:8C43                 xor     bx, bx
+seg001:8C45                 add     bx, [si+0Ah]
+seg001:8C48                 mov     es, [word ptr si+2]
+seg001:8C4B                 push    es
+seg001:8C4C                 push    bx
+seg001:8C4D                 mov     bx, [bp+div6_remain]
+seg001:8C50                 shl     bx, 1
+seg001:8C52                 mov     si, offset DDIM_fadegap_031524
+seg001:8C55                 add     bx, [si+0Ah]
+seg001:8C58                 mov     es, [word ptr si+2]
+seg001:8C5B                 push    es
+seg001:8C5C                 push    bx
+seg001:8C5D                 mov     bx, [word ptr bp+times]
+seg001:8C60                 push    ds
+seg001:8C61                 pop     es
+seg001:8C62                 push    es
+seg001:8C63                 push    bx
+seg001:8C64                 call    crossFade_F?
+seg001:8C69                 mov     bx, [bp+argu_gap]
+seg001:8C6C                 push    ds
+seg001:8C6D                 pop     es
+seg001:8C6E                 push    es              ; int
+seg001:8C6F                 push    bx              ; delay_time
+seg001:8C70                 call    delay_centisecond
+seg001:8C75                 call    ShakeScreen
+seg001:8C7A                 mov     ax, [bp+time_counter]
+seg001:8C7D                 inc     ax
+seg001:8C7E
+seg001:8C7E begin:                                  ; CODE XREF: crossFadeOut+5B↑j
+seg001:8C7E                 mov     [bp+time_counter], ax
+seg001:8C81                 cmp     ax, [bp+max_times]
+seg001:8C84                 jg      short loopend
+seg001:8C86                 jmp     some_loop
+seg001:8C89 ; ---------------------------------------------------------------------------
+seg001:8C89
+seg001:8C89 loopend:                                ; CODE XREF: crossFadeOut+122↑j
+seg001:8C89                 mov     si, offset DDIM_screen_buf
+seg001:8C8C                 xor     bx, bx
+seg001:8C8E                 add     bx, [si+0Ah]
+seg001:8C91                 mov     es, [word ptr si+2]
+seg001:8C94                 push    es
+seg001:8C95                 push    bx
+seg001:8C96                 call    write_to_screen
+seg001:8C9B                 mov     [word ptr bp+length], 0FFFCh
+seg001:8CA0                 mov     [word ptr bp+length+2], 0
+seg001:8CA5                 mov     [word ptr bp+src_offset], 0
+seg001:8CAA                 mov     [word ptr bp+src_offset+2], 0
+seg001:8CAF                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:8CB2                 xor     bx, bx
+seg001:8CB4                 add     bx, [si+0Ah]
+seg001:8CB7                 mov     es, [word ptr si+2]
+seg001:8CBA                 push    es              ; int
+seg001:8CBB                 push    bx              ; dst_offset
+seg001:8CBC                 lea     bx, [bp+length]
+seg001:8CBF                 push    ds
+seg001:8CC0                 pop     es
+seg001:8CC1                 push    es
+seg001:8CC2                 push    bx              ; length
+seg001:8CC3                 mov     bx, offset xms_handle_40K_backup
+seg001:8CC6                 push    ds
+seg001:8CC7                 pop     es
+seg001:8CC8                 push    es
+seg001:8CC9                 push    bx              ; src_handle
+seg001:8CCA                 lea     bx, [bp+src_offset]
+seg001:8CCD                 push    ds
+seg001:8CCE                 pop     es
+seg001:8CCF                 push    es
+seg001:8CD0                 push    bx              ; src_offset
+seg001:8CD1                 call    XMS_CopyBlockFromXMS_toAddr
+seg001:8CD6                 call    B$EXSA          ; clear frame state info
+seg001:8CDB                 retf    6
+seg001:8CDB endp            crossFadeOut
+</pre> 

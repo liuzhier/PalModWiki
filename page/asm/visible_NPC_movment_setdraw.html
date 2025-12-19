@@ -1,0 +1,211 @@
+<pre> 
+seg001:DC9D ; =============== S U B R O U T I N E =======================================
+seg001:DC9D
+seg001:DC9D ; Attributes: bp-based frame
+seg001:DC9D
+seg001:DC9D proc            visible_NPC_movment_setdraw far
+seg001:DC9D                                         ; CODE XREF: real_entry+DD7↑P
+seg001:DC9D                                         ; redraw_everything+5B↑P
+seg001:DC9D
+seg001:DC9D var_24          = word ptr -24h
+seg001:DC9D a_switch        = word ptr -22h
+seg001:DC9D prev_frames     = word ptr -20h
+seg001:DC9D evtobj_id       = word ptr -1Eh
+seg001:DC9D frame           = word ptr -1Ch
+seg001:DC9D layer           = word ptr -1Ah
+seg001:DC9D y               = word ptr -18h
+seg001:DC9D x               = word ptr -16h
+seg001:DC9D evtobjs         = word ptr -14h
+seg001:DC9D
+seg001:DC9D                 mov     cx, 12h
+seg001:DCA0                 mov     bx, 0
+seg001:DCA3                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:DCA8                 mov     ax, [ds:evt_objs_curr_scene]
+seg001:DCAB                 mov     [bp+evtobjs], ax
+seg001:DCAE                 mov     ax, 1
+seg001:DCB1                 jmp     begin
+seg001:DCB4 ; ---------------------------------------------------------------------------
+seg001:DCB4
+seg001:DCB4 evt_obj_loop:                           ; CODE XREF: visible_NPC_movment_setdraw+183↓j
+seg001:DCB4                 shl     ax, 1
+seg001:DCB6                 shl     ax, 1
+seg001:DCB8                 shl     ax, 1
+seg001:DCBA                 shl     ax, 1
+seg001:DCBC                 shl     ax, 1
+seg001:DCBE                 mov     bx, ax
+seg001:DCC0                 mov     si, offset DDIM_evt_obj_curr_scene
+seg001:DCC3                 add     bx, [si+0Ah]
+seg001:DCC6                 mov     es, [word ptr si+2]
+seg001:DCC9                 add     bx, event_object.obj_status ; 触发状态
+seg001:DCCC                 cmp     [word ptr es:bx], 0
+seg001:DCD0                 jg      short next
+seg001:DCD2                 jmp     continue
+seg001:DCD5 ; ---------------------------------------------------------------------------
+seg001:DCD5
+seg001:DCD5 next:                                   ; CODE XREF: visible_NPC_movment_setdraw+33↑j
+seg001:DCD5                 mov     bx, ax
+seg001:DCD7                 add     bx, [si+0Ah]
+seg001:DCDA                 mov     es, [word ptr si+2]
+seg001:DCDD                 add     bx, event_object.pos_x
+seg001:DCE0                 mov     cx, [es:bx]
+seg001:DCE3                 sub     cx, [ds:RPG_viewport_x]
+seg001:DCE7                 mov     [bp+x], cx
+seg001:DCEA                 mov     bx, ax
+seg001:DCEC                 add     bx, [si+0Ah]
+seg001:DCEF                 mov     es, [word ptr si+2]
+seg001:DCF2                 add     bx, event_object.pos_y
+seg001:DCF5                 mov     dx, [es:bx]
+seg001:DCF8                 sub     dx, [ds:RPG_viewport_y]
+seg001:DCFC                 mov     [bp+y], dx
+seg001:DCFF                 mov     bx, ax
+seg001:DD01                 add     bx, [si+0Ah]
+seg001:DD04                 mov     es, [word ptr si+2]
+seg001:DD07                 add     bx, event_object.layer
+seg001:DD0A                 mov     bx, [es:bx]
+seg001:DD0D                 shl     bx, 1
+seg001:DD0F                 shl     bx, 1
+seg001:DD11                 shl     bx, 1
+seg001:DD13                 mov     [bp+layer], bx
+seg001:DD16                 cmp     cx, 0FFC0h
+seg001:DD19                 jge     short next2
+seg001:DD1B                 jmp     continue
+seg001:DD1E ; ---------------------------------------------------------------------------
+seg001:DD1E
+seg001:DD1E next2:                                  ; CODE XREF: visible_NPC_movment_setdraw+7C↑j
+seg001:DD1E                 or      dx, dx
+seg001:DD20                 jge     short next3
+seg001:DD22                 jmp     continue
+seg001:DD25 ; ---------------------------------------------------------------------------
+seg001:DD25
+seg001:DD25 next3:                                  ; CODE XREF: visible_NPC_movment_setdraw+83↑j
+seg001:DD25                 cmp     cx, 180h
+seg001:DD29                 jle     short next4
+seg001:DD2B                 jmp     continue
+seg001:DD2E ; ---------------------------------------------------------------------------
+seg001:DD2E
+seg001:DD2E next4:                                  ; CODE XREF: visible_NPC_movment_setdraw+8C↑j
+seg001:DD2E                 cmp     dx, 148h
+seg001:DD32                 jle     short next5
+seg001:DD34                 jmp     continue
+seg001:DD37 ; ---------------------------------------------------------------------------
+seg001:DD37
+seg001:DD37 next5:                                  ; CODE XREF: visible_NPC_movment_setdraw+95↑j
+seg001:DD37                 mov     bx, ax          ; -40h<x_diff<180h,0<y_diff<148h
+seg001:DD39                 add     bx, [si+DDIM.offset]
+seg001:DD3C                 mov     es, [si+DDIM.header.segment]
+seg001:DD3F                 add     bx, event_object.curr_frame
+seg001:DD42                 mov     cx, [es:bx]
+seg001:DD45                 mov     [bp+frame], cx
+seg001:DD48                 mov     bx, ax
+seg001:DD4A                 add     bx, [si+DDIM.offset]
+seg001:DD4D                 mov     es, [si+DDIM.header.segment]
+seg001:DD50                 add     bx, event_object.frames
+seg001:DD53                 cmp     [word ptr es:bx], 3
+seg001:DD57                 jz      short next6
+seg001:DD59                 jmp     dyn_parm_not_3
+seg001:DD5C ; ---------------------------------------------------------------------------
+seg001:DD5C
+seg001:DD5C next6:                                  ; CODE XREF: visible_NPC_movment_setdraw+BA↑j
+seg001:DD5C                 cmp     cx, 2
+seg001:DD5F                 jnz     short step_not_2
+seg001:DD61                 mov     [bp+frame], 0
+seg001:DD66
+seg001:DD66 step_not_2:                             ; CODE XREF: visible_NPC_movment_setdraw+C2↑j
+seg001:DD66                 cmp     [bp+frame], 3
+seg001:DD6A                 jnz     short step_not_3
+seg001:DD6C                 mov     [bp+frame], 2
+seg001:DD71
+seg001:DD71 step_not_3:                             ; CODE XREF: visible_NPC_movment_setdraw+CD↑j
+seg001:DD71                 mov     bx, [bp+evtobj_id]
+seg001:DD74                 shl     bx, 1
+seg001:DD76                 shl     bx, 1
+seg001:DD78                 shl     bx, 1
+seg001:DD7A                 shl     bx, 1
+seg001:DD7C                 shl     bx, 1
+seg001:DD7E                 mov     si, offset DDIM_evt_obj_curr_scene
+seg001:DD81                 add     bx, [si+0Ah]
+seg001:DD84                 mov     es, [word ptr si+2]
+seg001:DD87                 add     bx, event_object.direction
+seg001:DD8A                 mov     ax, [es:bx]     ; direction?
+seg001:DD8D                 mov     cx, 3
+seg001:DD90                 imul    cx
+seg001:DD92                 mov     [bp+prev_frames], ax
+seg001:DD95                 jmp     next7
+seg001:DD98 ; ---------------------------------------------------------------------------
+seg001:DD98
+seg001:DD98 dyn_parm_not_3:                         ; CODE XREF: visible_NPC_movment_setdraw+BC↑j
+seg001:DD98                 mov     bx, [bp+evtobj_id]
+seg001:DD9B                 shl     bx, 1
+seg001:DD9D                 shl     bx, 1
+seg001:DD9F                 shl     bx, 1
+seg001:DDA1                 shl     bx, 1
+seg001:DDA3                 shl     bx, 1
+seg001:DDA5                 mov     si, offset DDIM_evt_obj_curr_scene
+seg001:DDA8                 mov     dx, bx
+seg001:DDAA                 add     bx, [si+0Ah]
+seg001:DDAD                 mov     es, [word ptr si+2]
+seg001:DDB0                 add     bx, event_object.direction
+seg001:DDB3                 mov     ax, [es:bx]
+seg001:DDB6                 mov     bx, dx
+seg001:DDB8                 add     bx, [si+0Ah]
+seg001:DDBB                 mov     es, [word ptr si+2]
+seg001:DDBE                 add     bx, event_object.frames
+seg001:DDC1                 imul    [word ptr es:bx]
+seg001:DDC4                 mov     [bp+prev_frames], ax
+seg001:DDC7
+seg001:DDC7 next7:                                  ; CODE XREF: visible_NPC_movment_setdraw+F8↑j
+seg001:DDC7                 mov     bx, [bp+evtobj_id]
+seg001:DDCA                 shl     bx, 1
+seg001:DDCC                 shl     bx, 1
+seg001:DDCE                 shl     bx, 1
+seg001:DDD0                 shl     bx, 1
+seg001:DDD2                 shl     bx, 1
+seg001:DDD4                 mov     si, offset DDIM_evt_obj_curr_scene
+seg001:DDD7                 add     bx, [si+0Ah]
+seg001:DDDA                 mov     es, [word ptr si+2]
+seg001:DDDD                 add     bx, event_object.image
+seg001:DDE0                 cmp     [word ptr es:bx], 0
+seg001:DDE4                 jg      short has_event_icon
+seg001:DDE6                 jmp     continue
+seg001:DDE9 ; ---------------------------------------------------------------------------
+seg001:DDE9
+seg001:DDE9 has_event_icon:                         ; CODE XREF: visible_NPC_movment_setdraw+147↑j
+seg001:DDE9                 mov     ax, [bp+frame]
+seg001:DDEC                 add     ax, [bp+prev_frames]
+seg001:DDEF                 mov     [bp+a_switch], ax
+seg001:DDF2                 mov     [bp+var_24], 1
+seg001:DDF7                 lea     ax, [bp+x]
+seg001:DDFA                 push    ax              ; a_y
+seg001:DDFB                 lea     ax, [bp+y]
+seg001:DDFE                 push    ax              ; a_layer
+seg001:DDFF                 lea     ax, [bp+layer]
+seg001:DE02                 push    ax              ; a_no
+seg001:DE03                 lea     ax, [bp+evtobj_id]
+seg001:DE06                 push    ax              ; a_frame
+seg001:DE07                 lea     ax, [bp+a_switch]
+seg001:DE0A                 push    ax              ; a_switch
+seg001:DE0B                 lea     ax, [bp+var_24]
+seg001:DE0E                 push    ax              ; int
+seg001:DE0F                 call    set_draw_sprite_calc_envelop
+seg001:DE14
+seg001:DE14 continue:                               ; CODE XREF: visible_NPC_movment_setdraw+35↑j
+seg001:DE14                                         ; visible_NPC_movment_setdraw+7E↑j
+seg001:DE14                                         ; visible_NPC_movment_setdraw+85↑j
+seg001:DE14                                         ; visible_NPC_movment_setdraw+8E↑j
+seg001:DE14                                         ; visible_NPC_movment_setdraw+97↑j
+seg001:DE14                                         ; visible_NPC_movment_setdraw+149↑j
+seg001:DE14                 mov     ax, [bp+evtobj_id]
+seg001:DE17                 inc     ax
+seg001:DE18
+seg001:DE18 begin:                                  ; CODE XREF: visible_NPC_movment_setdraw+14↑j
+seg001:DE18                 mov     [bp+evtobj_id], ax
+seg001:DE1B                 cmp     ax, [bp+evtobjs]
+seg001:DE1E                 jg      short return
+seg001:DE20                 jmp     evt_obj_loop
+seg001:DE23 ; ---------------------------------------------------------------------------
+seg001:DE23
+seg001:DE23 return:                                 ; CODE XREF: visible_NPC_movment_setdraw+181↑j
+seg001:DE23                 call    B$EXSA          ; clear frame state info
+seg001:DE28                 retf    0
+seg001:DE28 endp            visible_NPC_movment_setdraw
+</pre> 

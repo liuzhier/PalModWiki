@@ -1,0 +1,169 @@
+<pre> 
+seg000:CF98 ; =============== S U B R O U T I N E =======================================
+seg000:CF98
+seg000:CF98 ; Attributes: bp-based frame
+seg000:CF98
+seg000:CF98 proc            Redraw_Tiles_or_Fade_to_pic far
+seg000:CF98                                         ; CODE XREF: real_entry:loc_E0C↑P
+seg000:CF98                                         ; redraw_everything+65↓P
+seg000:CF98                                         ; FadeInPic_imp:loc_1B7F0↓P
+seg000:CF98
+seg000:CF98 gap_indexer     = word ptr -18h
+seg000:CF98 times           = word ptr -16h
+seg000:CF98 fade_times      = word ptr -14h
+seg000:CF98
+seg000:CF98                 mov     cx, 6
+seg000:CF9B                 mov     bx, 0
+seg000:CF9E                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg000:CFA3                 cmp     [ds:redraw_flag], 0 ; 0:生成,1:停工,2:淡入gop暂存屏
+seg000:CFA8                 jz      short redraw
+seg000:CFAA                 jmp     way?
+seg000:CFAD ; ---------------------------------------------------------------------------
+seg000:CFAD
+seg000:CFAD redraw:                                 ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+10↑j
+seg000:CFAD                 mov     bx, offset RPG_viewport_x
+seg000:CFB0                 push    ds
+seg000:CFB1                 pop     es
+seg000:CFB2                 push    es
+seg000:CFB3                 push    bx
+seg000:CFB4                 mov     bx, offset RPG_viewport_y
+seg000:CFB7                 push    ds
+seg000:CFB8                 pop     es
+seg000:CFB9                 push    es
+seg000:CFBA                 push    bx
+seg000:CFBB                 mov     si, offset DDIM_buf_glb_map
+seg000:CFBE                 xor     bx, bx
+seg000:CFC0                 add     bx, [si+0Ah]
+seg000:CFC3                 mov     es, [word ptr si+2]
+seg000:CFC6                 push    es
+seg000:CFC7                 push    bx
+seg000:CFC8                 mov     si, offset DDIM_buf_glb_1_redraw
+seg000:CFCB                 xor     bx, bx
+seg000:CFCD                 add     bx, [si+0Ah]
+seg000:CFD0                 mov     es, [word ptr si+2]
+seg000:CFD3                 push    es
+seg000:CFD4                 push    bx
+seg000:CFD5                 mov     si, offset DDIM_buf_glb_gop_or_FADEmap
+seg000:CFD8                 xor     bx, bx
+seg000:CFDA                 add     bx, [si+0Ah]
+seg000:CFDD                 mov     es, [word ptr si+2]
+seg000:CFE0                 push    es
+seg000:CFE1                 push    bx
+seg000:CFE2                 call    add_bricks_to_draw_array
+seg000:CFE7                 jmp     return
+seg000:CFEA ; ---------------------------------------------------------------------------
+seg000:CFEA
+seg000:CFEA way?:                                   ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+12↑j
+seg000:CFEA                 cmp     [ds:redraw_flag], 2 ; 0:生成,1:停工,2:淡入gop暂存屏
+seg000:CFEF                 jz      short yes_fadein
+seg000:CFF1                 jmp     return
+seg000:CFF4 ; ---------------------------------------------------------------------------
+seg000:CFF4
+seg000:CFF4 yes_fadein:                             ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+57↑j
+seg000:CFF4                 cmp     [ds:fade_div], 0
+seg000:CFF9                 jg      short valid_diving
+seg000:CFFB                 mov     [ds:fade_div], 1
+seg000:D001
+seg000:D001 valid_diving:                           ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+61↑j
+seg000:D001                 mov     ax, [ds:Fade_timing]
+seg000:D004                 cwd
+seg000:D005                 idiv    [ds:fade_div]
+seg000:D009                 or      dx, dx
+seg000:D00B                 jz      short loc_D010
+seg000:D00D                 jmp     wait_for_next
+seg000:D010 ; ---------------------------------------------------------------------------
+seg000:D010
+seg000:D010 loc_D010:                               ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+73↑j
+seg000:D010                 mov     ax, [ds:Fade_timing]
+seg000:D013                 cwd
+seg000:D014                 idiv    [ds:fade_div]
+seg000:D018                 mov     [bp+fade_times], ax
+seg000:D01B                 cmp     ax, 60h
+seg000:D01E                 jl      short loc_D023
+seg000:D020                 jmp     nexttime_norebuild_nopink
+seg000:D023 ; ---------------------------------------------------------------------------
+seg000:D023
+seg000:D023 loc_D023:                               ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+86↑j
+seg000:D023                 mov     [bp+times], 29ACh
+seg000:D028                 mov     cx, 6
+seg000:D02B                 cwd
+seg000:D02C                 idiv    cx
+seg000:D02E                 mov     [bp+gap_indexer], dx
+seg000:D031                 cmp     cx, [bp+fade_times]
+seg000:D034                 jg      short assimilate
+seg000:D036                 jmp     desalt
+seg000:D039 ; ---------------------------------------------------------------------------
+seg000:D039
+seg000:D039 assimilate:                             ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+9C↑j
+seg000:D039                 mov     si, offset DDIM_screen_buf
+seg000:D03C                 xor     bx, bx
+seg000:D03E                 add     bx, [si+0Ah]
+seg000:D041                 mov     es, [word ptr si+2]
+seg000:D044                 push    es
+seg000:D045                 push    bx              ; src
+seg000:D046                 mov     si, offset DDIM_buf_glb_gop_or_FADEmap
+seg000:D049                 xor     bx, bx
+seg000:D04B                 add     bx, [si+0Ah]
+seg000:D04E                 mov     es, [word ptr si+2]
+seg000:D051                 push    es
+seg000:D052                 push    bx              ; dst
+seg000:D053                 lea     bx, [bp+times]
+seg000:D056                 push    ds
+seg000:D057                 pop     es
+seg000:D058                 push    es
+seg000:D059                 push    bx              ; times
+seg000:D05A                 mov     bx, [bp+gap_indexer]
+seg000:D05D                 shl     bx, 1
+seg000:D05F                 mov     si, offset DDIM_fadegap_031524
+seg000:D062                 add     bx, [si+0Ah]
+seg000:D065                 mov     es, [word ptr si+2]
+seg000:D068                 push    es
+seg000:D069                 push    bx              ; gap
+seg000:D06A                 call    crossFade_assimilate
+seg000:D06F                 jmp     next
+seg000:D072 ; ---------------------------------------------------------------------------
+seg000:D072
+seg000:D072 desalt:                                 ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+9E↑j
+seg000:D072                 mov     si, offset DDIM_screen_buf
+seg000:D075                 xor     bx, bx
+seg000:D077                 add     bx, [si+0Ah]
+seg000:D07A                 mov     es, [word ptr si+2]
+seg000:D07D                 push    es
+seg000:D07E                 push    bx              ; src
+seg000:D07F                 mov     si, offset DDIM_buf_glb_gop_or_FADEmap
+seg000:D082                 xor     bx, bx
+seg000:D084                 add     bx, [si+0Ah]
+seg000:D087                 mov     es, [word ptr si+2]
+seg000:D08A                 push    es
+seg000:D08B                 push    bx              ; dst
+seg000:D08C                 lea     bx, [bp+times]
+seg000:D08F                 push    ds
+seg000:D090                 pop     es
+seg000:D091                 push    es
+seg000:D092                 push    bx              ; times
+seg000:D093                 mov     bx, [bp+gap_indexer]
+seg000:D096                 shl     bx, 1
+seg000:D098                 mov     si, offset DDIM_fadegap_031524
+seg000:D09B                 add     bx, [si+0Ah]
+seg000:D09E                 mov     es, [word ptr si+2]
+seg000:D0A1                 push    es
+seg000:D0A2                 push    bx              ; gap
+seg000:D0A3                 call    crossFade_desalt
+seg000:D0A8
+seg000:D0A8 next:                                   ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+D7↑j
+seg000:D0A8                 jmp     wait_for_next
+seg000:D0AB ; ---------------------------------------------------------------------------
+seg000:D0AB
+seg000:D0AB nexttime_norebuild_nopink:              ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+88↑j
+seg000:D0AB                 mov     [ds:redraw_flag], 1 ; 0:生成,1:停工,2:淡入gop暂存屏
+seg000:D0B1
+seg000:D0B1 wait_for_next:                          ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+75↑j
+seg000:D0B1                                         ; Redraw_Tiles_or_Fade_to_pic:next↑j
+seg000:D0B1                 inc     [ds:Fade_timing]
+seg000:D0B5
+seg000:D0B5 return:                                 ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+4F↑j
+seg000:D0B5                                         ; Redraw_Tiles_or_Fade_to_pic+59↑j
+seg000:D0B5                 call    B$EXSA          ; clear frame state info
+seg000:D0BA                 retf    0
+seg000:D0BA endp            Redraw_Tiles_or_Fade_to_pic
+</pre> 

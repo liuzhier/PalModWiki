@@ -1,0 +1,150 @@
+<pre> 
+seg009:01F1 ; =============== S U B R O U T I N E =======================================
+seg009:01F1
+seg009:01F1 ; Attributes: bp-based frame
+seg009:01F1
+seg009:01F1 proc            crossFade_F? far        ; CODE XREF: crossFadeOut+102↑P
+seg009:01F1
+seg009:01F1 arg_0           = dword ptr  6
+seg009:01F1 arg_4           = dword ptr  0Ah
+seg009:01F1 arg_8           = dword ptr  0Eh
+seg009:01F1
+seg009:01F1                 push    bp
+seg009:01F2                 mov     bp, sp
+seg009:01F4                 push    ds
+seg009:01F5                 cld
+seg009:01F6                 mov     ax, 0A000h
+seg009:01F9                 mov     es, ax
+seg009:01FB                 assume es:nothing
+seg009:01FB                 lds     si, [bp+arg_4]
+seg009:01FE                 mov     di, [si]
+seg009:0200                 lds     si, [bp+arg_0]
+seg009:0203                 mov     cx, [si]
+seg009:0205                 lds     si, [bp+arg_8]
+seg009:0208                 add     si, di
+seg009:020A                 mov     dx, 6
+seg009:020D                 shr     cx, 4
+seg009:0210
+seg009:0210 loc_28410:                              ; CODE XREF: crossFade_F?:loc_284A4↓j
+seg009:0210                 mov     al, [si]
+seg009:0212                 mov     [es:di], al
+seg009:0215                 add     si, dx
+seg009:0217                 add     di, dx
+seg009:0219                 mov     al, [si]
+seg009:021B                 mov     [es:di], al
+seg009:021E                 add     si, dx
+seg009:0220                 add     di, dx
+seg009:0222                 mov     al, [si]
+seg009:0224                 mov     [es:di], al
+seg009:0227                 add     si, dx
+seg009:0229                 add     di, dx
+seg009:022B
+seg009:022B loc_2842B:
+seg009:022B                 mov     al, [si]
+seg009:022D                 mov     [es:di], al
+seg009:0230                 add     si, dx
+seg009:0232                 add     di, dx
+seg009:0234                 mov     al, [si]
+seg009:0236
+seg009:0236 loc_28436:
+seg009:0236                 mov     [es:di], al
+seg009:0239                 add     si, dx
+seg009:023B                 add     di, dx
+seg009:023D                 mov     al, [si]
+seg009:023F                 mov     [es:di], al
+seg009:0242                 add     si, dx
+seg009:0244                 add     di, dx
+seg009:0246                 mov     al, [si]
+seg009:0248                 mov     [es:di], al
+seg009:024B                 add     si, dx
+seg009:024D
+seg009:024D loc_2844D:
+seg009:024D                 add     di, dx
+seg009:024F                 mov     al, [si]
+seg009:0251
+seg009:0251 loc_28451:
+seg009:0251                 mov     [es:di], al
+seg009:0254
+seg009:0254 loc_28454:
+seg009:0254                 add     si, dx
+seg009:0256                 add     di, dx
+seg009:0258                 mov     al, [si]
+seg009:025A                 mov     [es:di], al
+seg009:025D                 add     si, dx
+seg009:025F
+seg009:025F loc_2845F:
+seg009:025F                 add     di, dx
+seg009:0261                 mov     al, [si]
+seg009:0263
+seg009:0263 loc_28463:
+seg009:0263                 mov     [es:di], al
+seg009:0266
+seg009:0266 loc_28466:
+seg009:0266                 add     si, dx
+seg009:0268
+seg009:0268 loc_28468:
+seg009:0268                 add     di, dx
+seg009:026A
+seg009:026A loc_2846A:
+seg009:026A                 mov     al, [si]
+seg009:026C                 mov     [es:di], al
+seg009:026F
+seg009:026F loc_2846F:
+seg009:026F                 add     si, dx
+seg009:0271
+seg009:0271 loc_28471:
+seg009:0271                 add     di, dx
+seg009:0273                 mov     al, [si]
+seg009:0275                 mov     [es:di], al
+seg009:0278                 add     si, dx
+seg009:027A                 add     di, dx
+seg009:027C
+seg009:027C loc_2847C:
+seg009:027C                 mov     al, [si]
+seg009:027E
+seg009:027E loc_2847E:
+seg009:027E                 mov     [es:di], al
+seg009:0281
+seg009:0281 loc_28481:
+seg009:0281                 add     si, dx
+seg009:0283
+seg009:0283 loc_28483:
+seg009:0283                 add     di, dx
+seg009:0285
+seg009:0285 loc_28485:
+seg009:0285                 mov     al, [si]
+seg009:0287
+seg009:0287 loc_28487:
+seg009:0287                 mov     [es:di], al
+seg009:028A                 add     si, dx
+seg009:028C                 add     di, dx
+seg009:028E                 mov     al, [si]
+seg009:0290                 mov     [es:di], al
+seg009:0293                 add     si, dx
+seg009:0295                 add     di, dx
+seg009:0297                 mov     al, [si]
+seg009:0299                 mov     [es:di], al
+seg009:029C                 add     si, dx
+seg009:029E                 add     di, dx
+seg009:02A0
+seg009:02A0 loc_284A0:
+seg009:02A0                 loop    loc_284A4
+seg009:02A2
+seg009:02A2 loc_284A2:
+seg009:02A2                 jmp     short loc_284A7
+seg009:02A4 ; ---------------------------------------------------------------------------
+seg009:02A4
+seg009:02A4 loc_284A4:                              ; CODE XREF: crossFade_F?:loc_284A0↑j
+seg009:02A4                 jmp     loc_28410
+seg009:02A7 ; ---------------------------------------------------------------------------
+seg009:02A7
+seg009:02A7 loc_284A7:                              ; CODE XREF: crossFade_F?:loc_284A2↑j
+seg009:02A7                 pop     ds
+seg009:02A8
+seg009:02A8 loc_284A8:
+seg009:02A8                 pop     bp
+seg009:02A9
+seg009:02A9 locret_284A9:
+seg009:02A9                 retf    0Ch
+seg009:02A9 endp            crossFade_F?
+</pre> 

@@ -1,0 +1,76 @@
+<pre> 
+seg019:000E ; =============== S U B R O U T I N E =======================================
+seg019:000E
+seg019:000E ; Attributes: bp-based frame
+seg019:000E
+seg019:000E ; int __stdcall __far clear_DDIM(__int32 bytes, char ptr, int)
+seg019:000E proc            clear_DDIM far          ; CODE XREF: real_entry+DC5↑P
+seg019:000E                                         ; enemy_magical_attack+632↑P
+seg019:000E                                         ; enemy_phisical_attack_role+24↑P
+seg019:000E                                         ; select_thurgy+2C↑P
+seg019:000E                                         ; select_item_with_filter+5E↑P
+seg019:000E                                         ; process_Battle+47C↑P
+seg019:000E                                         ; process_Battle+5B8↑P
+seg019:000E                                         ; process_Battle+827↑P
+seg019:000E                                         ; process_Battle+392E↑P
+seg019:000E                                         ; process_Battle+3CDC↑P
+seg019:000E                                         ; process_Battle+3CFC↑P
+seg019:000E                                         ; process_Battle+3D1C↑P
+seg019:000E                                         ; process_Battle+3D3C↑P
+seg019:000E                                         ; process_Battle+3D5C↑P
+seg019:000E                                         ; process_Battle+3D7C↑P ...
+seg019:000E
+seg019:000E bytes           = dword ptr  6
+seg019:000E ptr             = byte ptr  0Ah
+seg019:000E
+seg019:000E                 push    bp
+seg019:000F
+seg019:000F loc_2B09F:
+seg019:000F                 mov     bp, sp
+seg019:0011                 push    ds
+seg019:0012
+seg019:0012 loc_2B0A2:
+seg019:0012                 push    es
+seg019:0013
+seg019:0013 loc_2B0A3:
+seg019:0013                 push    si
+seg019:0014
+seg019:0014 loc_2B0A4:
+seg019:0014                 push    di
+seg019:0015
+seg019:0015 loc_2B0A5:
+seg019:0015                 lds     si, [bp+bytes]
+seg019:0018
+seg019:0018 loc_2B0A8:
+seg019:0018                 mov     cx, [si]
+seg019:001A
+seg019:001A loc_2B0AA:
+seg019:001A                 les     di, [dword ptr bp+ptr]
+seg019:001D
+seg019:001D loc_2B0AD:
+seg019:001D                 xor     eax, eax
+seg019:0020
+seg019:0020 loc_2B0B0:
+seg019:0020                 cld
+seg019:0021
+seg019:0021 loc_2B0B1:
+seg019:0021                 shr     cx, 1
+seg019:0023
+seg019:0023 loc_2B0B3:
+seg019:0023                 rep stosd
+seg019:0026
+seg019:0026 loc_2B0B6:
+seg019:0026                 adc     cx, cx
+seg019:0028
+seg019:0028 loc_2B0B8:
+seg019:0028                 rep stosw
+seg019:002A                 pop     di
+seg019:002B                 pop     si
+seg019:002C
+seg019:002C loc_2B0BC:
+seg019:002C                 pop     es
+seg019:002D                 pop     ds
+seg019:002E                 pop     bp
+seg019:002F                 retf    8
+seg019:002F endp            clear_DDIM
+</pre> 

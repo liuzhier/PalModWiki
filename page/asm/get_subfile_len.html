@@ -1,0 +1,93 @@
+<pre> 
+seg000:8F56 ; =============== S U B R O U T I N E =======================================
+seg000:8F56
+seg000:8F56 ; Attributes: bp-based frame
+seg000:8F56
+seg000:8F56 proc            get_subfile_len far     ; CODE XREF: get_scene_map_source+EF↓P
+seg000:8F56                                         ; read_mgo_subfile_to_glb_1+11↓P
+seg000:8F56                                         ; load_enemy_pic_pos+BA↓P
+seg000:8F56                                         ; Read_subfile_to_glb_1+2B↓P
+seg000:8F56                                         ; deyj1_makesub_f_to_glb_5+11↓P
+seg000:8F56                                         ; rix_load?+57↓P
+seg000:8F56                                         ; rix_load?+CF↓P
+seg000:8F56                                         ; setMovie_impl+2F↓P
+seg000:8F56                                         ; get_movie_to_xms+11↓P
+seg000:8F56
+seg000:8F56 var_1E          = word ptr -1Eh
+seg000:8F56 var_1C          = word ptr -1Ch
+seg000:8F56 bytes           = dword ptr -1Ah
+seg000:8F56 offset          = dword ptr -16h
+seg000:8F56 arg_2           = word ptr  6
+seg000:8F56 file_handle     = byte ptr  8
+seg000:8F56
+seg000:8F56                 mov     cx, 0Ch
+seg000:8F59                 mov     bx, 0
+seg000:8F5C                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg000:8F61                 mov     si, [bp+arg_2]
+seg000:8F64                 mov     ax, [si]
+seg000:8F66                 shl     ax, 1
+seg000:8F68                 shl     ax, 1
+seg000:8F6A                 cwd
+seg000:8F6B                 mov     [word ptr bp+offset], ax
+seg000:8F6E                 mov     [word ptr bp+offset+2], dx
+seg000:8F71                 mov     bx, [word ptr bp+file_handle]
+seg000:8F74                 push    ds
+seg000:8F75                 pop     es
+seg000:8F76                 push    es              ; int
+seg000:8F77                 push    bx              ; file_handle
+seg000:8F78                 lea     bx, [bp+offset]
+seg000:8F7B                 push    ds
+seg000:8F7C                 pop     es
+seg000:8F7D                 push    es
+seg000:8F7E                 push    bx              ; offset
+seg000:8F7F                 call    DOS_SeekFile_Absolute
+seg000:8F84                 mov     [word ptr bp+bytes], 8
+seg000:8F89                 mov     [word ptr bp+bytes+2], 0
+seg000:8F8E                 mov     bx, [word ptr bp+file_handle]
+seg000:8F91                 push    ds
+seg000:8F92                 pop     es
+seg000:8F93                 push    es              ; int
+seg000:8F94                 push    bx              ; file_handle
+seg000:8F95                 mov     si, offset DDIM_buf_index
+seg000:8F98                 xor     bx, bx
+seg000:8F9A                 add     bx, [si+0Ah]
+seg000:8F9D                 mov     es, [word ptr si+2]
+seg000:8FA0                 push    es
+seg000:8FA1                 push    bx              ; buffer
+seg000:8FA2                 lea     bx, [bp+bytes]
+seg000:8FA5                 push    ds
+seg000:8FA6                 pop     es
+seg000:8FA7                 push    es
+seg000:8FA8                 push    bx              ; bytes
+seg000:8FA9                 call    DOS_ReadFile_toBuf
+seg000:8FAE                 mov     bx, [bp+8]
+seg000:8FB1                 push    ds
+seg000:8FB2                 pop     es
+seg000:8FB3                 push    es              ; int
+seg000:8FB4                 push    bx              ; file_handle
+seg000:8FB5                 mov     si, offset DDIM_buf_index
+seg000:8FB8                 xor     bx, bx
+seg000:8FBA                 add     bx, [si+0Ah]
+seg000:8FBD                 mov     es, [word ptr si+2]
+seg000:8FC0                 push    es
+seg000:8FC1                 push    bx              ; offset
+seg000:8FC2                 call    DOS_SeekFile_Absolute
+seg000:8FC7                 mov     si, offset DDIM_buf_index
+seg000:8FCA                 mov     bx, 4
+seg000:8FCD                 add     bx, [si+0Ah]
+seg000:8FD0                 mov     es, [word ptr si+2]
+seg000:8FD3                 mov     ax, [es:bx]
+seg000:8FD6                 mov     dx, [es:bx+2]
+seg000:8FDA                 xor     bx, bx
+seg000:8FDC                 add     bx, [si+0Ah]
+seg000:8FDF                 mov     es, [word ptr si+2]
+seg000:8FE2                 sub     ax, [es:bx]
+seg000:8FE5                 sbb     dx, [es:bx+2]
+seg000:8FE9                 mov     [bp+var_1E], ax
+seg000:8FEC                 mov     [bp+var_1C], dx
+seg000:8FEF                 mov     ax, [bp+var_1E]
+seg000:8FF2                 mov     dx, [bp+var_1C]
+seg000:8FF5                 call    B$EXSA          ; clear frame state info
+seg000:8FFA                 retf    4
+seg000:8FFA endp            get_subfile_len
+</pre> 

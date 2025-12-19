@@ -1,0 +1,182 @@
+<pre> 
+seg000:D3B1 ; =============== S U B R O U T I N E =======================================
+seg000:D3B1
+seg000:D3B1 ; Attributes: bp-based frame
+seg000:D3B1
+seg000:D3B1 proc            scanline_draw_normal_scene far
+seg000:D3B1                                         ; CODE XREF: real_entry+DEF↑P
+seg000:D3B1                                         ; redraw_everything+6D↓P
+seg000:D3B1
+seg000:D3B1 delay           = word ptr -16h
+seg000:D3B1 save_DDIM_scrn_seg= word ptr -14h
+seg000:D3B1 a_gap           = word ptr  6
+seg000:D3B1
+seg000:D3B1                 mov     cx, 4
+seg000:D3B4                 mov     bx, 0
+seg000:D3B7                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg000:D3BC                 mov     si, offset DDIM_screen_buf
+seg000:D3BF                 xor     bx, bx
+seg000:D3C1                 add     bx, [si+0Ah]
+seg000:D3C4                 mov     es, [word ptr si+2]
+seg000:D3C7                 mov     ax, es
+seg000:D3C9                 mov     [bp+save_DDIM_scrn_seg], ax
+seg000:D3CC                 mov     bx, offset scanline_bottom_boundary
+seg000:D3CF                 push    ds
+seg000:D3D0                 pop     es
+seg000:D3D1                 push    es
+seg000:D3D2                 push    bx              ; boundary
+seg000:D3D3                 mov     bx, offset relative_viewport_x
+seg000:D3D6                 push    ds
+seg000:D3D7                 pop     es
+seg000:D3D8                 push    es
+seg000:D3D9                 push    bx              ; viewport_X
+seg000:D3DA                 mov     bx, offset relative_viewport_y
+seg000:D3DD                 push    ds
+seg000:D3DE                 pop     es
+seg000:D3DF                 push    es
+seg000:D3E0                 push    bx              ; viewport_Y
+seg000:D3E1                 mov     bx, offset constant_200d
+seg000:D3E4                 push    ds
+seg000:D3E5                 pop     es
+seg000:D3E6                 push    es
+seg000:D3E7                 push    bx              ; c200d
+seg000:D3E8                 mov     bx, offset decimal_320
+seg000:D3EB                 push    ds
+seg000:D3EC                 pop     es
+seg000:D3ED                 push    es
+seg000:D3EE                 push    bx              ; width
+seg000:D3EF                 mov     bx, offset decimal_200
+seg000:D3F2                 push    ds
+seg000:D3F3                 pop     es
+seg000:D3F4                 push    es
+seg000:D3F5                 push    bx              ; height
+seg000:D3F6                 lea     bx, [bp+save_DDIM_scrn_seg]
+seg000:D3F9                 push    ds
+seg000:D3FA                 pop     es
+seg000:D3FB                 push    es
+seg000:D3FC                 push    bx              ; DDIM_scrn
+seg000:D3FD                 mov     si, offset DDIM_buf_glb_1_redraw
+seg000:D400                 xor     bx, bx
+seg000:D402                 add     bx, [si+0Ah]
+seg000:D405                 mov     es, [word ptr si+2]
+seg000:D408                 push    es
+seg000:D409                 push    bx              ; DDIM_redraw
+seg000:D40A                 call    split_scrn_to_scanlines_in_redraw
+seg000:D40F                 mov     ax, [ds:wave_progression]
+seg000:D412                 add     [ds:RPG_screen_wave_grade], ax
+seg000:D416                 cmp     [ds:RPG_screen_wave_grade], 0
+seg000:D41B                 jg      short waving
+seg000:D41D                 jmp     not_wave
+seg000:D420 ; ---------------------------------------------------------------------------
+seg000:D420
+seg000:D420 waving:                                 ; CODE XREF: scanline_draw_normal_scene+6A↑j
+seg000:D420                 cmp     [ds:RPG_screen_wave_grade], 100h
+seg000:D426                 jl      short valid_wavegrade
+seg000:D428                 jmp     not_wave
+seg000:D42B ; ---------------------------------------------------------------------------
+seg000:D42B
+seg000:D42B valid_wavegrade:                        ; CODE XREF: scanline_draw_normal_scene+75↑j
+seg000:D42B                 mov     bx, offset constant_200d
+seg000:D42E                 push    ds
+seg000:D42F                 pop     es
+seg000:D430                 push    es
+seg000:D431                 push    bx              ; height
+seg000:D432                 mov     bx, offset RPG_screen_wave_grade
+seg000:D435                 push    ds
+seg000:D436                 pop     es
+seg000:D437                 push    es
+seg000:D438                 push    bx              ; grade
+seg000:D439                 mov     si, offset DDIM_buf_glb_1_redraw
+seg000:D43C                 xor     bx, bx
+seg000:D43E                 add     bx, [si+0Ah]
+seg000:D441                 mov     es, [word ptr si+2]
+seg000:D444                 push    es
+seg000:D445                 push    bx              ; redraw
+seg000:D446                 call    wave_screen
+seg000:D44B                 jmp     next_sprites
+seg000:D44E ; ---------------------------------------------------------------------------
+seg000:D44E
+seg000:D44E not_wave:                               ; CODE XREF: scanline_draw_normal_scene+6C↑j
+seg000:D44E                                         ; scanline_draw_normal_scene+77↑j
+seg000:D44E                 mov     [ds:RPG_screen_wave_grade], 0
+seg000:D454                 mov     [ds:wave_progression], 0
+seg000:D45A
+seg000:D45A next_sprites:                           ; CODE XREF: scanline_draw_normal_scene+9A↑j
+seg000:D45A                 mov     bx, offset relative_viewport_x
+seg000:D45D                 push    ds
+seg000:D45E                 pop     es
+seg000:D45F                 push    es
+seg000:D460                 push    bx              ; a_relative_x
+seg000:D461                 mov     bx, offset scanline_bottom_boundary
+seg000:D464                 push    ds
+seg000:D465                 pop     es
+seg000:D466                 push    es
+seg000:D467                 push    bx              ; a_return
+seg000:D468                 mov     si, offset DDIM_buf_glb_1_redraw
+seg000:D46B                 xor     bx, bx
+seg000:D46D                 add     bx, [si+0Ah]
+seg000:D470                 mov     es, [word ptr si+2]
+seg000:D473                 push    es
+seg000:D474                 push    bx              ; a_DDIM
+seg000:D475                 call    draw_sprites
+seg000:D47A                 mov     ax, [ds:redraw_progression]
+seg000:D47D                 and     ax, ax
+seg000:D47F                 jnz     short has_progression
+seg000:D481                 jmp     direct_write
+seg000:D484 ; ---------------------------------------------------------------------------
+seg000:D484
+seg000:D484 has_progression:                        ; CODE XREF: scanline_draw_normal_scene+CE↑j
+seg000:D484                 mov     bx, offset redraw_progression
+seg000:D487                 push    ds
+seg000:D488                 pop     es
+seg000:D489                 push    es
+seg000:D48A                 push    bx
+seg000:D48B                 mov     bx, offset decimal_200
+seg000:D48E                 push    ds
+seg000:D48F                 pop     es
+seg000:D490                 push    es
+seg000:D491                 push    bx
+seg000:D492                 mov     si, offset DDIM_buf_glb_1_redraw
+seg000:D495                 xor     bx, bx
+seg000:D497                 add     bx, [si+0Ah]
+seg000:D49A                 mov     es, [word ptr si+2]
+seg000:D49D                 push    es
+seg000:D49E                 push    bx
+seg000:D49F                 call    sub_2B02C
+seg000:D4A4                 jmp     delay_return
+seg000:D4A7 ; ---------------------------------------------------------------------------
+seg000:D4A7
+seg000:D4A7 direct_write:                           ; CODE XREF: scanline_draw_normal_scene+D0↑j
+seg000:D4A7                 mov     bx, offset scanline_top
+seg000:D4AA                 push    ds
+seg000:D4AB                 pop     es
+seg000:D4AC                 push    es
+seg000:D4AD                 push    bx              ; begin_scanline
+seg000:D4AE                 mov     bx, offset decimal_200
+seg000:D4B1                 push    ds
+seg000:D4B2                 pop     es
+seg000:D4B3                 push    es
+seg000:D4B4                 push    bx              ; end_scanline
+seg000:D4B5                 mov     si, offset DDIM_buf_glb_1_redraw
+seg000:D4B8                 xor     bx, bx
+seg000:D4BA                 add     bx, [si+0Ah]
+seg000:D4BD                 mov     es, [word ptr si+2]
+seg000:D4C0                 push    es
+seg000:D4C1                 push    bx              ; REDRAW
+seg000:D4C2                 call    draw_scanline_to_scrn
+seg000:D4C7
+seg000:D4C7 delay_return:                           ; CODE XREF: scanline_draw_normal_scene+F3↑j
+seg000:D4C7                 mov     [bp+delay], 0Ah
+seg000:D4CC                 lea     bx, [bp+delay]
+seg000:D4CF                 push    ds
+seg000:D4D0                 pop     es
+seg000:D4D1                 push    es              ; int
+seg000:D4D2                 push    bx              ; delay_time
+seg000:D4D3                 call    delay_centisecond
+seg000:D4D8                 push    [bp+a_gap]
+seg000:D4DB                 call    fade_in
+seg000:D4E0                 call    ShakeScreen
+seg000:D4E5                 call    B$EXSA          ; clear frame state info
+seg000:D4EA                 retf    2
+seg000:D4EA endp            scanline_draw_normal_scene
+</pre> 

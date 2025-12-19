@@ -1,0 +1,70 @@
+<pre> 
+seg001:A6A8 ; =============== S U B R O U T I N E =======================================
+seg001:A6A8
+seg001:A6A8 ; Attributes: bp-based frame
+seg001:A6A8
+seg001:A6A8 proc            Read_subfile_to_glb_1 far
+seg001:A6A8                                         ; CODE XREF: deyj1_fbp_subfile_to_screen_buf+27↑P
+seg001:A6A8                                         ; get_scene_map_source+67↑P
+seg001:A6A8                                         ; process_scripts+4E7E↑P
+seg001:A6A8                                         ; show_item_created+D1↓P
+seg001:A6A8                                         ; get_fbp_two_scene_cat_to_glb_scrn+39↓P
+seg001:A6A8                                         ; load_theurgy_image+69↓P
+seg001:A6A8                                         ; read_palette+1E↓P
+seg001:A6A8                                         ; FadeInPic_imp+38↓P
+seg001:A6A8                                         ; show_face+27↓P
+seg001:A6A8
+seg001:A6A8 var_1A          = word ptr -1Ah
+seg001:A6A8 var_18          = word ptr -18h
+seg001:A6A8 var_16          = word ptr -16h
+seg001:A6A8 var_14          = word ptr -14h
+seg001:A6A8 arg_2           = word ptr  6
+seg001:A6A8 open_method     = word ptr  8
+seg001:A6A8
+seg001:A6A8                 mov     cx, 8
+seg001:A6AB                 mov     bx, 0
+seg001:A6AE                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:A6B3                 mov     [bp+var_14], 0
+seg001:A6B8                 push    [bp+open_method] ; open_method
+seg001:A6BB                 lea     ax, [bp+var_14]
+seg001:A6BE                 push    ax              ; int
+seg001:A6BF                 call    Open_File
+seg001:A6C4                 mov     [bp+var_16], ax
+seg001:A6C7                 mov     ax, [bp+var_16]
+seg001:A6CA                 mov     [ds:file_handle], ax
+seg001:A6CD                 push    offset file_handle
+seg001:A6D0                 push    [bp+arg_2]
+seg001:A6D3                 call    get_subfile_len
+seg001:A6D8                 mov     [bp+var_1A], ax
+seg001:A6DB                 mov     [bp+var_18], dx
+seg001:A6DE                 mov     ax, [bp+var_1A]
+seg001:A6E1                 mov     dx, [bp+var_18]
+seg001:A6E4                 mov     [word ptr ds:length], ax
+seg001:A6E7                 mov     [word ptr ds:length+2], dx
+seg001:A6EB                 mov     bx, offset file_handle
+seg001:A6EE                 push    ds
+seg001:A6EF                 pop     es
+seg001:A6F0                 push    es              ; int
+seg001:A6F1                 push    bx              ; file_handle
+seg001:A6F2                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:A6F5                 xor     bx, bx
+seg001:A6F7                 add     bx, [si+0Ah]
+seg001:A6FA                 mov     es, [word ptr si+2]
+seg001:A6FD                 push    es
+seg001:A6FE                 push    bx              ; buffer
+seg001:A6FF                 mov     bx, offset length
+seg001:A702                 push    ds
+seg001:A703                 pop     es
+seg001:A704                 push    es
+seg001:A705                 push    bx              ; bytes
+seg001:A706                 call    DOS_ReadFile_toBuf
+seg001:A70B                 mov     bx, offset file_handle
+seg001:A70E                 push    ds
+seg001:A70F                 pop     es
+seg001:A710                 push    es              ; int
+seg001:A711                 push    bx              ; file_handle
+seg001:A712                 call    DOS_CloseFile
+seg001:A717                 call    B$EXSA          ; clear frame state info
+seg001:A71C                 retf    4
+seg001:A71C endp            Read_subfile_to_glb_1
+</pre> 

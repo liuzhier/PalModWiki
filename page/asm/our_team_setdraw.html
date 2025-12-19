@@ -1,0 +1,99 @@
+<pre> 
+seg000:F0E5 ; =============== S U B R O U T I N E =======================================
+seg000:F0E5
+seg000:F0E5 ; Attributes: bp-based frame
+seg000:F0E5
+seg000:F0E5 proc            our_team_setdraw far    ; CODE XREF: real_entry+DD2↑P
+seg000:F0E5                                         ; redraw_everything+60↑P
+seg000:F0E5
+seg000:F0E5 index           = word ptr -20h
+seg000:F0E5 team_counter    = word ptr -1Eh
+seg000:F0E5 TEAM            = word ptr -1Ch
+seg000:F0E5 frame           = word ptr -1Ah
+seg000:F0E5 y               = word ptr -18h
+seg000:F0E5 x               = word ptr -16h
+seg000:F0E5 whole_team_nos  = word ptr -14h
+seg000:F0E5
+seg000:F0E5                 mov     cx, 0Eh
+seg000:F0E8                 mov     bx, 0
+seg000:F0EB                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg000:F0F0                 mov     ax, [ds:RPG_other_peoples]
+seg000:F0F3                 add     ax, [ds:RPG_team_number]
+seg000:F0F7                 mov     [bp+whole_team_nos], ax
+seg000:F0FA                 xor     ax, ax
+seg000:F0FC                 jmp     begin
+seg000:F0FF ; ---------------------------------------------------------------------------
+seg000:F0FF                 nop
+seg000:F100
+seg000:F100 people_loop:                            ; CODE XREF: our_team_setdraw+C2↓j
+seg000:F100                 mov     ax, 0Ah
+seg000:F103                 imul    [bp+team_counter]
+seg000:F106                 mov     bx, ax
+seg000:F108                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg000:F10B                 add     bx, [si+0Ah]
+seg000:F10E                 mov     es, [word ptr si+2]
+seg000:F111                 add     bx, 2
+seg000:F114                 mov     cx, [es:bx]
+seg000:F117                 mov     [bp+x], cx
+seg000:F11A                 mov     bx, ax
+seg000:F11C                 add     bx, [si+0Ah]
+seg000:F11F                 mov     es, [word ptr si+2]
+seg000:F122                 add     bx, 4
+seg000:F125                 mov     cx, [es:bx]
+seg000:F128                 mov     [bp+y], cx
+seg000:F12B                 mov     bx, ax
+seg000:F12D                 add     bx, [si+0Ah]
+seg000:F130                 mov     es, [word ptr si+2]
+seg000:F133                 add     bx, 6
+seg000:F136                 mov     cx, [es:bx]
+seg000:F139                 mov     [bp+frame], cx
+seg000:F13C                 mov     [bp+TEAM], 0
+seg000:F141                 mov     bx, ax
+seg000:F143                 lea     ax, [bp+x]
+seg000:F146                 push    ax              ; a_y
+seg000:F147                 lea     ax, [bp+y]
+seg000:F14A                 push    ax              ; a_layer
+seg000:F14B                 push    offset RPG_role_locate_layer ; a_no
+seg000:F14E                 lea     ax, [bp+team_counter]
+seg000:F151                 push    ax              ; a_frame
+seg000:F152                 lea     ax, [bp+frame]
+seg000:F155                 push    ax              ; a_switch
+seg000:F156                 lea     ax, [bp+TEAM]
+seg000:F159                 push    ax              ; int
+seg000:F15A                 mov     [bp+index], bx
+seg000:F15D                 call    set_draw_sprite_calc_envelop
+seg000:F162                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg000:F165                 mov     bx, [bp+index]
+seg000:F168                 mov     dx, bx
+seg000:F16A                 add     bx, [si+0Ah]
+seg000:F16D                 mov     es, [word ptr si+2]
+seg000:F170                 add     bx, 6
+seg000:F173                 mov     ax, [bp+frame]
+seg000:F176                 mov     [es:bx], ax
+seg000:F179                 mov     bx, dx
+seg000:F17B                 add     bx, [si+0Ah]
+seg000:F17E                 mov     es, [word ptr si+2]
+seg000:F181                 add     bx, 4
+seg000:F184                 mov     ax, [bp+y]
+seg000:F187                 mov     [es:bx], ax
+seg000:F18A                 mov     bx, dx
+seg000:F18C                 add     bx, [si+0Ah]
+seg000:F18F                 mov     es, [word ptr si+2]
+seg000:F192                 add     bx, 2
+seg000:F195                 mov     ax, [bp+x]
+seg000:F198                 mov     [es:bx], ax
+seg000:F19B                 mov     ax, [bp+team_counter]
+seg000:F19E                 inc     ax
+seg000:F19F
+seg000:F19F begin:                                  ; CODE XREF: our_team_setdraw+17↑j
+seg000:F19F                 mov     [bp+team_counter], ax
+seg000:F1A2                 cmp     ax, [bp+whole_team_nos]
+seg000:F1A5                 jg      short return
+seg000:F1A7                 jmp     people_loop
+seg000:F1AA ; ---------------------------------------------------------------------------
+seg000:F1AA
+seg000:F1AA return:                                 ; CODE XREF: our_team_setdraw+C0↑j
+seg000:F1AA                 call    B$EXSA          ; clear frame state info
+seg000:F1AF                 retf    0
+seg000:F1AF endp            our_team_setdraw
+</pre> 

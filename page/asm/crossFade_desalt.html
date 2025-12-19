@@ -1,0 +1,94 @@
+<pre> 
+seg009:006E ; =============== S U B R O U T I N E =======================================
+seg009:006E
+seg009:006E ; Attributes: bp-based frame
+seg009:006E
+seg009:006E ; int __stdcall __far crossFade_desalt(__int32 gap, __int32 times, __int32 dst, __int32 src)
+seg009:006E proc            crossFade_desalt far    ; CODE XREF: summon_lasting?+141↑P
+seg009:006E                                         ; summon_lasting?+17C↑P
+seg009:006E                                         ; Redraw_Tiles_or_Fade_to_pic+10B↑P
+seg009:006E                                         ; crossFadeOut+D9↑P
+seg009:006E
+seg009:006E gap             = dword ptr  6
+seg009:006E times           = dword ptr  0Ah
+seg009:006E dst             = dword ptr  0Eh
+seg009:006E src             = dword ptr  12h
+seg009:006E
+seg009:006E                 push    bp
+seg009:006F                 mov     bp, sp
+seg009:0071                 push    ds
+seg009:0072                 push    es
+seg009:0073                 push    si
+seg009:0074                 push    di
+seg009:0075                 cld
+seg009:0076                 lds     si, [bp+times]
+seg009:0079                 mov     cx, [si]
+seg009:007B                 shr     cx, 2
+seg009:007E                 lds     si, [bp+gap]
+seg009:0081                 lodsw
+seg009:0082                 lds     si, [bp+dst]
+seg009:0085                 les     di, [bp+src]
+seg009:0088                 add     si, ax
+seg009:008A
+seg009:008A loc_2828A:
+seg009:008A                 add     di, ax
+seg009:008C                 mov     bx, 6           ; 若s>d则d++,s<d则d--;s=d则d.
+seg009:008F
+seg009:008F fade_loop:                              ; CODE XREF: crossFade_desalt+81↓j
+seg009:008F                 mov     al, [si]
+seg009:0091                 mov     dl, [es:di]
+seg009:0094                 sub     al, dl
+seg009:0096                 cbw
+seg009:0097                 add     dl, ah
+seg009:0099                 neg     al
+seg009:009B                 cbw
+seg009:009C                 sub     dl, ah
+seg009:009E                 mov     al, dl
+seg009:00A0                 mov     [es:di], al
+seg009:00A3                 add     si, bx
+seg009:00A5                 add     di, bx
+seg009:00A7                 mov     al, [si]
+seg009:00A9                 mov     dl, [es:di]
+seg009:00AC                 sub     al, dl
+seg009:00AE                 cbw
+seg009:00AF                 add     dl, ah
+seg009:00B1                 neg     al
+seg009:00B3                 cbw
+seg009:00B4                 sub     dl, ah
+seg009:00B6                 mov     al, dl
+seg009:00B8                 mov     [es:di], al
+seg009:00BB                 add     si, bx
+seg009:00BD                 add     di, bx
+seg009:00BF                 mov     al, [si]
+seg009:00C1                 mov     dl, [es:di]
+seg009:00C4                 sub     al, dl
+seg009:00C6                 cbw
+seg009:00C7                 add     dl, ah
+seg009:00C9                 neg     al
+seg009:00CB                 cbw
+seg009:00CC                 sub     dl, ah
+seg009:00CE                 mov     al, dl
+seg009:00D0                 mov     [es:di], al
+seg009:00D3                 add     si, bx
+seg009:00D5                 add     di, bx
+seg009:00D7                 mov     al, [si]
+seg009:00D9                 mov     dl, [es:di]
+seg009:00DC                 sub     al, dl
+seg009:00DE                 cbw
+seg009:00DF                 add     dl, ah
+seg009:00E1                 neg     al
+seg009:00E3                 cbw
+seg009:00E4                 sub     dl, ah
+seg009:00E6                 mov     al, dl
+seg009:00E8                 mov     [es:di], al
+seg009:00EB                 add     si, bx
+seg009:00ED                 add     di, bx
+seg009:00EF                 loop    fade_loop
+seg009:00F1                 pop     di
+seg009:00F2                 pop     si
+seg009:00F3                 pop     es
+seg009:00F4                 pop     ds
+seg009:00F5                 pop     bp
+seg009:00F6                 retf    10h
+seg009:00F6 endp            crossFade_desalt
+</pre> 

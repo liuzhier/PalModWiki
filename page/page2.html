@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Wiki - Database Structure</title>
+		<link rel="icon" type="image/ico" href="../img/LOGO.ICO" />
+		<link rel="stylesheet" href="../css/all.css" />
+		<link rel="stylesheet" href="../css/class.css" />
+	</head>
+	<body>
+		<p class="PageTitle">
+			<b>DATA.MKF（基础数据）二进制结构</b>
+		</p>
+		<hr />
+		<p class="PageTitle2">
+			<b>#0 店铺售卖的商品</b>：
+		</p>
+		<p class="PageTitle3">
+			每个店铺都可以有 9 种商品，数据为 9 种商品的实体编号
+			<br />
+			数据格式：ushort[9] {entityId1, entityId2, entityId3, ...... entityId9}
+			<br />
+			原始数据示例：a6 00　d1 00　ec 00　eb 00　c9 00　c6 00　00 00　00 00　00 00
+			<br />
+			十进制数据：166　209　236　235　201　198　0　0　0
+			<br />
+			实体数据：木剑|藤甲|木鞋|草鞋|皮帽|发饰|无|无|无
+			<br />
+			可以看得出，这组商品数据用于盛渔村林木匠
+		</p>
+		<hr />
+		<p class="PageTitle2">
+			<b>#1 敌人的基础数据</b>：
+		</p>
+		<p class="PageTitle3">
+			每组数据有 70 字节，每个数据的单元大小都是 16 位的。
+			<br />
+			ABC.MKF 中行动动画的编号 = 当前敌人的基础数据地址 ÷ 每组数据的大小（70）
+			<br />
+			<br />
+			这里以狂徒废案“光头杀手”为例：
+			<br />
+			原始数据示例（地址为：DATA.MKF#1　0x1ACC）：
+			02 00　0b 00　02 00　05 00　02 00
+			00 00　00 00　00 00　00 00　00 00
+			00 00　bc 02　00 00　00 00　00 00
+			3d 01　0a 00　00 00　00 00　00 00
+			00 00　00 00　00 00　00 00　00 00
+			00 00　04 00　05 00　09 00　05 00
+			05 00　05 00　03 00　00 00　00 00
+			<br />
+			十进制数据：
+			2　11　2　5　2　0　0　0　0　0
+			0　700　0　0　0　317　10　0　0　0
+			0　0　0　0　0　0　4　5　9　5
+			5　5　3　0　0
+			<br />
+			对应 ABC.MKF 中行动动画的编号：98（0x1ACC ÷ 70）
+			<br />
+			<img src="../img/page2-1.png" />
+			<br />
+			<br />
+			<br />
+			数据格式如下：
+			<br />
+			<br />
+			原地蠕动帧数：2
+			<br />
+			施法帧：11
+			<br />
+			攻击帧：2
+			<br />
+			原地蠕动动画每帧间隔节拍：5（每隔 200ms【40ms × 5】 切换到下一帧）
+			<br />
+			行动动画每帧间隔节拍：2（每隔 80ms【40ms × 2】 切换到下一帧）
+			<br />
+			Y 轴偏移：0
+			<br />
+			音效-普攻：0
+			<br />
+			音效-行动：0
+			<br />
+			音效-施法：0
+			<br />
+			音效-阵亡：0
+			<br />
+			音效-进入战场时呼喊：0
+			<br />
+			体力：700
+			<br />
+			战利品-经验值：0
+			<br />
+			战利品-金钱：0
+			<br />
+			修行：0
+			<br />
+			法术：317（五雷咒）
+			<br />
+			施法概率：10（十分比，即 100％）
+			<br />
+			普攻附带道具：0（无）
+			<br />
+			普攻附带道具概率：0（十分比，即 0％）
+			<br />
+			可偷道具：0
+			<br />
+			可偷道具数量：0
+			<br />
+			武术：0
+			<br />
+			灵力：0
+			<br />
+			防御：0
+			<br />
+			身法：0
+			<br />
+			吉运：0
+			<br />
+			毒抗：4（十分比，即 40%）
+			<br />
+			灵抗：5　9　5　5　5（风雷水火土，十分比，50%　90%　50%　50%　50%）
+			<br />
+			物抗：3（十分比，即 30%）
+			<br />
+			二动：0（每回合能连续行动两次【是：不为 0】【否：0】，即否）
+			<br />
+			灵葫能量：0
+			<br />
+			<br />
+			<br />
+			先看前三项：【2　11　2】5　2　0　0　0　0　0　0　700　0　0　0　317　10　0　0　0　0　0　0　0　0　0　4　5　9　5　5　5　3　0　0
+			<br />
+			<br />
+			原地蠕动帧数：2（从编号 0 开始向后数 2 帧，该区间左闭右开，即不包括 2）
+			<br />
+			<img src="../img/page2-2.png" />
+			<br />
+			<br />
+			施法帧：11（从编号 2 开始向后数 11 帧，该区间左闭右开，即不包括 13【2 + 11】）
+			<br />
+			<img src="../img/page2-3.png" />
+			<br />
+			<br />
+			攻击帧：2（从编号 13 开始向后数 2 帧，该区间左闭右开，即不包括 15【13 + 2】）
+			<br />
+			<img src="../img/page2-4.png" />
+			<br />
+			<br />
+			<br />
+			接着往后看：2　11　2【5　2】0　0　0　0　0　0　700　0　0　0　317　10　0　0　0　0　0　0　0　0　0　4　5　9　5　5　5　3　0　0
+			<br />
+			<br />
+			原地蠕动动画每帧间隔节拍：5
+			<br />
+			行动动画每帧间隔节拍：2
+			<br />
+			战斗中正常待机循环为每 40ms 为一个节拍（刷新一次），即 FPS 25
+			<br />
+			但很多地方使用了固定延迟时间，基本上都在回合执行行动期间
+			<br />
+			这里的“间隔节拍”代表每过几个节拍切换到下一帧
+			<br />
+			光头杀手的“原地蠕动动画”每隔 200ms【40ms × 5】切换下一帧
+			<br />
+			光头杀手的“行动动画”每隔 200ms【40ms × 5】切换下一帧
+			<br />
+			<br />
+			<br />
+			接着往后看：2　11　2　5　2【0】0　0　0　0　0　700　0　0　0　317　10　0　0　0　0　0　0　0　0　0　4　5　9　5　5　5　3　0　0
+			<br />
+			Y 轴偏移：0（有些敌人贴图过高/过低，就需要对 Y 轴进行调整。这里是 0，没有变化）
+			<br />
+			<br />
+			<br />
+			接着往后看：2　11　2　5　2　0【0　0　0　0　0】700　0　0　0　317　10　0　0　0　0　0　0　0　0　0　4　5　9　5　5　5　3　0　0
+			<br />
+			音效对应 VOC.MKF/SOUNDS.MKF 里的声音文件，缺省则不播放
+			<br />
+			音效-普攻：0（WIN 版二动的敌人执行两次普攻时，播放的是施法音效）
+			<br />
+			音效-行动：0
+			<br />
+			音效-施法：0（WIN 版敌人的施法音效 ＜0 时，不会播放仙术特效的声音）
+			<br />
+			音效-阵亡：0
+			<br />
+			音效-进入战场时呼喊：0
+			<br />
+			<br />
+			<br />
+			接着往后看：2　11　2　5　2　0　0　0　0　0　0　700　0　0【0】317　10　0　0　0　0【0　0　0　0　0】4　5　9　5　5　5　3　0　0
+			<br />
+			修行：0
+			<br />
+			武术：0
+			<br />
+			灵力：0
+			<br />
+			防御：0
+			<br />
+			身法：0
+			<br />
+			吉运：0
+			<br />
+			众所周知，游戏内我方角色每次提升修行，HPMP、五维（武灵防速逃）都会跟着提升
+			<br />
+			其实敌人的五维也会跟随修行增长，但 HPMP 不会。而且这里给出的五维只是初始化五维，需要在战斗时动态计算修行额外加上的属性值。
+			<br />
+			以下是光头杀手的实际五维：
+			<br />
+			<br />
+			DOS 版武术：36【初始化武术 + 36 + 修行 * 6】
+			<br />
+			WIN 版武术：50【初始化武术 + 50 + 修行 * 5】
+			<br />
+			<br />
+			DOS 版灵力：36【初始化灵力 + 36 + 修行 * 6】
+			<br />
+			WIN 版灵力：50【初始化武术 + 50 + 修行 * 5】
+			<br />
+			<br />
+			DOS 版防御：24【初始化防御 + 24 + 修行 * 4】
+			<br />
+			WIN 版防御：18【初始化防御 + 18 + 修行 * 3】
+			<br />
+			<br />
+			DOS 版身法：18【初始化身法 + 18 + 修行 * 3】
+			<br />
+			WIN 版身法：18【初始化身法 + 18 + 修行 * 3】
+			<br />
+			<br />
+			DOS 版吉运：24【初始化身法 + 24 + 修行 * 4】
+			<br />
+			WIN 版吉运：12【初始化身法 + 12 + 修行 * 2】
+		</p>
+		<hr />
+		<p class="PageTitle2">
+			<b>#2 敌方队列</b>：
+		</p>
+		<p class="PageTitle3">
+			每个敌方队列都可以有 5 个敌人，数据为 5 个敌人的实体编号（【禁用：-1；空：0】）
+			<br />
+			<br />
+			数据格式：ushort[5] {entityId1, entityId2, ...... entityId5}
+			<br />
+			<br />
+			原始数据示例1：8e 01　8e 01　ff ff　ff ff　ff ff
+			<br />
+			原始数据示例2：00 00　d9 01　00 00　ff ff　ff ff
+			<br />
+			<br />
+			十进制数据1：398　398　-1　-1　-1
+			<br />
+			十进制数据2：0　473　0　-1　-1
+			<br />
+			<br />
+			实体数据1：史莱姆　　|史莱姆　　|禁用　　　|禁用　　　|禁用　　　
+			<br />
+			实体数据2：无　　　　|赤鬼王　　|无　　　　|禁用　　　|禁用　　　
+		</p>
+		<hr />
+		<p class="PageTitle2">
+			<b>#3 Hero 的基础数据（初始数据）</b>：
+		</p>
+		<p class="PageTitle3">
+			与之前的数据格式不太相同，它的存储方式是每项数据都按组存储，每组都是 6 名 Hero 的数据值。
+			<br />
+			<br />
+			数据格式：ushort[6] {hero0Value, hero1Value, ...... hero5Value}
+			<br />
+			<br />
+			整体格式如下：
+			<br />
+		</p>
+		<table class="PageTable">
+			<thead>
+				<tr>
+					<th>数据意义</th>
+					<th>Hero0</th>
+					<th>Hero1</th>
+					<th>Hero2</th>
+					<th>Hero3</th>
+					<th>Hero4</th>
+					<th>Hero5</th>
+					<th>备注</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>肖像</td>
+					<td>1</td>
+					<td>11</td>
+					<td>22</td>
+					<td>49</td>
+					<td>28</td>
+					<td>44</td>
+					<td>对应 RGM.MKF 中的形象</td>
+				</tr>
+				<tr>
+					<td>战斗形象</td>
+					<td>0</td>
+					<td>1</td>
+					<td>2</td>
+					<td>3</td>
+					<td>4</td>
+					<td>8</td>
+					<td>对应 F.MKF 中的形象</td>
+				</tr>
+				<tr>
+					<td>行走形象</td>
+					<td>2</td>
+					<td>3</td>
+					<td>7</td>
+					<td>525</td>
+					<td>5</td>
+					<td>26</td>
+					<td>对应 MGO.MKF 中的形象</td>
+				</tr>
+				<tr>
+					<td>名称</td>
+					<td>24<br />李逍遥</td>
+					<td>25<br />赵灵儿</td>
+					<td>26<br />林月如</td>
+					<td>28<br />巫后</td>
+					<td>27<br />阿奴</td>
+					<td>29<br />盖罗娇</td>
+					<td>对应 M.MSG 中的实体名称</td>
+				</tr>
+				<tr>
+					<td>普攻全体</td>
+					<td>0<br />否</td>
+					<td>0<br />否</td>
+					<td>0<br />否</td>
+					<td>0<br />否</td>
+					<td>0<br />否</td>
+					<td>0<br />否</td>
+					<td>普攻可攻击敌方全体</td>
+				</tr>
+				<tr>
+					<td>？？？</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>修行</td>
+					<td>1</td>
+					<td>5</td>
+					<td>3</td>
+					<td>48</td>
+					<td>28</td>
+					<td>40</td>
+					<td>判定已练成的法术</td>
+				</tr>
+				<tr>
+					<td>最大 HP</td>
+					<td>150</td>
+					<td>240</td>
+					<td>220</td>
+					<td>810</td>
+					<td>480</td>
+					<td>3600</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>最大 MP</td>
+					<td>100</td>
+					<td>240</td>
+					<td>80</td>
+					<td>790</td>
+					<td>410</td>
+					<td>720</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>HP</td>
+					<td>150</td>
+					<td>28</td>
+					<td>220</td>
+					<td>810</td>
+					<td>480</td>
+					<td>3600</td>
+					<td>≤0死亡<br />＜20%且＜100虚弱</td>
+				</tr>
+				<tr>
+					<td>MP</td>
+					<td>100</td>
+					<td>10</td>
+					<td>80</td>
+					<td>790</td>
+					<td>410</td>
+					<td>720</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>头戴</td>
+					<td>196<br />头巾</td>
+					<td>197<br />青丝巾</td>
+					<td>199<br />银钗</td>
+					<td>202<br />珍珠冠</td>
+					<td>202<br />珍珠冠</td>
+					<td>202<br />珍珠冠</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>披挂</td>
+					<td>225<br />披风</td>
+					<td>0<br />无</td>
+					<td>228<br />护心镜</td>
+					<td>234<br />圣灵披风</td>
+					<td>231<br />虎纹披风</td>
+					<td>231<br />虎纹披风</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>身穿</td>
+					<td>208<br />布袍</td>
+					<td>210<br />丝衣</td>
+					<td>210<br />丝衣</td>
+					<td>210<br />丝衣</td>
+					<td>209<br />藤甲</td>
+					<td>215<br />铁鳞甲</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>手持</td>
+					<td>166<br />木剑</td>
+					<td>170<br />仙女剑</td>
+					<td>163<br />长鞭</td>
+					<td>195<br />天蛇杖</td>
+					<td>192<br />青蛇杖</td>
+					<td>193<br />鬼头杖</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>脚穿</td>
+					<td>235<br />草鞋</td>
+					<td>237<br />布靴</td>
+					<td>238<br />绣花鞋</td>
+					<td>243<br />莲花靴</td>
+					<td>0<br />无</td>
+					<td>244<br />虎皮靴</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>配带</td>
+					<td>249<br />护腕</td>
+					<td>248<br />香袋</td>
+					<td>253<br />玉镯</td>
+					<td>260<br />圣灵珠</td>
+					<td>251<br />竹笛</td>
+					<td>253<br />玉镯</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>武术</td>
+					<td>35<br />33 + 2</td>
+					<td>28<br />20 + 8</td>
+					<td>58<br />38 + 20</td>
+					<td>268<br />168 + 100</td>
+					<td>218<br />168 + 50</td>
+					<td>190<br />120 + 70</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>灵力</td>
+					<td>20</td>
+					<td>64</td>
+					<td>22</td>
+					<td>564<br />220 + 244</td>
+					<td>282<br />256 + 26</td>
+					<td>650<br />562 + 88</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>防御</td>
+					<td>41<br />32 + 9</td>
+					<td>41<br />28 + 13</td>
+					<td>72<br />35 + 37</td>
+					<td>284<br />110 + 174</td>
+					<td>176<br />136 + 40</td>
+					<td>254<br />136 + 118</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>身法</td>
+					<td>31<br />28 + 3</td>
+					<td>61<br />55 + 6</td>
+					<td>60<br />36 + 4</td>
+					<td>141<br />160 + 19</td>
+					<td>160<br />132 + 28</td>
+					<td>122<br />110 + 12</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>吉运</td>
+					<td>32</td>
+					<td>27<br />18 + 9</td>
+					<td>37<br />28 + 9</td>
+					<td>96<br />60 + 36</td>
+					<td>160<br />150 + 100</td>
+					<td>49<br />40 + 9</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>毒抗</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>风抗</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>雷抗</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>水抗</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>火抗</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>土抗</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>？？？</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>？？？</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>？？？</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>受援</td>
+					<td>2<br />林月如</td>
+					<td>0<br />李逍遥</td>
+					<td>0<br />李逍遥</td>
+					<td>0<br />李逍遥</td>
+					<td>0<br />李逍遥</td>
+					<td>4<br />阿奴</td>
+					<td>虚弱时受谁援护</td>
+				</tr>
+				<tr>
+					<td>仙术1</td>
+					<td>296<br />气疗术</td>
+					<td>312<br />风咒</td>
+					<td>298<br />凝神归元</td>
+					<td>295<br />梦蛇</td>
+					<td>353<br />御蜂术</td>
+					<td>353<br />御蜂术</td>
+					<td>每位 Hero 仅可练成 32 种法术</td>
+				</tr>
+				<tr>
+					<td>仙术2</td>
+					<td>0<br />无</td>
+					<td>316<br />雷咒</td>
+					<td>337<br />气剑指</td>
+					<td>304<br />夺魂</td>
+					<td>352<br />三尸咒</td>
+					<td>329<br />炎杀咒</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术3</td>
+					<td>0<br />无</td>
+					<td>321<br />冰咒</td>
+					<td>0<br />无</td>
+					<td>299<br />元灵归心术</td>
+					<td>329<br />炎杀咒</td>
+					<td>323<br />风雪冰天</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术4</td>
+					<td>0<br />无</td>
+					<td>327<br />炎咒</td>
+					<td>0<br />无</td>
+					<td>315<br />风神</td>
+					<td>318<br />天雷破</td>
+					<td>374<br />爆炸蛊</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术5</td>
+					<td>0<br />无</td>
+					<td>332<br />土咒</td>
+					<td>0<br />无</td>
+					<td>320<br />雷神</td>
+					<td>394<br />乾坤一掷</td>
+					<td>308<br />灵血咒</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术6</td>
+					<td>0<br />无</td>
+					<td>306<br />净衣咒</td>
+					<td>0<br />无</td>
+					<td>325<br />雪妖</td>
+					<td>308<br />灵血咒</td>
+					<td>298<br />凝神归元</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术7</td>
+					<td>0<br />无</td>
+					<td>297<br />观音咒</td>
+					<td>0<br />无</td>
+					<td>389<br />火神</td>
+					<td>299<br />元灵归心</td>
+					<td>304<br />夺魂</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术8</td>
+					<td>0<br />无</td>
+					<td>309<br />金刚咒</td>
+					<td>0<br />无</td>
+					<td>336<br />山神</td>
+					<td>302<br />赎魂</td>
+					<td>0<br />无</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术9</td>
+					<td>0<br />无</td>
+					<td>303<br />回梦</td>
+					<td>0<br />无</td>
+					<td>302<br />赎魂</td>
+					<td>305<br />鬼降</td>
+					<td>0<br />无</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术10</td>
+					<td>0<br />无</td>
+					<td>307<br />冰心诀</td>
+					<td>0<br />无</td>
+					<td>308<br />灵血咒</td>
+					<td>304<br />夺魂</td>
+					<td>0<br />无</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术...</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>仙术32</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td>0<br />无</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>每方向帧数</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>行走形象每个方向的帧计数<br />缺省则为 3</td>
+				</tr>
+				<tr>
+					<td>合体法术</td>
+					<td>386<br />合体气功</td>
+					<td>381<br />爆炸</td>
+					<td>339<br />旋月斩</td>
+					<td>374<br />爆炸蛊</td>
+					<td>355<br />天女散花</td>
+					<td>381<br />爆炸</td>
+					<td>行走形象每个方向的帧计数<br />缺省则为 3</td>
+				</tr>
+				<tr>
+					<td>？？？</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>？？？</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>0</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>阵亡音效</td>
+					<td>23</td>
+					<td>24</td>
+					<td>25</td>
+					<td>24</td>
+					<td>26</td>
+					<td>25</td>
+					<td>对应<br />VOC.MKF/SOUNDS.MKF<br />中的音效</td>
+				</tr>
+				<tr>
+					<td>普攻音效</td>
+					<td>37</td>
+					<td>38</td>
+					<td>39</td>
+					<td>38</td>
+					<td>40</td>
+					<td>39</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>武器挥砍音效</td>
+					<td>1</td>
+					<td>2</td>
+					<td>3</td>
+					<td>2</td>
+					<td>4</td>
+					<td>3</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>普攻暴击音效</td>
+					<td>5</td>
+					<td>6</td>
+					<td>7</td>
+					<td>6</td>
+					<td>8</td>
+					<td>7</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>施法音效</td>
+					<td>9</td>
+					<td>10</td>
+					<td>11</td>
+					<td>10</td>
+					<td>12</td>
+					<td>11</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>武器格挡音效</td>
+					<td>15</td>
+					<td>16</td>
+					<td>17</td>
+					<td>16</td>
+					<td>18</td>
+					<td>17</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>濒死音效</td>
+					<td>19</td>
+					<td>20</td>
+					<td>21</td>
+					<td>20</td>
+					<td>22</td>
+					<td>21</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		<hr />
+		<p class="PageTitle2">
+			<b>#4 仙术的基础数据</b>：
+		</p>
+		<p class="PageTitle3">
+			每组数据有 32 字节，每个数据的单元大小都是 16 位的。
+			<br />
+			<br />
+			仙术包括普通仙术和召唤神
+			<br />
+			这里以普通仙术“御剑术”为例：
+			<br />
+			<br />
+			原始数据示例（地址为：DATA.MKF#4　0x0140）：
+			05 00　00 00　00 00　00 00　63 00　00 00　00 00　0a 00
+			00 00　00 00　00 00　00 00　0a 00　4d 00　00 00　7b 00
+			<br />
+			十进制数据：
+			5　0　0　0　99　0　0　10　0　0　0　0　10　77　0　123
+		</p>
+		<table class="PageTable">
+			<thead>
+				<tr>
+					<th>数据意义</th>
+					<th>数值</th>
+					<th>备注</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>仙术动画</td>
+					<td>5</td>
+					<td>对应 FIRE.MKF 中仙术动画的编号</td>
+				</tr>
+				<tr>
+					<td>行动类型</td>
+					<td>0</td>
+					<td>攻击单人，单个特效</td>
+				</tr>
+				<tr>
+					<td>X 轴偏移</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Y 轴偏移</td>
+					<td>0</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>图层偏移</td>
+					<td>99</td>
+					<td>实际图层 = Y坐标 + Y轴偏移 + 图层偏移</td>
+				</tr>
+				<tr>
+					<td>额外帧延迟</td>
+					<td>0</td>
+					<td>实际帧延迟(ms) = 50 + 额外帧延迟 * 10</td>
+				</tr>
+				<tr>
+					<td>破坏地面</td>
+					<td>0<br />否</td>
+					<td>将最后一帧留在地面上<br />【是：-1】【否：不为-1】</td>
+				</tr>
+				<tr>
+					<td>集气帧数</td>
+					<td>10</td>
+					<td>DOS：集气帧数结束才播放音效<br />WIN：直接播放音效</td>
+				</tr>
+				<tr>
+					<td>重复次数</td>
+					<td>0<br />不重复</td>
+					<td>重复播放后续帧数多少遍<br />（集气帧数之后的帧数）</td>
+				</tr>
+				<tr>
+					<td>屏幕震动幅度</td>
+					<td>0<br />不震动</td>
+					<td>动画播放完毕，最后一帧定格在场景，震动多少帧</td>
+				</tr>
+				<tr>
+					<td>屏幕波动</td>
+					<td>0<br />不波动</td>
+					<td>动画播放期间，战斗背景扭曲幅度</td>
+				</tr>
+				<tr>
+					<td>？？？</td>
+					<td>0</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>消耗真气</td>
+					<td>10</td>
+					<td>未知，可能并未用到</td>
+				</tr>
+				<tr>
+					<td>基础伤害</td>
+					<td>77</td>
+					<td>实际伤害还需带入受害者防御及各种抗性进行计算</td>
+				</tr>
+				<tr>
+					<td>系属</td>
+					<td>0</td>
+					<td>无【无：0】【五灵：1～5】【毒：6】【非攻击性：7】</td>
+				</tr>
+				<tr>
+					<td>音效</td>
+					<td>123</td>
+					<td>对应 VOC.MKF/SOUNDS.MKF 中的音效</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<p class="PageTitle3">
+			先看前两项：【5　0】0　0　99　0　0　10　0　0　0　0　10　77　0　123
+			<br />
+			<br />
+			仙术动画：5（直接对应 FIRE.MKF 中仙术动画）
+			<br />
+			<img src="../img/page2-5.png" />
+			<br />
+			行动类型：0（攻击单人，单个特效）
+			<br />
+			以下是各个枚举意义：
+		</p>
+		<table class="PageTable">
+			<thead>
+				<tr>
+					<th>行动类型</th>
+					<th>备注</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>0</td>
+					<td>攻击单人，单个特效</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>攻击全体，三个特效</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>攻击全体，单个特效</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>攻击全体，整屏特效</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>我方单人，单个特效</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>我方全体，三个特效</td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>施法者本身</td>
+				</tr>
+				<tr>
+					<td>9</td>
+					<td>召唤神</td>
+				</tr>
+			</tbody>
+		</table>
+		<br />
+		<p class="PageTitle3">
+			接着往后看：5　0　0　0【99】0　0　10　0　0　0　0　10　77　0　123
+			<br />
+			<br />
+			图层偏移：99
+			<br />
+			该值用于调整仙术动画的实际图层，战场中以 Sprite 脚底的 Y 坐标来确定绘制顺序
+		</p>
+		<table class="PageTable">
+			<tbody>
+				<tr>
+					<td>
+						实际 Y 坐标 = Y 坐标 + Y 轴偏移
+					</td>
+				</tr>
+				<tr>
+					<td>
+						这里写 99 可能是因为这里的御剑术在天上，故而图层需在所有 Sprite 之上
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="PageTable">
+			<thead>
+				<tr>
+					<th>
+						注意：
+						<br />
+						战场是斜 45 度的，从左上↖向右下↘倾斜，故越靠右下，图层越高，绘制优先级越低，
+						<br />
+						这样显现出的战斗场景才更有观感（画家算法）。
+					</th>
+				</tr>
+			</thead>
+		</table>
+		<br />
+		<p class="PageTitle3">
+			接着往后看：5　0　0　0　99【0】0　10　0　0　0　0　10　77　0　123
+			<br />
+			<br />
+			额外帧延迟：0
+			<br />
+			仙术动画的默认帧延迟为 50ms，此处的额外帧延迟的单位为 10ms，
+			<br />
+			若此处写 5 则代表动画帧延迟为 100ms（50ms + 5 * 10ms）
+		</p>
+		<table class="PageTable">
+			<tbody>
+				<tr>
+					<td>
+						公式为：
+						<br />
+						实际帧延迟(ms) = 50 + 额外帧延迟 * 10
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<p class="PageTitle3">
+			接着往后看：5　0　0　0　99 0　0【10　0】0　0　0　10　77　0　123
+			<br />
+			<br />
+			集气帧数：10
+			<br />
+			施法者于预演帧播放期间保持施法集气动作，播放后续帧数时才换为释放法术的动作
+			<br />
+			即前 10 帧（00000.png ～ 00009.png），施法者保持集气动作
+			<br />
+			<img src="../img/page2-6.png" />
+			<img src="../img/page2-7.png" />
+			<br />
+			<br />
+			从第 11 帧（00010.png）开始，施法者切换到释放法术的动作
+			<br />
+			<img src="../img/page2-8.png" />
+			<img src="../img/page2-9.png" />
+		</p>
+		<table class="PageTable">
+			<thead>
+				<tr>
+					<th>
+						注意：
+						<br />
+						DOS 版会等待预演帧播放结束，开始播放后续帧数时才播放仙术音效【与后续帧数同步】
+						<br />
+						WIN 版则是直接开始播放音效，不等待预演帧播放结束
+					</th>
+				</tr>
+			</thead>
+		</table>
+		<p class="PageTitle3">
+			重复次数：0（不重复）
+		</p>
+		<table class="PageTable">
+			<thead>
+				<tr>
+					<th>
+						注意：
+						<br />
+						只会重复后续帧数，也就是说集气帧数是不会重复播放的。
+					</th>
+				</tr>
+			</thead>
+		</table>
+		<br />
+		<p class="PageTitle3">
+			接着往后看：5　0　0　0　99 0　0　10　0　0　0　0　10【77】0　123
+			<br />
+			<br />
+			基础伤害：77
+			<br />
+			这里的基础伤害仅供参考，实际伤害是这样计算的：
+			<br />
+			
+		</p>
+	</body>
+	<script src="../js/jquery-3.4.1.min.js"></script>
+	<script src="../js/debug.js"></script>
+</html>

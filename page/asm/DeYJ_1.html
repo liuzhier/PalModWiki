@@ -1,0 +1,217 @@
+<pre> 
+seg026:042A ; =============== S U B R O U T I N E =======================================
+seg026:042A
+seg026:042A ; Attributes: bp-based frame
+seg026:042A
+seg026:042A ; int __stdcall __far DeYJ_1(__int32 dest_ptr, char src_ptr, int)
+seg026:042A proc            DeYJ_1 far              ; CODE XREF: deyj1_fbp_subfile_to_screen_buf+46↑P
+seg026:042A                                         ; get_sprites_curr_scene+DC↑P
+seg026:042A                                         ; get_scene_map_source+98↑P
+seg026:042A                                         ; load_team_mgo+E9↑P
+seg026:042A                                         ; load_team_mgo+1D7↑P
+seg026:042A                                         ; process_scripts+4EA7↑P
+seg026:042A                                         ; process_scripts+4ED4↑P
+seg026:042A                                         ; load_enemy_pic_pos+128↑P
+seg026:042A                                         ; get_fbp_two_scene_cat_to_glb_scrn+59↑P
+seg026:042A                                         ; load_theurgy_image+88↑P
+seg026:042A                                         ; deyj1_makesub_f_to_glb_5+68↑P
+seg026:042A                                         ; RollPicture_Imp+51↑P
+seg026:042A                                         ; FadeInPic_imp+57↑P
+seg026:042A                                         ; FadeInPic_imp+89↑P
+seg026:042A                                         ; Final_Stage_imp+41↑P ...
+seg026:042A
+seg026:042A dest_ptr        = dword ptr  6
+seg026:042A src_ptr         = byte ptr  0Ah
+seg026:042A
+seg026:042A                 push    bp
+seg026:042B                 mov     bp, sp
+seg026:042D                 push    ds
+seg026:042E                 push    es
+seg026:042F
+seg026:042F loc_2CCBF:
+seg026:042F                 push    esi
+seg026:0431                 push    edi
+seg026:0433                 cld
+seg026:0434                 lds     si, [dword ptr bp+src_ptr]
+seg026:0437                 mov     ax, si
+seg026:0439                 mov     dx, ds
+seg026:043B                 shr     ax, 4
+seg026:043E                 add     dx, ax
+seg026:0440                 mov     ds, dx
+seg026:0442                 and     si, 0Fh
+seg026:0445                 mov     [cs:src_base], ds
+seg026:044A                 mov     [cs:src_offset], si
+seg026:044F                 les     di, [bp+dest_ptr]
+seg026:0452                 mov     ax, di
+seg026:0454                 mov     dx, es
+seg026:0456                 shr     ax, 4
+seg026:0459                 add     dx, ax
+seg026:045B                 mov     es, dx
+seg026:045D                 and     di, 0Fh
+seg026:0460                 mov     [cs:dst_base], es
+seg026:0465                 mov     [cs:dst_offset], di
+seg026:046A                 mov     eax, [dword ptr bp+src_ptr]
+seg026:046E
+seg026:046E loc_2CCFE:
+seg026:046E                 cmp     [dword ptr si], '1_JY'
+seg026:0475                 jnz     deyj1_exit
+seg026:0479                 push    ebp
+seg026:047B                 mov     [cs:word_2CD5E], si
+seg026:0480                 mov     [cs:word_2CD61], di
+seg026:0485                 mov     ax, [si+0Ch]
+seg026:0488                 mov     [cs:blocks], ax
+seg026:048C                 add     si, 10h
+seg026:048F                 mov     cl, [si-1]
+seg026:0492                 mov     di, si
+seg026:0494                 xor     ch, ch
+seg026:0496                 add     si, cx
+seg026:0498                 add     si, cx
+seg026:049A                 xor     bp, bp
+seg026:049C
+seg026:049C loop_fill_table:                        ; CODE XREF: DeYJ_1+A1↓j
+seg026:049C                 test    bp, 1Fh
+seg026:04A0                 jnz     short next_bp_not_32x
+seg026:04A2                 mov     dx, [si]
+seg026:04A4                 add     si, 2
+seg026:04A7
+seg026:04A7 next_bp_not_32x:                        ; CODE XREF: DeYJ_1+76↑j
+seg026:04A7                 xor     bx, bx
+seg026:04A9                 mov     ax, [di]
+seg026:04AB                 xchg    ah, bl
+seg026:04AD                 add     dx, dx
+seg026:04AF                 jb      short next_ax_not_or_80
+seg026:04B1                 or      ah, 80h
+seg026:04B4
+seg026:04B4 next_ax_not_or_80:                      ; CODE XREF: DeYJ_1+85↑j
+seg026:04B4                 mov     [cs:bp+0Eh], ax
+seg026:04B9                 add     dx, dx
+seg026:04BB
+seg026:04BB loc_2CD4B:
+seg026:04BB                 jb      short next_bx_not_or_80
+seg026:04BD                 or      bh, 80h
+seg026:04C0
+seg026:04C0 next_bx_not_or_80:                      ; CODE XREF: DeYJ_1:loc_2CD4B↑j
+seg026:04C0                 mov     [cs:bp+10h], bx
+seg026:04C5                 add     di, 2
+seg026:04C8
+seg026:04C8 loc_2CD58:
+seg026:04C8                 add     bp, 4
+seg026:04CB                 loop    loop_fill_table
+seg026:04CB ; ---------------------------------------------------------------------------
+seg026:04CD save_src_offset db 0B8h
+seg026:04CE word_2CD5E      dw 0                    ; DATA XREF: DeYJ_1+51↑w
+seg026:04D0 save_dst_offset db 0BFh
+seg026:04D1 word_2CD61      dw 0                    ; DATA XREF: DeYJ_1+56↑w
+seg026:04D3 ; ---------------------------------------------------------------------------
+seg026:04D3                 sub     si, ax
+seg026:04D5                 add     [cs:src_offset], si
+seg026:04DA                 mov     si, [cs:src_offset]
+seg026:04DF                 jmp     short transfer_data
+seg026:04E1 ; ---------------------------------------------------------------------------
+seg026:04E1
+seg026:04E1 add_to_src:                             ; CODE XREF: DeYJ_1:loc_2CE3D↓j
+seg026:04E1                                         ; DATA XREF: DeYJ_1+10B↓w
+seg026:04E1                                         ; DeYJ_1:fill_and_prepare↓w
+seg026:04E1                 mov     ax, 0
+seg026:04E4                 mov     cx, ax
+seg026:04E6                 shr     cx, 4
+seg026:04E9                 and     ax, 0Fh
+seg026:04EC                 add     [cs:src_base], cx
+seg026:04F1                 add     [cs:src_offset], ax
+seg026:04F6                 mov     ds, [cs:src_base]
+seg026:04FB                 mov     si, [cs:src_offset]
+seg026:0500
+seg026:0500 add_to_dst:                             ; DATA XREF: DeYJ_1+F7↓w
+seg026:0500                 mov     ax, 0
+seg026:0503                 mov     cx, ax
+seg026:0505                 shr     cx, 4
+seg026:0508                 and     ax, 0Fh
+seg026:050B                 add     [cs:dst_base], cx
+seg026:0510                 add     [cs:dst_offset], ax
+seg026:0515                 mov     es, [cs:dst_base]
+seg026:051A                 mov     di, [cs:dst_offset]
+seg026:051F
+seg026:051F transfer_data:                          ; CODE XREF: DeYJ_1+B5↑j
+seg026:051F                 mov     cx, [si]
+seg026:0521                 mov     [word ptr cs:add_to_dst+1], cx
+seg026:0526                 mov     ax, [si+2]
+seg026:0529                 add     si, 4
+seg026:052C                 or      ax, ax
+seg026:052E                 jnz     short fill_and_prepare
+seg026:0530                 mov     ax, cx
+seg026:0532                 add     ax, 4
+seg026:0535                 mov     [word ptr cs:add_to_src+1], ax
+seg026:0539                 mov     bx, cx
+seg026:053B                 shr     cx, 2
+seg026:053E                 rep movsd
+seg026:0541                 mov     cx, bx
+seg026:0543
+seg026:0543 loc_2CDD3:
+seg026:0543                 and     cx, 3
+seg026:0546                 rep movsb
+seg026:0548                 jmp     short continue
+seg026:054A ; ---------------------------------------------------------------------------
+seg026:054A
+seg026:054A fill_and_prepare:                       ; CODE XREF: DeYJ_1+104↑j
+seg026:054A                 mov     [word ptr cs:add_to_src+1], ax
+seg026:054E                 mov     eax, [si]
+seg026:0551                 mov     [cs:keyword], eax
+seg026:0556                 mov     eax, [si+4]
+seg026:055A                 mov     [cs:keyword+4], eax
+seg026:055F
+seg026:055F loc_2CDEF:
+seg026:055F                 mov     eax, [si+8]
+seg026:0563                 mov     [cs:keyword+8], eax
+seg026:0568                 mov     eax, [si+0Ch]
+seg026:056C
+seg026:056C loc_2CDFC:
+seg026:056C                 mov     [cs:keyword+0Ch], eax
+seg026:0571                 mov     eax, [si+10h]
+seg026:0575                 mov     [cs:keyword+10h], eax
+seg026:057A
+seg026:057A loc_2CE0A:
+seg026:057A                 shr     eax, 10h
+seg026:057E                 xor     bx, bx
+seg026:0580                 xchg    bl, ah
+seg026:0582                 mov     [cs:word_2CE73], ax
+seg026:0586                 mov     [cs:word_2CF5C], ax
+seg026:058A
+seg026:058A loc_2CE1A:
+seg026:058A                 mov     [cs:word_2CE89], bx
+seg026:058F                 mov     [cs:word_2CF72], bx
+seg026:0594                 add     si, 14h
+seg026:0597
+seg026:0597 loc_2CE27:
+seg026:0597                 mov     dx, [si]
+seg026:0599                 shl     edx, 10h
+seg026:059D                 mov     dx, [si+2]
+seg026:05A0                 add     si, 4
+seg026:05A3                 mov     ch, 20h ; ' '
+seg026:05A5
+seg026:05A5 loc_2CE35:
+seg026:05A5                 call    analysis
+seg026:05A8
+seg026:05A8 continue:                               ; CODE XREF: DeYJ_1+11E↑j
+seg026:05A8                 dec     [cs:blocks]
+seg026:05AD
+seg026:05AD loc_2CE3D:
+seg026:05AD                 jnz     add_to_src
+seg026:05B1                 pop     ebp
+seg026:05B3
+seg026:05B3 loc_2CE43:
+seg026:05B3                 mov     eax, [bp+dest_ptr]
+seg026:05B7
+seg026:05B7 deyj1_exit:                             ; CODE XREF: DeYJ_1+4B↑j
+seg026:05B7                 shld    edx, eax, 10h
+seg026:05BC                 pop     edi
+seg026:05BE
+seg026:05BE loc_2CE4E:
+seg026:05BE                 pop     esi
+seg026:05C0                 pop     es
+seg026:05C1                 pop     ds
+seg026:05C2
+seg026:05C2 loc_2CE52:
+seg026:05C2                 pop     bp
+seg026:05C3                 retf    8
+seg026:05C3 endp            DeYJ_1
+</pre> 

@@ -1,0 +1,379 @@
+<pre> 
+seg026:05C6 ; =============== S U B R O U T I N E =======================================
+seg026:05C6
+seg026:05C6
+seg026:05C6 proc            analysis near           ; CODE XREF: DeYJ_1:loc_2CE35↑p
+seg026:05C6                                         ; analysis:loc_2D08C↓j
+seg026:05C6                 cmp     ch, 3
+seg026:05C9                 jnb     short loc_2CE70
+seg026:05CB                 xor     eax, eax
+seg026:05CE
+seg026:05CE loc_2CE5E:
+seg026:05CE                 mov     ax, [si]
+seg026:05D0
+seg026:05D0 loc_2CE60:
+seg026:05D0                 add     si, 2
+seg026:05D3                 mov     cl, 10h
+seg026:05D5                 sub     cl, ch
+seg026:05D7                 shl     eax, cl
+seg026:05DA
+seg026:05DA loc_2CE6A:
+seg026:05DA                 add     ch, 10h
+seg026:05DD                 or      edx, eax
+seg026:05E0
+seg026:05E0 loc_2CE70:                              ; CODE XREF: analysis+3↑j
+seg026:05E0                 dec     ch
+seg026:05E0 ; ---------------------------------------------------------------------------
+seg026:05E2 get_saved       db 0BDh
+seg026:05E3 word_2CE73      dw 0                    ; DATA XREF: DeYJ_1+158↑w
+seg026:05E5 ; ---------------------------------------------------------------------------
+seg026:05E5
+seg026:05E5 loc_2CE75:
+seg026:05E5                 add     edx, edx
+seg026:05E8                 jb      short loc_2CEBF
+seg026:05EA                 xor     bx, bx
+seg026:05EC                 shld    ebx, edx, 2
+seg026:05F1                 shl     edx, 2
+seg026:05F5                 sub     ch, 2
+seg026:05F5 ; ---------------------------------------------------------------------------
+seg026:05F8                 db 0BDh
+seg026:05F9 word_2CE89      dw 0                    ; DATA XREF: DeYJ_1:loc_2CE1A↑w
+seg026:05FB ; ---------------------------------------------------------------------------
+seg026:05FB                 or      bx, bx
+seg026:05FD                 jz      short loc_2CEBF
+seg026:05FF                 mov     bl, [cs:bx+418h]
+seg026:0604                 cmp     ch, bl
+seg026:0606                 jnb     short loc_2CEAD
+seg026:0608                 xor     eax, eax
+seg026:060B                 mov     ax, [si]
+seg026:060D                 add     si, 2
+seg026:0610                 mov     cl, 10h
+seg026:0612                 sub     cl, ch
+seg026:0614                 shl     eax, cl
+seg026:0617                 add     ch, 10h
+seg026:061A
+seg026:061A loc_2CEAA:
+seg026:061A                 or      edx, eax
+seg026:061D
+seg026:061D loc_2CEAD:                              ; CODE XREF: analysis+40↑j
+seg026:061D                 mov     cl, bl
+seg026:061F                 xor     ebp, ebp
+seg026:0622                 shld    ebp, edx, cl
+seg026:0626                 jz      return_to_DeYJ_1
+seg026:062A                 shl     edx, cl
+seg026:062D                 sub     ch, cl
+seg026:062F
+seg026:062F loc_2CEBF:                              ; CODE XREF: analysis+22↑j
+seg026:062F                                         ; analysis+37↑j
+seg026:062F                                         ; analysis+E7↓j
+seg026:062F                 cmp     ch, 10h
+seg026:0632                 jnb     short loc_2CED9
+seg026:0634
+seg026:0634 loc_2CEC4:
+seg026:0634                 xor     eax, eax
+seg026:0637
+seg026:0637 loc_2CEC7:
+seg026:0637                 mov     ax, [si]
+seg026:0639                 add     si, 2
+seg026:063C                 mov     cl, 10h
+seg026:063E                 sub     cl, ch
+seg026:0640                 shl     eax, cl
+seg026:0643                 add     ch, 10h
+seg026:0646                 or      edx, eax
+seg026:0649
+seg026:0649 loc_2CED9:                              ; CODE XREF: analysis+6C↑j
+seg026:0649                 xor     ebx, ebx
+seg026:064C
+seg026:064C loc_2CEDC:                              ; CODE XREF: analysis+E0↓j
+seg026:064C                 dec     ch
+seg026:064E                 shld    ebx, edx, 1
+seg026:0653                 add     edx, edx
+seg026:0656                 mov     bx, [word ptr cs:table+ebx*2]
+seg026:065F                 or      bx, bx
+seg026:0661                 jl      short loc_2CF38
+seg026:0663                 dec     ch
+seg026:0665
+seg026:0665 loc_2CEF5:
+seg026:0665                 shld    ebx, edx, 1
+seg026:066A                 add     edx, edx
+seg026:066D                 mov     bx, [word ptr cs:table+ebx*2]
+seg026:0676                 or      bx, bx
+seg026:0678                 jl      short loc_2CF38
+seg026:067A                 dec     ch
+seg026:067C                 shld    ebx, edx, 1
+seg026:0681                 add     edx, edx
+seg026:0684
+seg026:0684 loc_2CF14:
+seg026:0684                 mov     bx, [word ptr cs:table+ebx*2]
+seg026:068D                 or      bx, bx
+seg026:068F                 jl      short loc_2CF38
+seg026:0691                 dec     ch
+seg026:0693                 shld    ebx, edx, 1
+seg026:0698                 add     edx, edx
+seg026:069B
+seg026:069B loc_2CF2B:
+seg026:069B                 mov     bx, [word ptr cs:table+ebx*2]
+seg026:06A4                 or      bx, bx
+seg026:06A6                 jge     short loc_2CEDC
+seg026:06A8
+seg026:06A8 loc_2CF38:                              ; CODE XREF: analysis+9B↑j
+seg026:06A8                                         ; analysis+B2↑j
+seg026:06A8                                         ; analysis+C9↑j
+seg026:06A8                 mov     [es:di], bl
+seg026:06AB                 inc     di
+seg026:06AC                 dec     bp
+seg026:06AD                 jnz     short loc_2CEBF
+seg026:06AF                 cmp     ch, 3
+seg026:06B2                 jnb     short loc_2CF59
+seg026:06B4                 xor     eax, eax
+seg026:06B7                 mov     ax, [si]
+seg026:06B9                 add     si, 2
+seg026:06BC                 mov     cl, 10h
+seg026:06BE                 sub     cl, ch
+seg026:06C0                 shl     eax, cl
+seg026:06C3                 add     ch, 10h
+seg026:06C6                 or      edx, eax
+seg026:06C9
+seg026:06C9 loc_2CF59:                              ; CODE XREF: analysis+EC↑j
+seg026:06C9                 dec     ch
+seg026:06C9 ; ---------------------------------------------------------------------------
+seg026:06CB                 db 0BDh
+seg026:06CC word_2CF5C      dw 0                    ; DATA XREF: DeYJ_1+15C↑w
+seg026:06CE ; ---------------------------------------------------------------------------
+seg026:06CE                 add     edx, edx
+seg026:06D1                 jb      short loc_2CFA8
+seg026:06D3                 xor     bx, bx
+seg026:06D5                 shld    ebx, edx, 2
+seg026:06DA                 shl     edx, 2
+seg026:06DE                 sub     ch, 2
+seg026:06DE ; ---------------------------------------------------------------------------
+seg026:06E1                 db 0BDh
+seg026:06E2 word_2CF72      dw 0                    ; DATA XREF: DeYJ_1+165↑w
+seg026:06E4 ; ---------------------------------------------------------------------------
+seg026:06E4
+seg026:06E4 loc_2CF74:
+seg026:06E4                 or      bx, bx
+seg026:06E6                 jz      short loc_2CFA8
+seg026:06E8
+seg026:06E8 loc_2CF78:
+seg026:06E8                 mov     bl, [cs:bx+418h]
+seg026:06ED                 cmp     ch, bl
+seg026:06EF                 jnb     short loc_2CF96
+seg026:06F1                 xor     eax, eax
+seg026:06F4                 mov     ax, [si]
+seg026:06F6
+seg026:06F6 loc_2CF86:
+seg026:06F6                 add     si, 2
+seg026:06F9                 mov     cl, 10h
+seg026:06FB                 sub     cl, ch
+seg026:06FD                 shl     eax, cl
+seg026:0700                 add     ch, 10h
+seg026:0703                 or      edx, eax
+seg026:0706
+seg026:0706 loc_2CF96:                              ; CODE XREF: analysis+129↑j
+seg026:0706                 mov     cl, bl
+seg026:0708                 xor     ebp, ebp
+seg026:070B                 shld    ebp, edx, cl
+seg026:070F                 jz      return_to_DeYJ_1
+seg026:0713                 shl     edx, cl
+seg026:0716                 sub     ch, cl
+seg026:0718
+seg026:0718 loc_2CFA8:                              ; CODE XREF: analysis+10B↑j
+seg026:0718                                         ; analysis+120↑j
+seg026:0718                 mov     [cs:loops], bp
+seg026:071D
+seg026:071D loc_2CFAD:                              ; CODE XREF: analysis:loc_2D088↓j
+seg026:071D                 cmp     ch, 3
+seg026:0720
+seg026:0720 loc_2CFB0:
+seg026:0720                 jnb     short loc_2CFC7
+seg026:0722
+seg026:0722 loc_2CFB2:
+seg026:0722                 xor     eax, eax
+seg026:0725
+seg026:0725 loc_2CFB5:
+seg026:0725                 mov     ax, [si]
+seg026:0727                 add     si, 2
+seg026:072A                 mov     cl, 10h
+seg026:072C                 sub     cl, ch
+seg026:072E
+seg026:072E loc_2CFBE:
+seg026:072E                 shl     eax, cl
+seg026:0731                 add     ch, 10h
+seg026:0734                 or      edx, eax
+seg026:0737
+seg026:0737 loc_2CFC7:                              ; CODE XREF: analysis:loc_2CFB0↑j
+seg026:0737                 xor     ebp, ebp
+seg026:073A                 shld    ebp, edx, 2
+seg026:073F                 jnz     short loc_2CFDF
+seg026:0741                 shl     edx, 2
+seg026:0745                 sub     ch, 2
+seg026:0748                 mov     bp, [word ptr cs:keyword]
+seg026:074D
+seg026:074D loc_2CFDD:
+seg026:074D                 jmp     short loc_2D020
+seg026:074F ; ---------------------------------------------------------------------------
+seg026:074F
+seg026:074F loc_2CFDF:                              ; CODE XREF: analysis+179↑j
+seg026:074F                 shl     edx, 2
+seg026:0753
+seg026:0753 loc_2CFE3:
+seg026:0753                 sub     ch, 3
+seg026:0756
+seg026:0756 loc_2CFE6:
+seg026:0756                 add     edx, edx
+seg026:0759                 jb      short loc_2CFF4
+seg026:075B                 add     bp, bp
+seg026:075D                 mov     bp, [cs:bp+40Ah]
+seg026:0762                 jmp     short loc_2D020
+seg026:0764 ; ---------------------------------------------------------------------------
+seg026:0764
+seg026:0764 loc_2CFF4:                              ; CODE XREF: analysis+193↑j
+seg026:0764                 mov     bl, [cs:bp+415h]
+seg026:0769
+seg026:0769 loc_2CFF9:
+seg026:0769                 cmp     ch, bl
+seg026:076B                 jnb     short loc_2D012
+seg026:076D                 xor     eax, eax
+seg026:0770                 mov     ax, [si]
+seg026:0772                 add     si, 2
+seg026:0775                 mov     cl, 10h
+seg026:0777                 sub     cl, ch
+seg026:0779                 shl     eax, cl
+seg026:077C
+seg026:077C loc_2D00C:
+seg026:077C                 add     ch, 10h
+seg026:077F                 or      edx, eax
+seg026:0782
+seg026:0782 loc_2D012:                              ; CODE XREF: analysis+1A5↑j
+seg026:0782                 mov     cl, bl
+seg026:0784
+seg026:0784 loc_2D014:
+seg026:0784                 xor     ebp, ebp
+seg026:0787
+seg026:0787 loc_2D017:
+seg026:0787                 shld    ebp, edx, cl
+seg026:078B
+seg026:078B loc_2D01B:
+seg026:078B                 shl     edx, cl
+seg026:078E
+seg026:078E loc_2D01E:
+seg026:078E                 sub     ch, cl
+seg026:0790
+seg026:0790 loc_2D020:                              ; CODE XREF: analysis:loc_2CFDD↑j
+seg026:0790                                         ; analysis+19C↑j
+seg026:0790                 cmp     ch, 10h
+seg026:0793                 jnb     short loc_2D03A
+seg026:0795                 xor     eax, eax
+seg026:0798
+seg026:0798 loc_2D028:
+seg026:0798                 mov     ax, [si]
+seg026:079A
+seg026:079A loc_2D02A:
+seg026:079A                 add     si, 2
+seg026:079D
+seg026:079D loc_2D02D:
+seg026:079D                 mov     cl, 10h
+seg026:079F                 sub     cl, ch
+seg026:07A1                 shl     eax, cl
+seg026:07A4
+seg026:07A4 loc_2D034:
+seg026:07A4                 add     ch, 10h
+seg026:07A7
+seg026:07A7 loc_2D037:
+seg026:07A7                 or      edx, eax
+seg026:07AA
+seg026:07AA loc_2D03A:                              ; CODE XREF: analysis+1CD↑j
+seg026:07AA                 xor     ebx, ebx
+seg026:07AD
+seg026:07AD loc_2D03D:
+seg026:07AD                 shld    ebx, edx, 2
+seg026:07B2
+seg026:07B2 loc_2D042:
+seg026:07B2                 shl     edx, 2
+seg026:07B6
+seg026:07B6 loc_2D046:
+seg026:07B6                 sub     ch, 2
+seg026:07B9
+seg026:07B9 loc_2D049:
+seg026:07B9                 mov     bl, [cs:bx+412h]
+seg026:07BE
+seg026:07BE loc_2D04E:
+seg026:07BE                 mov     cl, bl
+seg026:07C0
+seg026:07C0 loc_2D050:
+seg026:07C0                 xor     eax, eax
+seg026:07C3
+seg026:07C3 loc_2D053:
+seg026:07C3                 shld    eax, edx, cl
+seg026:07C7
+seg026:07C7 loc_2D057:
+seg026:07C7                 shl     edx, cl
+seg026:07CA
+seg026:07CA loc_2D05A:
+seg026:07CA                 sub     ch, cl
+seg026:07CC
+seg026:07CC loc_2D05C:
+seg026:07CC                 mov     bx, si
+seg026:07CE
+seg026:07CE loc_2D05E:
+seg026:07CE                 mov     si, di
+seg026:07D0
+seg026:07D0 loc_2D060:
+seg026:07D0                 sub     si, ax
+seg026:07D2
+seg026:07D2 loc_2D062:
+seg026:07D2                 xchg    cx, bp
+seg026:07D4
+seg026:07D4 loc_2D064:
+seg026:07D4                 cmp     cx, 8
+seg026:07D7
+seg026:07D7 loc_2D067:
+seg026:07D7                 jb      short loc_2D07C
+seg026:07D9
+seg026:07D9 loc_2D069:
+seg026:07D9                 cmp     ax, 4
+seg026:07DC
+seg026:07DC loc_2D06C:
+seg026:07DC                 jb      short loc_2D07C
+seg026:07DE
+seg026:07DE loc_2D06E:
+seg026:07DE                 mov     ax, cx
+seg026:07E0
+seg026:07E0 loc_2D070:
+seg026:07E0                 shr     cx, 2
+seg026:07E3
+seg026:07E3 loc_2D073:
+seg026:07E3                 rep movs [dword ptr es:di], [dword ptr es:si]
+seg026:07E7
+seg026:07E7 loc_2D077:
+seg026:07E7                 mov     cx, ax
+seg026:07E9
+seg026:07E9 loc_2D079:
+seg026:07E9                 and     cx, 3
+seg026:07EC
+seg026:07EC loc_2D07C:                              ; CODE XREF: analysis:loc_2D067↑j
+seg026:07EC                                         ; analysis:loc_2D06C↑j
+seg026:07EC                 rep movs [byte ptr es:di], [byte ptr es:si]
+seg026:07EF
+seg026:07EF loc_2D07F:
+seg026:07EF                 mov     cx, bp
+seg026:07F1
+seg026:07F1 loc_2D081:
+seg026:07F1                 mov     si, bx
+seg026:07F3
+seg026:07F3 loc_2D083:
+seg026:07F3                 dec     [cs:loops]
+seg026:07F8
+seg026:07F8 loc_2D088:
+seg026:07F8                 jnz     loc_2CFAD
+seg026:07FC
+seg026:07FC loc_2D08C:
+seg026:07FC                 jmp     analysis
+seg026:07FF ; ---------------------------------------------------------------------------
+seg026:07FF
+seg026:07FF return_to_DeYJ_1:                       ; CODE XREF: analysis+60↑j
+seg026:07FF                                         ; analysis+149↑j
+seg026:07FF                 retn
+seg026:07FF endp            analysis
+</pre> 

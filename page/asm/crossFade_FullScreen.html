@@ -1,0 +1,158 @@
+<pre> 
+seg009:00F9 ; =============== S U B R O U T I N E =======================================
+seg009:00F9
+seg009:00F9 ; Attributes: bp-based frame
+seg009:00F9
+seg009:00F9 proc            crossFade_FullScreen far
+seg009:00F9                                         ; CODE XREF: process_Battle+3F8↑P
+seg009:00F9                                         ; summon_lasting?+19E↑P
+seg009:00F9
+seg009:00F9 arg_0           = dword ptr  6
+seg009:00F9 arg_4           = dword ptr  0Ah
+seg009:00F9
+seg009:00F9                 push    bp
+seg009:00FA                 mov     bp, sp
+seg009:00FC                 push    ds
+seg009:00FD                 push    es
+seg009:00FE                 push    si
+seg009:00FF                 push    di
+seg009:0100                 cld
+seg009:0101                 mov     ax, 0A000h
+seg009:0104                 mov     es, ax
+seg009:0106                 assume es:nothing
+seg009:0106                 lds     si, [bp+arg_0]
+seg009:0109                 mov     di, [si]
+seg009:010B                 lds     si, [bp+arg_4]
+seg009:010E
+seg009:010E loc_2830E:
+seg009:010E                 add     si, di
+seg009:0110                 mov     dx, 6
+seg009:0113
+seg009:0113 loc_28313:
+seg009:0113                 mov     cx, 888
+seg009:0116
+seg009:0116 fading_loop:                            ; CODE XREF: crossFade_FullScreen+89↓j
+seg009:0116                 mov     al, [si]
+seg009:0118
+seg009:0118 loc_28318:
+seg009:0118                 mov     [es:di], al
+seg009:011B                 add     si, dx
+seg009:011D                 add     di, dx
+seg009:011F                 mov     al, [si]
+seg009:0121                 mov     [es:di], al
+seg009:0124                 add     si, dx
+seg009:0126                 add     di, dx
+seg009:0128                 mov     al, [si]
+seg009:012A                 mov     [es:di], al
+seg009:012D                 add     si, dx
+seg009:012F                 add     di, dx
+seg009:0131                 mov     al, [si]
+seg009:0133                 mov     [es:di], al
+seg009:0136                 add     si, dx
+seg009:0138                 add     di, dx
+seg009:013A                 mov     al, [si]
+seg009:013C                 mov     [es:di], al
+seg009:013F                 add     si, dx
+seg009:0141                 add     di, dx
+seg009:0143
+seg009:0143 loc_28343:
+seg009:0143                 mov     al, [si]
+seg009:0145                 mov     [es:di], al
+seg009:0148
+seg009:0148 loc_28348:
+seg009:0148                 add     si, dx
+seg009:014A                 add     di, dx
+seg009:014C                 mov     al, [si]
+seg009:014E
+seg009:014E loc_2834E:
+seg009:014E                 mov     [es:di], al
+seg009:0151                 add     si, dx
+seg009:0153                 add     di, dx
+seg009:0155                 mov     al, [si]
+seg009:0157                 mov     [es:di], al
+seg009:015A                 add     si, dx
+seg009:015C                 add     di, dx
+seg009:015E                 mov     al, [si]
+seg009:0160                 mov     [es:di], al
+seg009:0163                 add     si, dx
+seg009:0165                 add     di, dx
+seg009:0167                 mov     al, [si]
+seg009:0169                 mov     [es:di], al
+seg009:016C                 add     si, dx
+seg009:016E                 add     di, dx
+seg009:0170                 mov     al, [si]
+seg009:0172
+seg009:0172 loc_28372:
+seg009:0172                 mov     [es:di], al
+seg009:0175                 add     si, dx
+seg009:0177                 add     di, dx
+seg009:0179                 mov     al, [si]
+seg009:017B                 mov     [es:di], al
+seg009:017E                 add     si, dx
+seg009:0180
+seg009:0180 loc_28380:
+seg009:0180                 add     di, dx
+seg009:0182                 loop    fading_loop
+seg009:0184                 mov     al, [si]
+seg009:0186
+seg009:0186 loc_28386:
+seg009:0186                 mov     [es:di], al
+seg009:0189                 add     si, dx
+seg009:018B                 add     di, dx
+seg009:018D                 mov     al, [si]
+seg009:018F                 mov     [es:di], al
+seg009:0192                 add     si, dx
+seg009:0194                 add     di, dx
+seg009:0196                 mov     al, [si]
+seg009:0198                 mov     [es:di], al
+seg009:019B                 add     si, dx
+seg009:019D                 add     di, dx
+seg009:019F                 mov     al, [si]
+seg009:01A1                 mov     [es:di], al
+seg009:01A4                 add     si, dx
+seg009:01A6                 add     di, dx
+seg009:01A8                 mov     al, [si]
+seg009:01AA                 mov     [es:di], al
+seg009:01AD                 add     si, dx
+seg009:01AF                 add     di, dx
+seg009:01B1
+seg009:01B1 loc_283B1:
+seg009:01B1                 mov     al, [si]
+seg009:01B3                 mov     [es:di], al
+seg009:01B6                 add     si, dx
+seg009:01B8                 add     di, dx
+seg009:01BA                 mov     al, [si]
+seg009:01BC                 mov     [es:di], al
+seg009:01BF                 add     si, dx
+seg009:01C1                 add     di, dx
+seg009:01C3                 mov     al, [si]
+seg009:01C5                 mov     [es:di], al
+seg009:01C8                 add     si, dx
+seg009:01CA                 add     di, dx
+seg009:01CC                 mov     al, [si]
+seg009:01CE                 mov     [es:di], al
+seg009:01D1                 add     si, dx
+seg009:01D3                 add     di, dx
+seg009:01D5                 mov     al, [si]
+seg009:01D7                 mov     [es:di], al
+seg009:01DA                 add     si, dx
+seg009:01DC                 add     di, dx
+seg009:01DE
+seg009:01DE loc_283DE:
+seg009:01DE                 cmp     di, 0FA00h
+seg009:01E2
+seg009:01E2 loc_283E2:
+seg009:01E2                 jnb     short loc_283E9
+seg009:01E4                 mov     al, [si]
+seg009:01E6                 mov     [es:di], al
+seg009:01E9
+seg009:01E9 loc_283E9:                              ; CODE XREF: crossFade_FullScreen:loc_283E2↑j
+seg009:01E9                 pop     di
+seg009:01EA                 pop     si
+seg009:01EB                 pop     es
+seg009:01EC                 assume es:nothing
+seg009:01EC                 pop     ds
+seg009:01ED                 pop     bp
+seg009:01EE                 retf    8
+seg009:01EE endp            crossFade_FullScreen
+</pre> 

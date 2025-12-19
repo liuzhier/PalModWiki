@@ -1,0 +1,105 @@
+<pre> 
+seg009:0000 ; =============== S U B R O U T I N E =======================================
+seg009:0000
+seg009:0000 ; Attributes: bp-based frame
+seg009:0000
+seg009:0000 ; int __stdcall __far crossFade_assimilate(__int32 gap, __int32 times, __int32 dst, __int32 src)
+seg009:0000 proc            crossFade_assimilate far
+seg009:0000                                         ; CODE XREF: summon_lasting?+103↑P
+seg009:0000                                         ; Redraw_Tiles_or_Fade_to_pic+D2↑P
+seg009:0000                                         ; crossFadeOut+A0↑P
+seg009:0000
+seg009:0000 gap             = dword ptr  6
+seg009:0000 times           = dword ptr  0Ah
+seg009:0000 dst             = dword ptr  0Eh
+seg009:0000 src             = dword ptr  12h
+seg009:0000
+seg009:0000                 push    bp
+seg009:0001
+seg009:0001 loc_28201:
+seg009:0001                 mov     bp, sp
+seg009:0003                 push    ds
+seg009:0004                 push    es
+seg009:0005                 push    si
+seg009:0006
+seg009:0006 loc_28206:
+seg009:0006                 push    di
+seg009:0007                 cld
+seg009:0008
+seg009:0008 loc_28208:
+seg009:0008                 lds     si, [bp+times]
+seg009:000B
+seg009:000B loc_2820B:
+seg009:000B                 mov     cx, [si]
+seg009:000D
+seg009:000D loc_2820D:
+seg009:000D                 shr     cx, 2
+seg009:0010
+seg009:0010 loc_28210:
+seg009:0010                 lds     si, [bp+gap]
+seg009:0013                 lodsw
+seg009:0014
+seg009:0014 loc_28214:
+seg009:0014                 lds     si, [bp+dst]
+seg009:0017
+seg009:0017 loc_28217:
+seg009:0017                 les     di, [bp+src]
+seg009:001A                 add     si, ax
+seg009:001C                 add     di, ax
+seg009:001E
+seg009:001E loc_2821E:
+seg009:001E                 mov     dx, 0FF0h
+seg009:0021                 mov     bx, 6
+seg009:0024
+seg009:0024 fade_loop:                              ; CODE XREF: crossFade_assimilate:loc_28264↓j
+seg009:0024                 mov     al, [si]
+seg009:0026
+seg009:0026 loc_28226:
+seg009:0026                 mov     ah, [es:di]
+seg009:0029                 and     ax, dx
+seg009:002B                 or      al, ah
+seg009:002D                 mov     [es:di], al
+seg009:0030                 add     si, bx
+seg009:0032                 add     di, bx
+seg009:0034
+seg009:0034 loc_28234:
+seg009:0034                 mov     al, [si]
+seg009:0036                 mov     ah, [es:di]
+seg009:0039                 and     ax, dx
+seg009:003B                 or      al, ah
+seg009:003D                 mov     [es:di], al
+seg009:0040                 add     si, bx
+seg009:0042                 add     di, bx
+seg009:0044                 mov     al, [si]
+seg009:0046                 mov     ah, [es:di]
+seg009:0049                 and     ax, dx
+seg009:004B                 or      al, ah
+seg009:004D                 mov     [es:di], al
+seg009:0050
+seg009:0050 loc_28250:
+seg009:0050                 add     si, bx
+seg009:0052                 add     di, bx
+seg009:0054
+seg009:0054 loc_28254:
+seg009:0054                 mov     al, [si]
+seg009:0056
+seg009:0056 loc_28256:
+seg009:0056                 mov     ah, [es:di]
+seg009:0059
+seg009:0059 loc_28259:
+seg009:0059                 and     ax, dx
+seg009:005B                 or      al, ah
+seg009:005D                 mov     [es:di], al
+seg009:0060                 add     si, bx
+seg009:0062                 add     di, bx
+seg009:0064
+seg009:0064 loc_28264:
+seg009:0064                 loop    fade_loop
+seg009:0066                 pop     di
+seg009:0067                 pop     si
+seg009:0068                 pop     es
+seg009:0069                 pop     ds
+seg009:006A                 pop     bp
+seg009:006B                 retf    10h
+seg009:006B endp            crossFade_assimilate
+</pre> 

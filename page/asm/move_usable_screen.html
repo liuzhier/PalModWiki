@@ -1,0 +1,509 @@
+<pre> 
+seg000:F65D ; =============== S U B R O U T I N E =======================================
+seg000:F65D
+seg000:F65D ; Attributes: bp-based frame
+seg000:F65D
+seg000:F65D proc            move_usable_screen far  ; CODE XREF: real_entry+DE1↑P
+seg000:F65D                                         ; process_scripts+215A↓P
+seg000:F65D                                         ; process_scripts+38A6↓P
+seg000:F65D                                         ; process_scripts+39D6↓P
+seg000:F65D                                         ; process_scripts:loc_16390↓P
+seg000:F65D                                         ; GameLoop_OneCycle+46A↓P
+seg000:F65D
+seg000:F65D final_y_max     = word ptr -52h
+seg000:F65D final_x_max     = word ptr -50h
+seg000:F65D final_y_min     = word ptr -4Eh
+seg000:F65D final_x_min     = word ptr -4Ch
+seg000:F65D var_4A          = word ptr -4Ah
+seg000:F65D var_48          = word ptr -48h
+seg000:F65D var_46          = word ptr -46h
+seg000:F65D var_44          = word ptr -44h
+seg000:F65D var_42          = word ptr -42h
+seg000:F65D var_40          = word ptr -40h
+seg000:F65D var_3E          = word ptr -3Eh
+seg000:F65D var_3C          = word ptr -3Ch
+seg000:F65D var_3A          = word ptr -3Ah
+seg000:F65D var_38          = word ptr -38h
+seg000:F65D var_36          = word ptr -36h
+seg000:F65D argu_y_max      = word ptr -34h
+seg000:F65D var_32          = word ptr -32h
+seg000:F65D var_30          = word ptr -30h
+seg000:F65D var_2E          = word ptr -2Eh
+seg000:F65D var_2C          = word ptr -2Ch
+seg000:F65D var_2A          = word ptr -2Ah
+seg000:F65D bottom_boundary_= word ptr -28h
+seg000:F65D var_26          = word ptr -26h
+seg000:F65D var_24          = word ptr -24h
+seg000:F65D y_flag_         = word ptr -22h
+seg000:F65D var_20          = word ptr -20h
+seg000:F65D argu_x_max      = word ptr -1Eh
+seg000:F65D argu_x_min      = word ptr -1Ch
+seg000:F65D right_boundary_ = word ptr -1Ah
+seg000:F65D relative_viewport_x_prev= word ptr -18h
+seg000:F65D var_x_bak_a320  = word ptr -16h
+seg000:F65D x_flag_         = word ptr -14h
+seg000:F65D
+seg000:F65D                 mov     cx, 40h
+seg000:F660                 mov     bx, 0
+seg000:F663                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg000:F668                 mov     ax, [ds:relative_viewport_x]
+seg000:F66B                 mov     [ds:relative_viewport_x_prev], ax
+seg000:F66E                 mov     cx, [ds:relative_viewport_y]
+seg000:F672                 mov     [ds:relative_viewport_y_prev], cx
+seg000:F676                 sub     ax, [ds:viewport_x_bak]
+seg000:F67A                 add     ax, [ds:RPG_viewport_x]
+seg000:F67E                 add     ax, 320
+seg000:F681                 mov     cx, 320
+seg000:F684                 cwd
+seg000:F685                 idiv    cx
+seg000:F687                 mov     [ds:relative_viewport_x], dx
+seg000:F68B                 mov     ax, [ds:relative_viewport_y]
+seg000:F68E                 sub     ax, [ds:viewport_y_bak]
+seg000:F692                 add     ax, [ds:RPG_viewport_y]
+seg000:F696                 add     ax, 200
+seg000:F699                 mov     cx, 200
+seg000:F69C                 cwd
+seg000:F69D                 idiv    cx
+seg000:F69F                 mov     [ds:relative_viewport_y], dx
+seg000:F6A3                 cmp     [ds:redraw_flag], 0 ; 0:生成,1:停工,2:淡入gop暂存屏
+seg000:F6A8                 jz      short viewport_x_check
+seg000:F6AA                 jmp     return
+seg000:F6AD ; ---------------------------------------------------------------------------
+seg000:F6AD
+seg000:F6AD viewport_x_check:                       ; CODE XREF: move_usable_screen+4B↑j
+seg000:F6AD                 mov     ax, [ds:RPG_viewport_x]
+seg000:F6B0                 sub     ax, [ds:viewport_x_bak]
+seg000:F6B4                 cwd
+seg000:F6B5                 xor     ax, dx
+seg000:F6B7                 sub     ax, dx
+seg000:F6B9                 cmp     ax, 320
+seg000:F6BC                 jl      short viewport_y_check
+seg000:F6BE                 jmp     return
+seg000:F6C1 ; ---------------------------------------------------------------------------
+seg000:F6C1
+seg000:F6C1 viewport_y_check:                       ; CODE XREF: move_usable_screen+5F↑j
+seg000:F6C1                 mov     ax, [ds:RPG_viewport_y]
+seg000:F6C4                 sub     ax, [ds:viewport_y_bak]
+seg000:F6C8                 cwd
+seg000:F6C9                 xor     ax, dx
+seg000:F6CB                 sub     ax, dx
+seg000:F6CD                 cmp     ax, 200
+seg000:F6D0                 jl      short in_one_scrn
+seg000:F6D2                 jmp     return
+seg000:F6D5 ; ---------------------------------------------------------------------------
+seg000:F6D5
+seg000:F6D5 in_one_scrn:                            ; CODE XREF: move_usable_screen+73↑j
+seg000:F6D5                 mov     [bp+x_flag_], 0
+seg000:F6DA                 mov     ax, [ds:viewport_x_bak]
+seg000:F6DD                 cmp     ax, [ds:RPG_viewport_x]
+seg000:F6E1                 jnz     short x_check_
+seg000:F6E3                 jmp     check_y_move
+seg000:F6E6 ; ---------------------------------------------------------------------------
+seg000:F6E6
+seg000:F6E6 x_check_:                               ; CODE XREF: move_usable_screen+84↑j
+seg000:F6E6                 mov     [bp+x_flag_], 1
+seg000:F6EB                 cmp     ax, [ds:RPG_viewport_x]
+seg000:F6EF                 jl      short move_right
+seg000:F6F1                 jmp     move_left
+seg000:F6F4 ; ---------------------------------------------------------------------------
+seg000:F6F4
+seg000:F6F4 move_right:                             ; CODE XREF: move_usable_screen+92↑j
+seg000:F6F4                 add     ax, 320
+seg000:F6F7                 mov     [bp+var_x_bak_a320], ax
+seg000:F6FA                 cmp     [ds:relative_viewport_x], 0
+seg000:F6FF                 jnz     short rvx_valid
+seg000:F701                 mov     ax, [ds:relative_viewport_x_prev]
+seg000:F704                 mov     [bp+relative_viewport_x_prev], ax
+seg000:F707                 mov     [bp+right_boundary_], 319
+seg000:F70C                 jmp     jmp_y_check
+seg000:F70F ; ---------------------------------------------------------------------------
+seg000:F70F
+seg000:F70F rvx_valid:                              ; CODE XREF: move_usable_screen+A2↑j
+seg000:F70F                 mov     ax, [ds:relative_viewport_x_prev]
+seg000:F712                 cmp     ax, [ds:relative_viewport_x]
+seg000:F716                 jge     short o_o_o_possible?
+seg000:F718                 mov     [bp+relative_viewport_x_prev], ax
+seg000:F71B                 mov     ax, [ds:relative_viewport_x]
+seg000:F71E                 dec     ax
+seg000:F71F                 mov     [bp+right_boundary_], ax
+seg000:F722                 jmp     jmp_y_check
+seg000:F725 ; ---------------------------------------------------------------------------
+seg000:F725
+seg000:F725 o_o_o_possible?:                        ; CODE XREF: move_usable_screen+B9↑j
+seg000:F725                 mov     [bp+x_flag_], 2
+seg000:F72A                 mov     ax, [ds:relative_viewport_x_prev]
+seg000:F72D                 mov     [bp+relative_viewport_x_prev], ax
+seg000:F730                 mov     [bp+right_boundary_], 319
+seg000:F735                 mov     cx, [ds:viewport_x_bak]
+seg000:F739                 add     cx, 320
+seg000:F73D                 mov     [bp+var_x_bak_a320], cx
+seg000:F740                 mov     [bp+argu_x_min], 0
+seg000:F745                 mov     dx, [ds:relative_viewport_x]
+seg000:F749                 dec     dx
+seg000:F74A                 mov     [bp+argu_x_max], dx
+seg000:F74D                 sub     cx, ax
+seg000:F74F                 add     cx, 320
+seg000:F753                 mov     [bp+var_20], cx
+seg000:F756
+seg000:F756 jmp_y_check:                            ; CODE XREF: move_usable_screen+AF↑j
+seg000:F756                                         ; move_usable_screen+C5↑j
+seg000:F756                 jmp     check_y_move
+seg000:F759 ; ---------------------------------------------------------------------------
+seg000:F759
+seg000:F759 move_left:                              ; CODE XREF: move_usable_screen+94↑j
+seg000:F759                 mov     ax, [ds:RPG_viewport_x]
+seg000:F75C                 mov     [bp+var_x_bak_a320], ax
+seg000:F75F                 cmp     [ds:relative_viewport_x_prev], 0
+seg000:F764                 jnz     short loc_F774
+seg000:F766                 mov     ax, [ds:relative_viewport_x]
+seg000:F769                 mov     [bp+relative_viewport_x_prev], ax
+seg000:F76C                 mov     [bp+right_boundary_], 319
+seg000:F771                 jmp     check_y_move
+seg000:F774 ; ---------------------------------------------------------------------------
+seg000:F774
+seg000:F774 loc_F774:                               ; CODE XREF: move_usable_screen+107↑j
+seg000:F774                 mov     ax, [ds:relative_viewport_x_prev]
+seg000:F777                 cmp     ax, [ds:relative_viewport_x]
+seg000:F77B                 jge     short loc_F7A5
+seg000:F77D                 mov     [bp+x_flag_], 2
+seg000:F782                 mov     cx, [ds:relative_viewport_x]
+seg000:F786                 mov     [bp+relative_viewport_x_prev], cx
+seg000:F789                 mov     [bp+right_boundary_], 319
+seg000:F78E                 mov     [bp+argu_x_min], 0
+seg000:F793                 dec     ax
+seg000:F794                 mov     [bp+argu_x_max], ax
+seg000:F797                 mov     ax, [bp+var_x_bak_a320]
+seg000:F79A                 sub     ax, cx
+seg000:F79C                 add     ax, 140h
+seg000:F79F                 mov     [bp+var_20], ax
+seg000:F7A2                 jmp     check_y_move
+seg000:F7A5 ; ---------------------------------------------------------------------------
+seg000:F7A5
+seg000:F7A5 loc_F7A5:                               ; CODE XREF: move_usable_screen+11E↑j
+seg000:F7A5                 mov     ax, [ds:relative_viewport_x]
+seg000:F7A8                 mov     [bp+relative_viewport_x_prev], ax
+seg000:F7AB                 mov     ax, [ds:relative_viewport_x_prev]
+seg000:F7AE                 dec     ax
+seg000:F7AF                 mov     [bp+right_boundary_], ax
+seg000:F7B2
+seg000:F7B2 check_y_move:                           ; CODE XREF: move_usable_screen+86↑j
+seg000:F7B2                                         ; move_usable_screen:jmp_y_check↑j
+seg000:F7B2                                         ; move_usable_screen+114↑j
+seg000:F7B2                                         ; move_usable_screen+145↑j
+seg000:F7B2                 mov     [bp+y_flag_], 0
+seg000:F7B7                 mov     ax, [ds:relative_viewport_y_prev]
+seg000:F7BA                 cmp     ax, [ds:relative_viewport_y]
+seg000:F7BE                 jnz     short loc_F7C3
+seg000:F7C0                 jmp     loc_F88A
+seg000:F7C3 ; ---------------------------------------------------------------------------
+seg000:F7C3
+seg000:F7C3 loc_F7C3:                               ; CODE XREF: move_usable_screen+161↑j
+seg000:F7C3                 mov     [bp+y_flag_], 1
+seg000:F7C8                 mov     ax, [ds:viewport_y_bak]
+seg000:F7CB                 cmp     ax, [ds:RPG_viewport_y]
+seg000:F7CF                 jl      short loc_F7D4
+seg000:F7D1                 jmp     loc_F831
+seg000:F7D4 ; ---------------------------------------------------------------------------
+seg000:F7D4
+seg000:F7D4 loc_F7D4:                               ; CODE XREF: move_usable_screen+172↑j
+seg000:F7D4                 add     ax, 0C8h
+seg000:F7D7                 mov     [bp+var_24], ax
+seg000:F7DA                 cmp     [ds:relative_viewport_y], 0
+seg000:F7DF                 jnz     short loc_F7EF
+seg000:F7E1                 mov     ax, [ds:relative_viewport_y_prev]
+seg000:F7E4                 mov     [bp+var_26], ax
+seg000:F7E7                 mov     [bp+bottom_boundary_], 199
+seg000:F7EC                 jmp     loc_F82E
+seg000:F7EF ; ---------------------------------------------------------------------------
+seg000:F7EF
+seg000:F7EF loc_F7EF:                               ; CODE XREF: move_usable_screen+182↑j
+seg000:F7EF                 mov     ax, [ds:relative_viewport_y_prev]
+seg000:F7F2                 cmp     ax, [ds:relative_viewport_y]
+seg000:F7F6                 jge     short loc_F805
+seg000:F7F8                 mov     [bp+var_26], ax
+seg000:F7FB                 mov     ax, [ds:relative_viewport_y]
+seg000:F7FE                 dec     ax
+seg000:F7FF                 mov     [bp+bottom_boundary_], ax
+seg000:F802                 jmp     loc_F82E
+seg000:F805 ; ---------------------------------------------------------------------------
+seg000:F805
+seg000:F805 loc_F805:                               ; CODE XREF: move_usable_screen+199↑j
+seg000:F805                 mov     [bp+y_flag_], 2
+seg000:F80A                 mov     ax, [ds:relative_viewport_y_prev]
+seg000:F80D                 mov     [bp+var_26], ax
+seg000:F810                 mov     [bp+bottom_boundary_], 0C7h
+seg000:F815                 mov     [bp+var_2A], 0
+seg000:F81A                 mov     cx, [ds:relative_viewport_y]
+seg000:F81E                 dec     cx
+seg000:F81F                 mov     [bp+var_2C], cx
+seg000:F822                 mov     cx, [bp+var_24]
+seg000:F825                 sub     cx, ax
+seg000:F827                 add     cx, 0C8h
+seg000:F82B                 mov     [bp+var_2E], cx
+seg000:F82E
+seg000:F82E loc_F82E:                               ; CODE XREF: move_usable_screen+18F↑j
+seg000:F82E                                         ; move_usable_screen+1A5↑j
+seg000:F82E                 jmp     loc_F88A
+seg000:F831 ; ---------------------------------------------------------------------------
+seg000:F831
+seg000:F831 loc_F831:                               ; CODE XREF: move_usable_screen+174↑j
+seg000:F831                 mov     ax, [ds:RPG_viewport_y]
+seg000:F834                 mov     [bp+var_24], ax
+seg000:F837                 cmp     [ds:relative_viewport_y_prev], 0
+seg000:F83C                 jnz     short loc_F84C
+seg000:F83E                 mov     ax, [ds:relative_viewport_y]
+seg000:F841                 mov     [bp+var_26], ax
+seg000:F844                 mov     [bp+bottom_boundary_], 0C7h
+seg000:F849                 jmp     loc_F88A
+seg000:F84C ; ---------------------------------------------------------------------------
+seg000:F84C
+seg000:F84C loc_F84C:                               ; CODE XREF: move_usable_screen+1DF↑j
+seg000:F84C                 mov     ax, [ds:relative_viewport_y_prev]
+seg000:F84F                 cmp     ax, [ds:relative_viewport_y]
+seg000:F853                 jge     short loc_F87D
+seg000:F855                 mov     [bp+y_flag_], 2
+seg000:F85A                 mov     cx, [ds:relative_viewport_y]
+seg000:F85E                 mov     [bp+var_26], cx
+seg000:F861                 mov     [bp+bottom_boundary_], 0C7h
+seg000:F866                 mov     [bp+var_2A], 0
+seg000:F86B                 dec     ax
+seg000:F86C                 mov     [bp+var_2C], ax
+seg000:F86F                 mov     ax, [bp+var_24]
+seg000:F872                 sub     ax, cx
+seg000:F874                 add     ax, 0C8h
+seg000:F877                 mov     [bp+var_2E], ax
+seg000:F87A                 jmp     loc_F88A
+seg000:F87D ; ---------------------------------------------------------------------------
+seg000:F87D
+seg000:F87D loc_F87D:                               ; CODE XREF: move_usable_screen+1F6↑j
+seg000:F87D                 mov     ax, [ds:relative_viewport_y]
+seg000:F880                 mov     [bp+var_26], ax
+seg000:F883                 mov     ax, [ds:relative_viewport_y_prev]
+seg000:F886                 dec     ax
+seg000:F887                 mov     [bp+bottom_boundary_], ax
+seg000:F88A
+seg000:F88A loc_F88A:                               ; CODE XREF: move_usable_screen+163↑j
+seg000:F88A                                         ; move_usable_screen:loc_F82E↑j
+seg000:F88A                                         ; move_usable_screen+1EC↑j
+seg000:F88A                                         ; move_usable_screen+21D↑j
+seg000:F88A                 mov     ax, [ds:RPG_viewport_y]
+seg000:F88D                 sub     ax, [ds:relative_viewport_y]
+seg000:F891                 add     ax, 0C8h
+seg000:F894                 mov     [bp+var_30], ax
+seg000:F897                 mov     ax, [ds:RPG_viewport_x]
+seg000:F89A                 sub     ax, [ds:relative_viewport_x]
+seg000:F89E                 add     ax, 140h
+seg000:F8A1                 mov     [bp+var_32], ax
+seg000:F8A4                 cmp     [bp+x_flag_], 0
+seg000:F8A8                 jg      short loc_F8AD
+seg000:F8AA                 jmp     loc_F900
+seg000:F8AD ; ---------------------------------------------------------------------------
+seg000:F8AD
+seg000:F8AD loc_F8AD:                               ; CODE XREF: move_usable_screen+24B↑j
+seg000:F8AD                 cmp     [ds:relative_viewport_y], 0
+seg000:F8B2                 jg      short loc_F8B7
+seg000:F8B4                 jmp     loc_F8E0
+seg000:F8B7 ; ---------------------------------------------------------------------------
+seg000:F8B7
+seg000:F8B7 loc_F8B7:                               ; CODE XREF: move_usable_screen+255↑j
+seg000:F8B7                 mov     [bp+argu_y_max], 0
+seg000:F8BC                 mov     ax, [ds:relative_viewport_y]
+seg000:F8BF                 dec     ax
+seg000:F8C0                 mov     [bp+var_36], ax
+seg000:F8C3                 lea     ax, [bp+relative_viewport_x_prev]
+seg000:F8C6                 push    ax              ; argu_x_min
+seg000:F8C7                 lea     ax, [bp+argu_y_max]
+seg000:F8CA                 push    ax              ; argu_y_max
+seg000:F8CB                 lea     ax, [bp+right_boundary_]
+seg000:F8CE                 push    ax              ; argu_x_max
+seg000:F8CF                 lea     ax, [bp+var_36]
+seg000:F8D2                 push    ax              ; int
+seg000:F8D3                 lea     ax, [bp+var_x_bak_a320]
+seg000:F8D6                 push    ax              ; int
+seg000:F8D7                 lea     ax, [bp+var_30]
+seg000:F8DA                 push    ax              ; int
+seg000:F8DB                 call    redraw_tile
+seg000:F8E0
+seg000:F8E0 loc_F8E0:                               ; CODE XREF: move_usable_screen+257↑j
+seg000:F8E0                 mov     [bp+var_38], 0C7h
+seg000:F8E5                 lea     ax, [bp+relative_viewport_x_prev]
+seg000:F8E8                 push    ax              ; argu_x_min
+seg000:F8E9                 push    offset relative_viewport_y ; argu_y_max
+seg000:F8EC                 lea     ax, [bp+right_boundary_]
+seg000:F8EF                 push    ax              ; argu_x_max
+seg000:F8F0                 lea     ax, [bp+var_38]
+seg000:F8F3                 push    ax              ; int
+seg000:F8F4                 lea     ax, [bp+var_x_bak_a320]
+seg000:F8F7                 push    ax              ; int
+seg000:F8F8                 push    offset RPG_viewport_y ; int
+seg000:F8FB                 call    redraw_tile
+seg000:F900
+seg000:F900 loc_F900:                               ; CODE XREF: move_usable_screen+24D↑j
+seg000:F900                 cmp     [bp+x_flag_], 2
+seg000:F904                 jz      short loc_F909
+seg000:F906                 jmp     loc_F95C
+seg000:F909 ; ---------------------------------------------------------------------------
+seg000:F909
+seg000:F909 loc_F909:                               ; CODE XREF: move_usable_screen+2A7↑j
+seg000:F909                 cmp     [ds:relative_viewport_y], 0
+seg000:F90E                 jg      short loc_F913
+seg000:F910                 jmp     loc_F93C
+seg000:F913 ; ---------------------------------------------------------------------------
+seg000:F913
+seg000:F913 loc_F913:                               ; CODE XREF: move_usable_screen+2B1↑j
+seg000:F913                 mov     [bp+var_3A], 0
+seg000:F918                 mov     ax, [ds:relative_viewport_y]
+seg000:F91B                 dec     ax
+seg000:F91C                 mov     [bp+var_3C], ax
+seg000:F91F                 lea     ax, [bp+argu_x_min]
+seg000:F922                 push    ax              ; argu_x_min
+seg000:F923                 lea     ax, [bp+var_3A]
+seg000:F926                 push    ax              ; argu_y_max
+seg000:F927                 lea     ax, [bp+argu_x_max]
+seg000:F92A                 push    ax              ; argu_x_max
+seg000:F92B                 lea     ax, [bp+var_3C]
+seg000:F92E                 push    ax              ; int
+seg000:F92F                 lea     ax, [bp+var_20]
+seg000:F932                 push    ax              ; int
+seg000:F933                 lea     ax, [bp+var_30]
+seg000:F936                 push    ax              ; int
+seg000:F937                 call    redraw_tile
+seg000:F93C
+seg000:F93C loc_F93C:                               ; CODE XREF: move_usable_screen+2B3↑j
+seg000:F93C                 mov     [bp+var_3E], 0C7h
+seg000:F941                 lea     ax, [bp+argu_x_min]
+seg000:F944                 push    ax              ; argu_x_min
+seg000:F945                 push    offset relative_viewport_y ; argu_y_max
+seg000:F948                 lea     ax, [bp+argu_x_max]
+seg000:F94B                 push    ax              ; argu_x_max
+seg000:F94C                 lea     ax, [bp+var_3E]
+seg000:F94F                 push    ax              ; int
+seg000:F950                 lea     ax, [bp+var_20]
+seg000:F953                 push    ax              ; int
+seg000:F954                 push    offset RPG_viewport_y ; int
+seg000:F957                 call    redraw_tile
+seg000:F95C
+seg000:F95C loc_F95C:                               ; CODE XREF: move_usable_screen+2A9↑j
+seg000:F95C                 cmp     [bp+y_flag_], 0
+seg000:F960                 jg      short loc_F965
+seg000:F962                 jmp     loc_F9B8
+seg000:F965 ; ---------------------------------------------------------------------------
+seg000:F965
+seg000:F965 loc_F965:                               ; CODE XREF: move_usable_screen+303↑j
+seg000:F965                 cmp     [ds:relative_viewport_x], 0
+seg000:F96A                 jg      short loc_F96F
+seg000:F96C                 jmp     loc_F998
+seg000:F96F ; ---------------------------------------------------------------------------
+seg000:F96F
+seg000:F96F loc_F96F:                               ; CODE XREF: move_usable_screen+30D↑j
+seg000:F96F                 mov     [bp+var_40], 0
+seg000:F974                 mov     ax, [ds:relative_viewport_x]
+seg000:F977                 dec     ax
+seg000:F978                 mov     [bp+var_42], ax
+seg000:F97B                 lea     ax, [bp+var_40]
+seg000:F97E                 push    ax              ; argu_x_min
+seg000:F97F                 lea     ax, [bp+var_26]
+seg000:F982                 push    ax              ; argu_y_max
+seg000:F983                 lea     ax, [bp+var_42]
+seg000:F986                 push    ax              ; argu_x_max
+seg000:F987                 lea     ax, [bp+bottom_boundary_]
+seg000:F98A                 push    ax              ; int
+seg000:F98B                 lea     ax, [bp+var_32]
+seg000:F98E                 push    ax              ; int
+seg000:F98F                 lea     ax, [bp+var_24]
+seg000:F992                 push    ax              ; int
+seg000:F993                 call    redraw_tile
+seg000:F998
+seg000:F998 loc_F998:                               ; CODE XREF: move_usable_screen+30F↑j
+seg000:F998                 mov     [bp+var_44], 13Fh
+seg000:F99D                 push    offset relative_viewport_x ; argu_x_min
+seg000:F9A0                 lea     ax, [bp+var_26]
+seg000:F9A3                 push    ax              ; argu_y_max
+seg000:F9A4                 lea     ax, [bp+var_44]
+seg000:F9A7                 push    ax              ; argu_x_max
+seg000:F9A8                 lea     ax, [bp+bottom_boundary_]
+seg000:F9AB                 push    ax              ; int
+seg000:F9AC                 push    offset RPG_viewport_x ; int
+seg000:F9AF                 lea     ax, [bp+var_24]
+seg000:F9B2                 push    ax              ; int
+seg000:F9B3                 call    redraw_tile
+seg000:F9B8
+seg000:F9B8 loc_F9B8:                               ; CODE XREF: move_usable_screen+305↑j
+seg000:F9B8                 cmp     [bp+y_flag_], 2
+seg000:F9BC                 jz      short loc_F9C1
+seg000:F9BE                 jmp     restore_return
+seg000:F9C1 ; ---------------------------------------------------------------------------
+seg000:F9C1
+seg000:F9C1 loc_F9C1:                               ; CODE XREF: move_usable_screen+35F↑j
+seg000:F9C1                 cmp     [ds:relative_viewport_x], 0
+seg000:F9C6                 jg      short loc_F9CB
+seg000:F9C8                 jmp     loc_F9F4
+seg000:F9CB ; ---------------------------------------------------------------------------
+seg000:F9CB
+seg000:F9CB loc_F9CB:                               ; CODE XREF: move_usable_screen+369↑j
+seg000:F9CB                 mov     [bp+var_46], 0
+seg000:F9D0                 mov     ax, [ds:relative_viewport_x]
+seg000:F9D3                 dec     ax
+seg000:F9D4                 mov     [bp+var_48], ax
+seg000:F9D7                 lea     ax, [bp+var_46]
+seg000:F9DA                 push    ax              ; argu_x_min
+seg000:F9DB                 lea     ax, [bp+var_2A]
+seg000:F9DE                 push    ax              ; argu_y_max
+seg000:F9DF                 lea     ax, [bp+var_48]
+seg000:F9E2                 push    ax              ; argu_x_max
+seg000:F9E3                 lea     ax, [bp+var_2C]
+seg000:F9E6                 push    ax              ; int
+seg000:F9E7                 lea     ax, [bp+var_32]
+seg000:F9EA                 push    ax              ; int
+seg000:F9EB                 lea     ax, [bp+var_2E]
+seg000:F9EE                 push    ax              ; int
+seg000:F9EF                 call    redraw_tile
+seg000:F9F4
+seg000:F9F4 loc_F9F4:                               ; CODE XREF: move_usable_screen+36B↑j
+seg000:F9F4                 mov     [bp+var_4A], 13Fh
+seg000:F9F9                 push    offset relative_viewport_x ; argu_x_min
+seg000:F9FC                 lea     ax, [bp+var_2A]
+seg000:F9FF                 push    ax              ; argu_y_max
+seg000:FA00                 lea     ax, [bp+var_4A]
+seg000:FA03                 push    ax              ; argu_x_max
+seg000:FA04                 lea     ax, [bp+var_2C]
+seg000:FA07                 push    ax              ; int
+seg000:FA08                 push    offset RPG_viewport_x ; int
+seg000:FA0B                 lea     ax, [bp+var_2E]
+seg000:FA0E                 push    ax              ; int
+seg000:FA0F                 call    redraw_tile
+seg000:FA14
+seg000:FA14 restore_return:                         ; CODE XREF: move_usable_screen+361↑j
+seg000:FA14                 mov     [bp+final_x_min], 0
+seg000:FA19                 mov     [bp+final_y_min], 0
+seg000:FA1E                 mov     [bp+final_x_max], 319
+seg000:FA23                 mov     [bp+final_y_max], 199
+seg000:FA28                 lea     bx, [bp+final_x_min]
+seg000:FA2B                 push    ds
+seg000:FA2C                 pop     es
+seg000:FA2D                 push    es
+seg000:FA2E                 push    bx              ; argu_x_min
+seg000:FA2F                 lea     bx, [bp+final_y_min]
+seg000:FA32                 push    ds
+seg000:FA33                 pop     es
+seg000:FA34                 push    es
+seg000:FA35                 push    bx              ; argu_y_min
+seg000:FA36                 lea     bx, [bp+final_x_max]
+seg000:FA39                 push    ds
+seg000:FA3A                 pop     es
+seg000:FA3B                 push    es
+seg000:FA3C                 push    bx              ; argu_x_max
+seg000:FA3D                 lea     bx, [bp+final_y_max]
+seg000:FA40                 push    ds
+seg000:FA41                 pop     es
+seg000:FA42                 push    es
+seg000:FA43                 push    bx              ; argu_y_max
+seg000:FA44                 call    set_DeRLE_rect
+seg000:FA49
+seg000:FA49 return:                                 ; CODE XREF: move_usable_screen+4D↑j
+seg000:FA49                                         ; move_usable_screen+61↑j
+seg000:FA49                                         ; move_usable_screen+75↑j
+seg000:FA49                 call    B$EXSA          ; clear frame state info
+seg000:FA4E                 retf    0
+seg000:FA4E endp            move_usable_screen
+</pre> 
