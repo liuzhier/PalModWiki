@@ -1,0 +1,124 @@
+/*
+ * Index.html
+ * 
+ */
+.Background {
+	background-color: bisque;
+}
+
+.Window {
+	width: 100vw;
+	height: 100%;
+	display: flex;
+}
+
+.TabButtons {
+	height: 100vh;
+	overflow: auto;
+}
+
+.TabButtons>span {
+	display: block;
+	text-align: center;
+	color: hotpink;
+	font-size: 20px;
+	line-height: 40px;
+}
+
+.TabButtons>ul {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	height: 86vh;
+	border: 2px solid #ccc;
+	border-right: 0px;
+	border-color: pink;
+	border-radius: 20px 0 0 20px;
+	overflow: auto;
+}
+
+.TabButtons>ul>li {
+	height: 60px;
+	line-height: 60px;
+	padding: 0 14px;
+}
+
+.TabButtons>ul>li:hover {
+	background-color: beige;
+}
+
+.TabButtons>ul>li.TabButtonActive {
+	background-color: #ddffff !important;
+	border-left: 6px solid #ccc !important;
+	border-color: #2196F3 !important;
+}
+
+.TabPageBox {
+	display: flex;
+	flex-grow: 1;
+	background-color: #ddffff;
+	overflow-y: auto;
+}
+
+.TabPageBox>iframe {
+	width: 100%;
+	height: 100%;
+	border: none;
+	margin: 0 20px;
+}
+
+/*
+ * page0.html
+ * 
+ */
+.authorImgBox {
+	width: max-content;
+	text-align: center;
+}
+
+.authorImg {
+	width: 240px;
+	height: 240px;
+	background: url(../img/Author.png) no-repeat 100% 100%;
+	background-size: contain;
+	margin: 0 auto;
+}
+
+/*
+ * page1.html
+ * 
+ */
+.PageTitle {
+	text-align: center;
+	font-size: 40px;
+	color: red;
+}
+
+.PageTitle2 {
+	font-size: 25px;
+	color: cornflowerblue;
+}
+
+.PageTitle3 {
+	color: purple;
+}
+
+.PageTitleNote {
+	text-align: center;
+	margin: 20px 0;
+	font-size: 1.4em;
+}
+
+.PageTitle3,
+.PageTable {
+	margin: 10px 0 10px 40px;
+}
+
+.PageTable>thead>tr>th,
+.PageTable>tbody>tr>td {
+	border: 2px solid #ccc;
+	border-color: pink;
+	border-radius: 20px;
+	text-align: center;
+	padding: 4px 10px;
+}
