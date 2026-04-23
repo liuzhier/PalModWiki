@@ -1,6 +1,6 @@
 cd E:\liuzhier\HTML\PalModWiki
 git add *
 #git commit --amend --no-edit
-git commit -m "æœºå™¨äººä¸Šä¼ "
+git commit -m "»úÆ÷ÈËÉÏ´«"
 git push -f
 pause
