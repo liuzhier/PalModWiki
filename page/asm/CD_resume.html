@@ -1,0 +1,29 @@
+<pre> 
+seg003:1030 ; =============== S U B R O U T I N E =======================================
+seg003:1030
+seg003:1030
+seg003:1030 proc            CD_resume near          ; CODE XREF: CDROM_functions:func4_resume↑p
+seg003:1030                 mov     al, 0Dh
+seg003:1032                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:1035                 mov     al, [ds:CDriver_letter]
+seg003:1038                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:103B                 mov     al, 88h
+seg003:103D                 mov     [ds:CDROM_request_header.funcNr], al
+seg003:1040                 xor     ax, ax
+seg003:1042                 mov     [ds:CDROM_request_header.status], ax
+seg003:1045                 mov     bx, 1A6Eh
+seg003:1048                 call    CDROM_SendDriverRequest
+seg003:104B                 mov     ax, [ds:CDROM_request_header.status]
+seg003:104E                 test    ah, 80h
+seg003:1051                 jnz     short locret_24B9D
+seg003:1053                 push    ax
+seg003:1054                 call    is_pause?
+seg003:1057                 and     al, 0FBh
+seg003:1059                 mov     [ds:CDROM_access_result], al ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:1059                                         ;            错误           正播  正常
+seg003:105C                 pop     ax
+seg003:105D
+seg003:105D locret_24B9D:                           ; CODE XREF: CD_resume+21↑j
+seg003:105D                 retn
+seg003:105D endp            CD_resume
+</pre> 

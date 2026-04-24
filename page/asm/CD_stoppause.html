@@ -1,0 +1,30 @@
+<pre> 
+seg003:0FEE ; =============== S U B R O U T I N E =======================================
+seg003:0FEE
+seg003:0FEE
+seg003:0FEE proc            CD_stoppause near       ; CODE XREF: CDROM_functions:func3_stoppause↑p
+seg003:0FEE                 call    is_pause?
+seg003:0FF1                 and     al, 2
+seg003:0FF3                 jnz     short loc_24B38
+seg003:0FF5                 xor     ax, ax
+seg003:0FF7                 retn
+seg003:0FF8 ; ---------------------------------------------------------------------------
+seg003:0FF8
+seg003:0FF8 loc_24B38:                              ; CODE XREF: CD_stoppause+5↑j
+seg003:0FF8                 call    stop_CD
+seg003:0FFB                 mov     bl, ah
+seg003:0FFD                 and     bl, 80h
+seg003:1000
+seg003:1000 loc_24B40:
+seg003:1000                 jnz     short locret_24B50
+seg003:1002                 mov     cl, [ds:CDROM_access_result] ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:1002                                         ;            错误           正播  正常
+seg003:1006                 or      cl, 4
+seg003:1009                 and     cl, 0FDh
+seg003:100C                 mov     [ds:CDROM_access_result], cl ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:100C                                         ;            错误           正播  正常
+seg003:1010
+seg003:1010 locret_24B50:                           ; CODE XREF: CD_stoppause:loc_24B40↑j
+seg003:1010                 retn
+seg003:1010 endp            CD_stoppause
+</pre> 

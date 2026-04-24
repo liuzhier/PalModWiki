@@ -1,0 +1,25 @@
+<pre> 
+seg003:0EA2 ; =============== S U B R O U T I N E =======================================
+seg003:0EA2
+seg003:0EA2
+seg003:0EA2 proc            CD_stopplay near        ; CODE XREF: CDROM_functions:func2_stop↑p
+seg003:0EA2                                         ; LoadUnloadMedia↓p
+seg003:0EA2                 call    is_pause?
+seg003:0EA5                 and     al, 4
+seg003:0EA7                 jnz     short loc_249EC
+seg003:0EA9                 call    stop_CD
+seg003:0EAC
+seg003:0EAC loc_249EC:                              ; CODE XREF: CD_stopplay+5↑j
+seg003:0EAC                 call    stop_CD
+seg003:0EAF                 mov     cl, ah
+seg003:0EB1                 and     cl, 81h
+seg003:0EB4                 xor     cl, 80h
+seg003:0EB7                 jnz     short ret
+seg003:0EB9                 mov     cl, 0F9h
+seg003:0EBB                 and     [ds:CDROM_access_result], cl ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0EBB                                         ;            错误           正播  正常
+seg003:0EBF
+seg003:0EBF ret:                                    ; CODE XREF: CD_stopplay+15↑j
+seg003:0EBF                 retn
+seg003:0EBF endp            CD_stopplay
+</pre> 

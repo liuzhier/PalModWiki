@@ -1,0 +1,73 @@
+<pre> 
+seg003:0F60 ; =============== S U B R O U T I N E =======================================
+seg003:0F60
+seg003:0F60
+seg003:0F60 proc            GetSubChannelData near  ; CODE XREF: CD_is_pause?↑p
+seg003:0F60                                         ; CD_is_pause?:loc_24A7D↑p
+seg003:0F60                                         ; LoadUnloadMedia:loc_24DAF↓p
+seg003:0F60                 mov     al, 0Dh
+seg003:0F62                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:0F65                 mov     al, [ds:CDriver_letter]
+seg003:0F68                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:0F6B                 mov     al, 3
+seg003:0F6D                 mov     [ds:CDROM_request_header.funcNr], al
+seg003:0F70                 xor     eax, eax
+seg003:0F73                 mov     [ds:SubChannelData.attribute], al
+seg003:0F76                 mov     [ds:SubChannelData.subtrack], al
+seg003:0F79                 mov     [ds:SubChannelData.index], al
+seg003:0F7C                 mov     [ds:SubChannelData.rel.minute], al
+seg003:0F7F                 mov     [ds:SubChannelData.rel.second], al
+seg003:0F82                 mov     [ds:SubChannelData.rel.hour], al
+seg003:0F85                 mov     [ds:SubChannelData.reserved_sc], al
+seg003:0F88                 mov     [ds:SubChannelData.abs.minute], al
+seg003:0F8B                 mov     [ds:SubChannelData.abs.second], al
+seg003:0F8E                 mov     [ds:SubChannelData.abs.hour], al
+seg003:0F91                 mov     [byte ptr ds:CDROM_request_header.bytes_to_access+1], al
+seg003:0F94                 mov     [ds:CDROM_request_header.status], ax
+seg003:0F97                 mov     [ds:not_used], ax
+seg003:0F9A                 mov     [ds:not_used_too], eax
+seg003:0F9E                 push    ds
+seg003:0F9F                 push    offset ioctl_fct_GetAudioSubChannelData
+seg003:0FA2                 pop     eax
+seg003:0FA4                 mov     [dword ptr ds:CDROM_request_header.len_drh+0Eh], eax
+seg003:0FA8                 mov     ax, 0Bh
+seg003:0FAB                 mov     [ds:CDROM_request_header.status+0Fh], ax
+seg003:0FAE                 mov     al, 0Ch
+seg003:0FB0                 mov     [ds:ioctl_fct_GetAudioSubChannelData], al
+seg003:0FB3                 mov     bx, offset CDROM_request_header
+seg003:0FB6                 call    CDROM_SendDriverRequest
+seg003:0FB9                 mov     ax, [ds:CDROM_request_header.status]
+seg003:0FBC                 mov     bl, ah
+seg003:0FBE                 and     bl, 81h
+seg003:0FC1                 xor     bl, 1
+seg003:0FC4                 mov     cl, [ds:CDROM_access_result] ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0FC4                                         ;            错误           正播  正常
+seg003:0FC8                 jz      short loc_24B0F
+seg003:0FCA                 and     cl, 11111110b
+seg003:0FCD                 jmp     short loc_24B12
+seg003:0FCF ; ---------------------------------------------------------------------------
+seg003:0FCF
+seg003:0FCF loc_24B0F:                              ; CODE XREF: GetSubChannelData+68↑j
+seg003:0FCF                 or      cl, 1
+seg003:0FD2
+seg003:0FD2 loc_24B12:                              ; CODE XREF: GetSubChannelData+6D↑j
+seg003:0FD2                 test    ah, 2           ; playing
+seg003:0FD5                 jz      short loc_24B1F
+seg003:0FD7                 and     cl, 11111011b
+seg003:0FDA                 or      cl, 10b         ; 增加第2位，去掉第3位
+seg003:0FDD                 jmp     short loc_24B29
+seg003:0FDF ; ---------------------------------------------------------------------------
+seg003:0FDF
+seg003:0FDF loc_24B1F:                              ; CODE XREF: GetSubChannelData+75↑j
+seg003:0FDF                 and     cl, 11111101b   ; 去掉第2位
+seg003:0FE2                 test    al, 1
+seg003:0FE4                 jz      short loc_24B29
+seg003:0FE6                 or      cl, 100b        ; 增加第3位
+seg003:0FE9
+seg003:0FE9 loc_24B29:                              ; CODE XREF: GetSubChannelData+7D↑j
+seg003:0FE9                                         ; GetSubChannelData+84↑j
+seg003:0FE9                 mov     [ds:CDROM_access_result], cl ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0FE9                                         ;            错误           正播  正常
+seg003:0FED                 retn
+seg003:0FED endp            GetSubChannelData
+</pre> 

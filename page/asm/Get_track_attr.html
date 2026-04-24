@@ -1,0 +1,39 @@
+<pre> 
+seg003:10A8 ; =============== S U B R O U T I N E =======================================
+seg003:10A8
+seg003:10A8
+seg003:10A8 proc            Get_track_attr near     ; CODE XREF: CDROM_info_check+34↓p
+seg003:10A8                 xor     dh, dh
+seg003:10AA                 mov     al, 0Dh
+seg003:10AC                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:10AF                 mov     al, [ds:CDriver_letter]
+seg003:10B2                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:10B5                 mov     al, 3
+seg003:10B7                 mov     [ds:CDROM_request_header.funcNr], al
+seg003:10BA                 xor     eax, eax
+seg003:10BD                 mov     [ds:CDROM_request_header.status], ax
+seg003:10C0                 mov     [byte ptr ds:CDROM_request_header.bytes_to_access+1], al
+seg003:10C3                 mov     [ds:not_used], ax
+seg003:10C6                 mov     [ds:not_used_too], eax
+seg003:10CA                 mov     di, 7
+seg003:10CD                 mov     [ds:CDROM_request_header.status+0Fh], di
+seg003:10D1                 imul    di, dx
+seg003:10D4                 add     di, offset track_info_array
+seg003:10D8                 push    ds
+seg003:10D9                 push    di
+seg003:10DA                 pop     eax
+seg003:10DC                 mov     [dword ptr ds:CDROM_request_header.len_drh+0Eh], eax
+seg003:10E0                 mov     al, 0Bh         ; Audio Track Info
+seg003:10E2                 mov     [di], al
+seg003:10E4                 mov     [di+track_info_s.track], dl ; track
+seg003:10E7                 xor     al, al
+seg003:10E9                 mov     [di+track_info_s.start.min], al ; 时间、attr清零
+seg003:10EC                 mov     [di+track_info_s.start.sec], al
+seg003:10EF                 mov     [di+track_info_s.start.fr], al
+seg003:10F2                 mov     [di+track_info_s.attr], al
+seg003:10F5                 mov     bx, offset CDROM_request_header
+seg003:10F8                 call    CDROM_SendDriverRequest
+seg003:10FB                 mov     ax, [ds:CDROM_request_header.status]
+seg003:10FE                 retn
+seg003:10FE endp            Get_track_attr
+</pre> 

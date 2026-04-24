@@ -1,0 +1,81 @@
+<pre> 
+seg003:0EC7 ; =============== S U B R O U T I N E =======================================
+seg003:0EC7
+seg003:0EC7
+seg003:0EC7 proc            CD_is_pause? near       ; CODE XREF: is_pause?↑p
+seg003:0EC7                 call    GetSubChannelData
+seg003:0ECA                 mov     al, 0Dh
+seg003:0ECC                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:0ECF                 mov     al, [ds:CDriver_letter]
+seg003:0ED2                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:0ED5                 mov     al, 3
+seg003:0ED7                 mov     [ds:CDROM_request_header.funcNr], al
+seg003:0EDA                 xor     eax, eax
+seg003:0EDD                 mov     [byte ptr ds:CDROM_request_header.bytes_to_access+1], al
+seg003:0EE0                 mov     [ds:CDROM_request_header.status], ax
+seg003:0EE3                 mov     [ds:not_used], ax
+seg003:0EE6                 mov     [ds:not_used_too], eax
+seg003:0EEA                 mov     [word ptr ds:AudioStatus.pause], ax
+seg003:0EED                 mov     [dword ptr ds:AudioStatus.resStart.second], eax
+seg003:0EF1                 mov     [dword ptr ds:AudioStatus.resEnd.second], eax
+seg003:0EF5                 push    ds
+seg003:0EF6                 push    offset ioctl_fct_GetAudioStatus
+seg003:0EF9                 pop     eax
+seg003:0EFB                 mov     [dword ptr ds:CDROM_request_header.len_drh+0Eh], eax
+seg003:0EFF                 mov     ax, 0Bh
+seg003:0F02                 mov     [ds:CDROM_request_header.status+0Fh], ax
+seg003:0F05                 mov     al, 0Fh
+seg003:0F07                 mov     [ds:ioctl_fct_GetAudioStatus], al
+seg003:0F0A                 mov     bx, offset CDROM_request_header
+seg003:0F0D                 call    CDROM_SendDriverRequest
+seg003:0F10                 xor     al, al
+seg003:0F12                 mov     bl, 2
+seg003:0F14                 test    [byte ptr ds:CDROM_request_header.status+1], bl
+seg003:0F18                 jz      short loc_24A5C
+seg003:0F1A                 mov     al, 2
+seg003:0F1C
+seg003:0F1C loc_24A5C:                              ; CODE XREF: CD_is_pause?+51↑j
+seg003:0F1C                 shr     bl, 1
+seg003:0F1E                 test    [ds:AudioStatus.pause], bl
+seg003:0F22                 jz      short loc_24A66
+seg003:0F24                 or      al, 4
+seg003:0F26
+seg003:0F26 loc_24A66:                              ; CODE XREF: CD_is_pause?+5B↑j
+seg003:0F26                 mov     dl, [ds:CDROM_access_result] ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0F26                                         ;            错误           正播  正常
+seg003:0F2A                 and     dl, 1
+seg003:0F2D                 jz      short loc_24A97
+seg003:0F2F                 or      al, al
+seg003:0F31                 jnz     short loc_24A97
+seg003:0F33                 push    ax
+seg003:0F34                 mov     dh, 5
+seg003:0F36                 mov     ax, [word ptr ds:SubChannelData.rel.second]
+seg003:0F39                 xchg    ah, al
+seg003:0F3B                 mov     si, ax
+seg003:0F3D
+seg003:0F3D loc_24A7D:                              ; CODE XREF: CD_is_pause?+87↓j
+seg003:0F3D                 call    GetSubChannelData
+seg003:0F40                 mov     ax, [word ptr ds:SubChannelData.rel.second]
+seg003:0F43                 xchg    ah, al
+seg003:0F45                 sub     ax, si
+seg003:0F47                 cmp     ax, 100h
+seg003:0F4A                 jnb     short loc_24A90
+seg003:0F4C                 dec     dh
+seg003:0F4E                 jnz     short loc_24A7D
+seg003:0F50
+seg003:0F50 loc_24A90:                              ; CODE XREF: CD_is_pause?+83↑j
+seg003:0F50                 pop     ax
+seg003:0F51                 or      dh, dh
+seg003:0F53                 jz      short loc_24A97
+seg003:0F55                 or      al, 2
+seg003:0F57
+seg003:0F57 loc_24A97:                              ; CODE XREF: CD_is_pause?+66↑j
+seg003:0F57                                         ; CD_is_pause?+6A↑j
+seg003:0F57                                         ; CD_is_pause?+8C↑j
+seg003:0F57                 or      al, dl
+seg003:0F59                 mov     [ds:CDROM_access_result], al ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0F59                                         ;            错误           正播  正常
+seg003:0F5C                 mov     ax, [word ptr ds:AudioStatus.pause]
+seg003:0F5F                 retn
+seg003:0F5F endp            CD_is_pause?
+</pre> 

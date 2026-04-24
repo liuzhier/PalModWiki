@@ -1,0 +1,24 @@
+<pre> 
+seg003:0E4A ; =============== S U B R O U T I N E =======================================
+seg003:0E4A
+seg003:0E4A
+seg003:0E4A proc            CDROM_SendDriverRequest near ; CODE XREF: playCD+2C↓p
+seg003:0E4A                                         ; CD_is_pause?+46↓p
+seg003:0E4A                                         ; GetSubChannelData+56↓p
+seg003:0E4A                                         ; stop_CD+18↓p
+seg003:0E4A                                         ; CD_resume+18↓p
+seg003:0E4A                                         ; Get_track_attr+50↓p
+seg003:0E4A                                         ; Check_CD_info+3F↓p
+seg003:0E4A                                         ; LoadUnloadMedia-1A↓p
+seg003:0E4A                 mov     ax, 1510h
+seg003:0E4D                 movzx   cx, [ds:CDriver_letter]
+seg003:0E52                 push    ds
+seg003:0E53                 pop     es
+seg003:0E54                 int     2Fh             ;  Multiplex - CDROM - 2.10 - SEND DEVICE DRIVER REQUEST
+seg003:0E54                                         ; CX = CD-ROM drive letter (0 = A, 1 = B, etc)
+seg003:0E54                                         ; ES:BX -> CD-ROM device driver request header
+seg003:0E56
+seg003:0E56 locret_24996:
+seg003:0E56                 retn
+seg003:0E56 endp            CDROM_SendDriverRequest
+</pre> 

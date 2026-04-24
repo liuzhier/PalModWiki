@@ -1,0 +1,48 @@
+<pre> 
+seg003:10FF ; =============== S U B R O U T I N E =======================================
+seg003:10FF
+seg003:10FF
+seg003:10FF proc            Check_CD_info near      ; CODE XREF: CDROM_info_check+16↓p
+seg003:10FF                 mov     al, 0Dh
+seg003:1101                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:1104                 mov     al, [ds:CDriver_letter]
+seg003:1107                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:110A                 mov     al, 3
+seg003:110C                 mov     [ds:CDROM_request_header.funcNr], al ; IOCTL read
+seg003:110F                 xor     eax, eax
+seg003:1112                 mov     [ds:CDROM_request_header.status], ax
+seg003:1115                 mov     [byte ptr ds:CDROM_request_header.bytes_to_access+1], al
+seg003:1118                 mov     [ds:not_used], ax
+seg003:111B                 mov     [ds:not_used_too], eax
+seg003:111F                 mov     [ds:start_track], al
+seg003:1122                 mov     [ds:end_track], al
+seg003:1125                 mov     [ds:CDROM_TMSF], eax
+seg003:1129                 push    ds
+seg003:112A                 push    offset ioctl_fct_AudioTrackInfo
+seg003:112D                 pop     eax
+seg003:112F                 mov     [dword ptr ds:CDROM_request_header.len_drh+0Eh], eax
+seg003:1133                 mov     ax, 7
+seg003:1136                 mov     al, 0Ah
+seg003:1138                 mov     [ds:ioctl_fct_AudioTrackInfo], al ; Get Audio Disk info
+seg003:113B                 mov     bx, offset CDROM_request_header
+seg003:113E                 call    CDROM_SendDriverRequest
+seg003:1141                 mov     ax, [ds:CDROM_request_header.status] ; 100h,Done
+seg003:1144                 mov     bl, ah
+seg003:1146                 and     bl, 81h
+seg003:1149                 xor     bl, 1
+seg003:114C                 mov     cl, [ds:CDROM_access_result] ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:114C                                         ;            错误           正播  正常
+seg003:1150                 jz      short Done
+seg003:1152                 and     cl, 0FEh
+seg003:1155                 jmp     short loc_24C9A
+seg003:1157 ; ---------------------------------------------------------------------------
+seg003:1157
+seg003:1157 Done:                                   ; CODE XREF: Check_CD_info+51↑j
+seg003:1157                 or      cl, 1
+seg003:115A
+seg003:115A loc_24C9A:                              ; CODE XREF: Check_CD_info+56↑j
+seg003:115A                 mov     [ds:CDROM_access_result], cl ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:115A                                         ;            错误           正播  正常
+seg003:115E                 retn
+seg003:115E endp            Check_CD_info
+</pre> 

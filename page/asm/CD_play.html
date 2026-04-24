@@ -1,0 +1,68 @@
+<pre> 
+seg003:115F ; =============== S U B R O U T I N E =======================================
+seg003:115F
+seg003:115F
+seg003:115F proc            CD_play near            ; CODE XREF: CDROM_functions:loc_2495D↑p
+seg003:115F                 push    edx
+seg003:1161                 push    ecx
+seg003:1163                 push    ax
+seg003:1164                 call    is_pause?
+seg003:1167                 test    al, 1
+seg003:1169                 jnz     short loc_24CB1
+seg003:116B                 add     sp, 0Ah
+seg003:116E                 mov     al, 0FFh
+seg003:1170                 retn
+seg003:1171 ; ---------------------------------------------------------------------------
+seg003:1171
+seg003:1171 loc_24CB1:                              ; CODE XREF: CD_play+A↑j
+seg003:1171                 pop     ax
+seg003:1172                 sub     al, [ds:start_track]
+seg003:1176                 jl      short loc_24CBE
+seg003:1178                 cmp     al, [ds:end_track]
+seg003:117C                 jl      short loc_24CC4
+seg003:117E
+seg003:117E loc_24CBE:                              ; CODE XREF: CD_play+17↑j
+seg003:117E                 add     sp, 8
+seg003:1181                 mov     al, 0FFh
+seg003:1183                 retn
+seg003:1184 ; ---------------------------------------------------------------------------
+seg003:1184
+seg003:1184 loc_24CC4:                              ; CODE XREF: CD_play+1D↑j
+seg003:1184                 sub     sp, 2
+seg003:1187                 call    stop_CD
+seg003:118A                 pop     bx
+seg003:118B                 call    GetThisTrackMSF
+seg003:118E                 pop     eax
+seg003:1190                 cmp     eax, 0FFFFFFFFh
+seg003:1194                 jnz     short loc_24CEB
+seg003:1196                 push    ebx
+seg003:1198                 mov     bl, [ds:end_track]
+seg003:119C                 inc     bl
+seg003:119E                 call    GetThisTrackMSF
+seg003:11A1                 mov     ecx, ebx
+seg003:11A4                 pop     ebx
+seg003:11A6                 sub     ecx, ebx
+seg003:11A9                 jmp     short loc_24CF4
+seg003:11AB ; ---------------------------------------------------------------------------
+seg003:11AB
+seg003:11AB loc_24CEB:                              ; CODE XREF: CD_play+35↑j
+seg003:11AB                 cmp     eax, 0FFFFFFFEh
+seg003:11AF                 jz      short loc_24CF4
+seg003:11B1                 mov     ecx, eax
+seg003:11B4
+seg003:11B4 loc_24CF4:                              ; CODE XREF: CD_play+4A↑j
+seg003:11B4                                         ; CD_play+50↑j
+seg003:11B4                 pop     edx
+seg003:11B6                 add     ebx, edx
+seg003:11B9                 sub     ecx, edx
+seg003:11BC                 jg      short loc_24D01
+seg003:11BE                 mov     al, 0FFh
+seg003:11C0                 retn
+seg003:11C1 ; ---------------------------------------------------------------------------
+seg003:11C1
+seg003:11C1 loc_24D01:                              ; CODE XREF: CD_play+5D↑j
+seg003:11C1                 call    playCD
+seg003:11C4                 xor     al, al
+seg003:11C6                 retn
+seg003:11C6 endp            CD_play
+</pre> 

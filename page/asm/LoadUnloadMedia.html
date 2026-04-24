@@ -1,0 +1,57 @@
+<pre> 
+seg003:121D ; ---------------------------------------------------------------------------
+seg003:121D                 push    2
+seg003:121F ; START OF FUNCTION CHUNK FOR LoadUnloadMedia
+seg003:121F
+seg003:121F loc_24D5F:                              ; CODE XREF: LoadUnloadMedia+D↓j
+seg003:121F                 mov     al, 0Dh
+seg003:1221                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:1224                 mov     al, [ds:CDriver_letter]
+seg003:1227                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:122A                 mov     al, 0Ch
+seg003:122C                 mov     [ds:CDROM_request_header.funcNr], al
+seg003:122F                 xor     eax, eax
+seg003:1232                 mov     [ds:CDROM_request_header.status], ax
+seg003:1235                 mov     [byte ptr ds:CDROM_request_header.bytes_to_access+1], al
+seg003:1238                 mov     [ds:not_used], ax
+seg003:123B                 mov     [ds:not_used_too], eax
+seg003:123F                 mov     ax, 1
+seg003:1242                 mov     [ds:CDROM_request_header.status+0Fh], ax
+seg003:1245                 mov     ax, sp
+seg003:1247                 push    ss
+seg003:1248                 push    ax
+seg003:1249                 pop     eax
+seg003:124B                 mov     [dword ptr ds:CDROM_request_header.len_drh+0Eh], eax
+seg003:124F                 mov     bx, offset CDROM_request_header
+seg003:1252                 call    CDROM_SendDriverRequest
+seg003:1255                 mov     ax, [ds:CDROM_request_header.status]
+seg003:1258                 test    ah, 80h
+seg003:125B                 jnz     short loc_24DA8
+seg003:125D                 mov     cl, [ds:CDROM_access_result] ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:125D                                         ;            错误           正播  正常
+seg003:1261                 and     cl, 0F8h
+seg003:1264                 mov     [ds:CDROM_access_result], cl ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:1264                                         ;            错误           正播  正常
+seg003:1268
+seg003:1268 loc_24DA8:                              ; CODE XREF: LoadUnloadMedia-11↑j
+seg003:1268                 add     sp, 2
+seg003:126B                 retn
+seg003:126B ; END OF FUNCTION CHUNK FOR LoadUnloadMedia
+seg003:126C
+seg003:126C ; =============== S U B R O U T I N E =======================================
+seg003:126C
+seg003:126C
+seg003:126C proc            LoadUnloadMedia near    ; CODE XREF: CDROM_functions:func7_load_unload↑p
+seg003:126C
+seg003:126C ; FUNCTION CHUNK AT seg003:121F SIZE 0000004D BYTES
+seg003:126C
+seg003:126C                 call    CD_stopplay
+seg003:126F
+seg003:126F loc_24DAF:                              ; CODE XREF: LoadUnloadMedia+9↓j
+seg003:126F                 call    GetSubChannelData
+seg003:1272                 test    ah, 2
+seg003:1275                 jnz     short loc_24DAF
+seg003:1277                 push    0
+seg003:1279                 jmp     short loc_24D5F
+seg003:1279 endp            LoadUnloadMedia
+</pre> 

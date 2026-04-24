@@ -1,0 +1,13 @@
+<pre> 
+seg003:0EC0 ; =============== S U B R O U T I N E =======================================
+seg003:0EC0
+seg003:0EC0
+seg003:0EC0 proc            is_pause? near          ; CODE XREF: CD_stopplay↑p
+seg003:0EC0                                         ; CD_stoppause↓p
+seg003:0EC0                                         ; CD_resume+24↓p CD_play+5↓p
+seg003:0EC0                 call    CD_is_pause?
+seg003:0EC3                 mov     al, [ds:CDROM_access_result] ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0EC3                                         ;            错误           正播  正常
+seg003:0EC6                 retn
+seg003:0EC6 endp            is_pause?
+</pre> 

@@ -1,0 +1,58 @@
+<pre> 
+seg003:11C7 ; =============== S U B R O U T I N E =======================================
+seg003:11C7
+seg003:11C7
+seg003:11C7 proc            CDROM_info_check near   ; CODE XREF: CDROM_functions:func0_obtain_info↑p
+seg003:11C7                 mov     ax, 1500h
+seg003:11CA                 xor     bx, bx
+seg003:11CC                 int     2Fh             ;  Multiplex - CDROM - INSTALLATION CHECK
+seg003:11CC                                         ; BX = 0000h
+seg003:11CC                                         ; Return: BX = number of CDROM drive letters used
+seg003:11CC                                         ; CX = starting drive letter (0=A:)
+seg003:11CE                 or      bx, bx
+seg003:11D0                 jnz     short CDROM_installed
+seg003:11D2                 mov     al, 0FFh
+seg003:11D4                 retn
+seg003:11D5 ; ---------------------------------------------------------------------------
+seg003:11D5
+seg003:11D5 CDROM_installed:                        ; CODE XREF: CDROM_info_check+9↑j
+seg003:11D5                 mov     [ds:CDriver_letter], cl
+seg003:11D9                 mov     cx, 2
+seg003:11DC
+seg003:11DC ensure_loop:                            ; CODE XREF: CDROM_info_check+26↓j
+seg003:11DC                 push    cx
+seg003:11DD                 call    Check_CD_info
+seg003:11E0                 pop     cx
+seg003:11E1                 test    ah, 80h
+seg003:11E4                 jz      short no_problem
+seg003:11E6                 push    cx
+seg003:11E7                 mov     cx, 0FFFFh
+seg003:11EA
+seg003:11EA null_loop:                              ; CODE XREF: CDROM_info_check:null_loop↓j
+seg003:11EA                 loop    null_loop
+seg003:11EC                 pop     cx
+seg003:11ED                 loop    ensure_loop
+seg003:11EF
+seg003:11EF no_problem:                             ; CODE XREF: CDROM_info_check+1D↑j
+seg003:11EF                 movzx   cx, [ds:end_track]
+seg003:11F4                 mov     dl, [ds:start_track]
+seg003:11F8                 inc     cx              ; 轨数+1
+seg003:11F9
+seg003:11F9 Track_loop:                             ; CODE XREF: CDROM_info_check+3B↓j
+seg003:11F9                 push    cx
+seg003:11FA                 push    dx
+seg003:11FB                 call    Get_track_attr
+seg003:11FE                 pop     dx
+seg003:11FF                 inc     dl
+seg003:1201                 pop     cx
+seg003:1202                 loop    Track_loop
+seg003:1204                 mov     eax, [ds:CDROM_TMSF]
+seg003:1208                 mov     [di+track_info_s.start.fr], al ; 确保最后一轨?
+seg003:120B                 shr     eax, 8
+seg003:120F                 mov     [di+track_info_s.start.sec], al
+seg003:1212                 shr     eax, 8
+seg003:1216                 mov     [di+track_info_s.start.min], al
+seg003:1219                 mov     al, [ds:CDriver_letter]
+seg003:121C                 retn
+seg003:121C endp            CDROM_info_check
+</pre> 

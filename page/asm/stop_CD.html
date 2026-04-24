@@ -1,0 +1,22 @@
+<pre> 
+seg003:1011 ; =============== S U B R O U T I N E =======================================
+seg003:1011
+seg003:1011
+seg003:1011 proc            stop_CD near            ; CODE XREF: CD_stopplay+7↑p
+seg003:1011                                         ; CD_stopplay:loc_249EC↑p
+seg003:1011                                         ; CD_stoppause:loc_24B38↑p
+seg003:1011                                         ; CD_play+28↓p
+seg003:1011                 mov     al, 0Dh
+seg003:1013                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:1016                 mov     al, [ds:CDriver_letter]
+seg003:1019                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:101C                 mov     al, 85h
+seg003:101E                 mov     [ds:CDROM_request_header.funcNr], al
+seg003:1021                 xor     ax, ax
+seg003:1023                 mov     [ds:CDROM_request_header.status], ax
+seg003:1026                 mov     bx, offset CDROM_request_header
+seg003:1029                 call    CDROM_SendDriverRequest
+seg003:102C                 mov     ax, [ds:CDROM_request_header.status]
+seg003:102F                 retn
+seg003:102F endp            stop_CD
+</pre> 

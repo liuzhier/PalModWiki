@@ -1,0 +1,39 @@
+<pre> 
+seg003:0E57 ; =============== S U B R O U T I N E =======================================
+seg003:0E57
+seg003:0E57
+seg003:0E57 proc            playCD near             ; CODE XREF: CD_play:loc_24D01↓p
+seg003:0E57                 sub     ebx, 96h
+seg003:0E5E                 mov     [dword ptr ds:CDROM_request_header.len_drh+0Eh], ebx
+seg003:0E63
+seg003:0E63 loc_249A3:
+seg003:0E63                 mov     [dword ptr ds:CDROM_request_header.status+0Fh], ecx
+seg003:0E68                 mov     al, 0Dh
+seg003:0E6A                 mov     [ds:CDROM_request_header.len_drh], al
+seg003:0E6D                 mov     al, [ds:CDriver_letter]
+seg003:0E70
+seg003:0E70 loc_249B0:
+seg003:0E70                 mov     [ds:CDROM_request_header.subUnit], al
+seg003:0E73                 mov     al, 84h
+seg003:0E75                 mov     [ds:CDROM_request_header.funcNr], al
+seg003:0E78                 xor     ax, ax
+seg003:0E7A                 mov     [ds:CDROM_request_header.status], ax
+seg003:0E7D                 mov     [byte ptr ds:CDROM_request_header.bytes_to_access+1], al
+seg003:0E80                 mov     bx, offset CDROM_request_header
+seg003:0E83                 call    CDROM_SendDriverRequest
+seg003:0E86                 mov     ax, [ds:CDROM_request_header.status]
+seg003:0E89                 mov     bl, ah
+seg003:0E8B                 and     bl, 81h
+seg003:0E8E                 xor     bl, 80h
+seg003:0E91                 jz      short locret_249E1
+seg003:0E93                 mov     cl, [ds:CDROM_access_result] ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0E93                                         ;            错误           正播  正常
+seg003:0E97                 or      cl, 2
+seg003:0E9A                 and     cl, 0FBh
+seg003:0E9D                 mov     [ds:CDROM_access_result], cl ; F    E D C B A 9     8    7 6 5 4 3 2 1 0
+seg003:0E9D                                         ;            错误           正播  正常
+seg003:0EA1
+seg003:0EA1 locret_249E1:                           ; CODE XREF: playCD+3A↑j
+seg003:0EA1                 retn
+seg003:0EA1 endp            playCD
+</pre> 

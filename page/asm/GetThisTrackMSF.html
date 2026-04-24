@@ -1,0 +1,33 @@
+<pre> 
+seg003:105E ; =============== S U B R O U T I N E =======================================
+seg003:105E
+seg003:105E
+seg003:105E proc            GetThisTrackMSF near    ; CODE XREF: CD_play+2C↓p
+seg003:105E                                         ; CD_play+3F↓p
+seg003:105E                 xor     bh, bh
+seg003:1060                 xor     eax, eax
+seg003:1063                 mov     si, 7
+seg003:1066                 imul    si, bx
+seg003:1069                 add     si, offset track_info_array
+seg003:106D                 mov     di, si
+seg003:106F                 add     di, 7
+seg003:1072                 xor     ebx, ebx
+seg003:1075                 mov     bl, [si+track_info_s.start.min]
+seg003:1078                 imul    bx, 3Ch ; '<'
+seg003:107B                 mov     al, [si+track_info_s.start.sec]
+seg003:107E                 add     ebx, eax
+seg003:1081                 imul    ebx, 4Bh ; 'K'
+seg003:1085                 mov     al, [si+track_info_s.start.fr]
+seg003:1088                 add     ebx, eax
+seg003:108B                 xor     ecx, ecx
+seg003:108E                 mov     cl, [di+track_info_s.start.min]
+seg003:1091                 imul    cx, 3Ch ; '<'
+seg003:1094                 mov     al, [di+track_info_s.start.sec]
+seg003:1097                 add     ecx, eax
+seg003:109A                 imul    ecx, 4Bh ; 'K'
+seg003:109E                 mov     al, [di+track_info_s.start.fr]
+seg003:10A1                 add     ecx, eax
+seg003:10A4                 sub     ecx, ebx
+seg003:10A7                 retn
+seg003:10A7 endp            GetThisTrackMSF
+</pre> 
