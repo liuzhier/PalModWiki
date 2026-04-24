@@ -1,0 +1,60 @@
+<pre> 
+seg001:83DD ; =============== S U B R O U T I N E =======================================
+seg001:83DD
+seg001:83DD ; Attributes: bp-based frame
+seg001:83DD
+seg001:83DD proc            ShakeScreen far         ; CODE XREF: draw_battle_scene+2C8↑P
+seg001:83DD                                         ; scanline_draw_normal_scene+12F↑P
+seg001:83DD                                         ; crossFadeOut+113↓P
+seg001:83DD                                         ; playRNG_impl+1C9↓P
+seg001:83DD
+seg001:83DD shake_pixels    = word ptr -16h
+seg001:83DD shake_filter    = word ptr -14h
+seg001:83DD
+seg001:83DD                 mov     cx, 4
+seg001:83E0                 mov     bx, 0
+seg001:83E3                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:83E8                 mov     ax, [ds:mutex_shaking]
+seg001:83EB                 and     ax, ax
+seg001:83ED                 jz      short valid_mutex
+seg001:83EF                 jmp     return
+seg001:83F2 ; ---------------------------------------------------------------------------
+seg001:83F2
+seg001:83F2 valid_mutex:                            ; CODE XREF: ShakeScreen+10↑j
+seg001:83F2                 cmp     [ds:shaking_times], 0
+seg001:83F7                 jg      short valid_shake
+seg001:83F9                 jmp     return
+seg001:83FC ; ---------------------------------------------------------------------------
+seg001:83FC
+seg001:83FC valid_shake:                            ; CODE XREF: ShakeScreen+1A↑j
+seg001:83FC                 dec     [ds:shaking_times]
+seg001:8400                 cmp     [ds:shaking_times], 10h
+seg001:8405                 jge     short loc_17E77
+seg001:8407                 mov     ax, 0Fh
+seg001:840A                 imul    [ds:shaking_grade]
+seg001:840E                 mov     cx, 10h
+seg001:8411                 cwd
+seg001:8412                 idiv    cx
+seg001:8414                 mov     [ds:shaking_grade], ax
+seg001:8417
+seg001:8417 loc_17E77:                              ; CODE XREF: ShakeScreen+28↑j
+seg001:8417                 mov     ax, [ds:shaking_times]
+seg001:841A                 and     ax, 1
+seg001:841D                 imul    [ds:shaking_grade]
+seg001:8421                 mov     [bp+shake_filter], ax
+seg001:8424                 mov     ax, 50h ; 'P'
+seg001:8427                 imul    [bp+shake_filter]
+seg001:842A                 mov     [bp+shake_pixels], ax
+seg001:842D                 lea     bx, [bp+shake_pixels]
+seg001:8430                 push    ds
+seg001:8431                 pop     es
+seg001:8432                 push    es
+seg001:8433                 push    bx
+seg001:8434                 call    CRT_Shake
+seg001:8439
+seg001:8439 return:                                 ; CODE XREF: ShakeScreen+12↑j
+seg001:8439                                         ; ShakeScreen+1C↑j
+seg001:8439                 call    B$EXSA          ; clear frame state info
+seg001:843E                 retf    0
+seg001:843E endp            ShakeScreen
+</pre> 

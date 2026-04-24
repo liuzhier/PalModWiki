@@ -1,0 +1,75 @@
+<pre> 
+seg030:0131 ; =============== S U B R O U T I N E =======================================
+seg030:0131
+seg030:0131 ; Attributes: bp-based frame
+seg030:0131
+seg030:0131 ; int __stdcall __far XMS_CopyBlockToXMS(__int32 dst_handle, __int32 length, char src, int)
+seg030:0131 proc            XMS_CopyBlockToXMS far  ; CODE XREF: inventory_Equip+6D↑P
+seg030:0131                                         ; process_Battle+3CB↑P
+seg030:0131                                         ; sub_9262+1FF↑P
+seg030:0131                                         ; show_fbp+3A↑P
+seg030:0131                                         ; sub_118F4+173↑P
+seg030:0131                                         ; process_scripts+4DDF↑P
+seg030:0131                                         ; crossFadeOut+3A↑P
+seg030:0131                                         ; backup_screen+2A↑P
+seg030:0131                                         ; playRNG_impl+4B↑P
+seg030:0131
+seg030:0131 dst_handle      = dword ptr  6
+seg030:0131 length          = dword ptr  0Ah
+seg030:0131 src             = byte ptr  0Eh
+seg030:0131
+seg030:0131                 push    bp
+seg030:0132
+seg030:0132 loc_2EB42:
+seg030:0132                 mov     bp, sp
+seg030:0134                 push    ds
+seg030:0135                 push    es
+seg030:0136
+seg030:0136 loc_2EB46:
+seg030:0136                 push    si
+seg030:0137                 push    di
+seg030:0138                 call    Clear_XMS_Trans_Table
+seg030:013B                 lds     si, [bp+length]
+seg030:013E                 lodsw
+seg030:013F
+seg030:013F loc_2EB4F:
+seg030:013F                 mov     dx, [si]
+seg030:0141                 test    al, 1
+seg030:0143
+seg030:0143 loc_2EB53:
+seg030:0143                 jz      short Even_StartCopy
+seg030:0145                 add     ax, 1
+seg030:0148
+seg030:0148 loc_2EB58:
+seg030:0148                 adc     dx, 0
+seg030:014B
+seg030:014B Even_StartCopy:                         ; CODE XREF: XMS_CopyBlockToXMS:loc_2EB53↑j
+seg030:014B                 mov     [cs:XMS_Trans_tbl.Length_tt], ax
+seg030:014F                 mov     [cs:XMS_Trans_tbl.Src_Handle], dx
+seg030:0154
+seg030:0154 loc_2EB64:
+seg030:0154                 lds     si, [bp+dst_handle]
+seg030:0157                 lodsw
+seg030:0158                 mov     [cs:XMS_Trans_tbl.Length_tt+0Ah], ax
+seg030:015C                 lds     si, [dword ptr bp+src]
+seg030:015F                 mov     dx, [si]
+seg030:0161
+seg030:0161 loc_2EB71:
+seg030:0161                 xor     ax, ax
+seg030:0163                 mov     [cs:XMS_Trans_tbl.Dst_Handle], ax
+seg030:0167                 mov     [cs:XMS_Trans_tbl.Dst_Offset], dx
+seg030:016C                 push    cs
+seg030:016D                 pop     ds
+seg030:016E                 assume ds:seg030
+seg030:016E                 mov     si, 8Ah
+seg030:0171                 mov     ah, 0Bh
+seg030:0173                 call    [cs:XMS_Driver]
+seg030:0178                 pop     di
+seg030:0179                 pop     si
+seg030:017A                 pop     es
+seg030:017B                 pop     ds
+seg030:017C                 assume ds:nothing
+seg030:017C                 pop     bp
+seg030:017D                 retf    0Ch
+seg030:017D endp            XMS_CopyBlockToXMS
+</pre> 

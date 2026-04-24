@@ -1,0 +1,43 @@
+<pre> 
+seg012:00D3 ; =============== S U B R O U T I N E =======================================
+seg012:00D3
+seg012:00D3 ; Attributes: bp-based frame
+seg012:00D3
+seg012:00D3 proc            CRT_Shake far           ; CODE XREF: process_scripts+1AEE↑P
+seg012:00D3                                         ; ShakeScreen+57↑P
+seg012:00D3
+seg012:00D3 arg_0           = dword ptr  6
+seg012:00D3
+seg012:00D3                 push    bp
+seg012:00D4                 mov     bp, sp
+seg012:00D6                 push    ds
+seg012:00D7                 push    si
+seg012:00D8                 lds     si, [bp+arg_0]
+seg012:00DB
+seg012:00DB loc_286BB:
+seg012:00DB                 mov     bx, [si]
+seg012:00DD                 mov     dx, 3D4h        ; 03D4  rW  CRT (6845) register index   (CGA/MCGA/color EGA/color VGA)
+seg012:00DD                                         ;         selects which register (0-11h) is to be accessed through 03D5
+seg012:00DD                                         ;         this port is r/w on some VGA, e.g. ET4000
+seg012:00DD                                         ;             bit 7-6 =0: (VGA) reserved
+seg012:00DD                                         ;             bit 5   =0: (VGA) reserved for testage
+seg012:00DD                                         ;             bit 4-0   : selects which register is to be accessed through 03D5
+seg012:00E0
+seg012:00E0 loc_286C0:
+seg012:00E0                 mov     al, 1100b
+seg012:00E2                 mov     ah, bh
+seg012:00E4                 out     dx, ax          ; Video: CRT cntrlr addr
+seg012:00E4                                         ; horizontal total
+seg012:00E5                 inc     al
+seg012:00E7                 mov     ah, bl
+seg012:00E9
+seg012:00E9 loc_286C9:                              ; Video: CRT cntrlr addr
+seg012:00E9                 out     dx, ax          ; horizontal total
+seg012:00EA
+seg012:00EA loc_286CA:
+seg012:00EA                 pop     si
+seg012:00EB                 pop     ds
+seg012:00EC                 pop     bp
+seg012:00ED                 retf    4
+seg012:00ED endp            CRT_Shake
+</pre> 

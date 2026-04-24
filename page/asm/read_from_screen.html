@@ -1,0 +1,44 @@
+<pre> 
+seg012:001D ; =============== S U B R O U T I N E =======================================
+seg012:001D
+seg012:001D ; Attributes: bp-based frame
+seg012:001D
+seg012:001D proc            read_from_screen far    ; CODE XREF: select_thurgy+1F7↑P
+seg012:001D                                         ; select_thurgy+21C↑P
+seg012:001D                                         ; select_item_with_filter+225↑P
+seg012:001D                                         ; select_item_with_filter+24F↑P
+seg012:001D                                         ; summon_lasting?+B1↑P
+seg012:001D                                         ; sub_118F4+8A↑P
+seg012:001D                                         ; process_scripts+57C5↑P
+seg012:001D                                         ; crossFadeOut+4C↑P
+seg012:001D                                         ; begin_scene+4CC↑P
+seg012:001D
+seg012:001D arg_0           = dword ptr  6
+seg012:001D
+seg012:001D                 push    bp
+seg012:001E
+seg012:001E loc_285FE:
+seg012:001E                 mov     bp, sp
+seg012:0020                 push    ds
+seg012:0021                 push    es
+seg012:0022                 push    si
+seg012:0023                 push    di
+seg012:0024
+seg012:0024 loc_28604:
+seg012:0024                 cld
+seg012:0025                 mov     ax, 0A000h
+seg012:0028                 mov     ds, ax
+seg012:002A                 assume ds:nothing
+seg012:002A                 xor     si, si
+seg012:002C                 les     di, [bp+arg_0]
+seg012:002F                 mov     cx, 16000
+seg012:0032                 rep movsd
+seg012:0035                 pop     di
+seg012:0036                 pop     si
+seg012:0037                 pop     es
+seg012:0038                 pop     ds
+seg012:0039                 assume ds:nothing
+seg012:0039                 pop     bp
+seg012:003A                 retf    4
+seg012:003A endp            read_from_screen
+</pre> 

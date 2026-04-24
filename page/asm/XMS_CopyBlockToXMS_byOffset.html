@@ -1,0 +1,87 @@
+<pre> 
+seg030:0180 ; =============== S U B R O U T I N E =======================================
+seg030:0180
+seg030:0180 ; Attributes: bp-based frame
+seg030:0180
+seg030:0180 ; int __stdcall __far XMS_CopyBlockToXMS_byOffset(__int32 dst_offset, __int32 dst_handle, __int32 length, char src_offset, int)
+seg030:0180 proc            XMS_CopyBlockToXMS_byOffset far
+seg030:0180                                         ; CODE XREF: read_ball_mkf+A6↑P
+seg030:0180                                         ; read_subfile+12F↑P
+seg030:0180                                         ; Load_system_files+4DF↑P
+seg030:0180                                         ; process_scripts+5AC↑P
+seg030:0180                                         ; process_scripts+70C↑P
+seg030:0180                                         ; process_scripts+111E↑P
+seg030:0180                                         ; process_scripts+11D7↑P
+seg030:0180                                         ; process_scripts+1F06↑P
+seg030:0180                                         ; process_scripts+2388↑P
+seg030:0180                                         ; process_scripts+2B49↑P
+seg030:0180                                         ; process_scripts+37C6↑P
+seg030:0180                                         ; process_scripts+3B2C↑P
+seg030:0180                                         ; process_scripts+3F56↑P
+seg030:0180                                         ; process_scripts+405C↑P
+seg030:0180                                         ; process_scripts+4740↑P ...
+seg030:0180
+seg030:0180 dst_offset      = dword ptr  6
+seg030:0180 dst_handle      = dword ptr  0Ah
+seg030:0180 length          = dword ptr  0Eh
+seg030:0180 src_offset      = byte ptr  12h
+seg030:0180
+seg030:0180                 push    bp
+seg030:0181
+seg030:0181 loc_2EB91:
+seg030:0181                 mov     bp, sp
+seg030:0183                 push    ds
+seg030:0184                 push    es
+seg030:0185                 push    si
+seg030:0186
+seg030:0186 loc_2EB96:
+seg030:0186                 push    di
+seg030:0187
+seg030:0187 loc_2EB97:
+seg030:0187                 call    Clear_XMS_Trans_Table
+seg030:018A
+seg030:018A loc_2EB9A:
+seg030:018A                 lds     si, [bp+dst_offset]
+seg030:018D                 lodsw
+seg030:018E
+seg030:018E loc_2EB9E:
+seg030:018E                 mov     [cs:XMS_Trans_tbl.Src_Handle+0Ah], ax
+seg030:0192                 lodsw
+seg030:0193                 mov     [cs:XMS_Trans_tbl.Src_Offset+0Ah], ax
+seg030:0197                 lds     si, [bp+length]
+seg030:019A                 lodsw
+seg030:019B                 mov     dx, [si]
+seg030:019D                 test    al, 1
+seg030:019F                 jz      short Even_StartCopy
+seg030:01A1                 add     ax, 1
+seg030:01A4                 adc     dx, 0
+seg030:01A7
+seg030:01A7 Even_StartCopy:                         ; CODE XREF: XMS_CopyBlockToXMS_byOffset+1F↑j
+seg030:01A7                 mov     [cs:XMS_Trans_tbl.Length_tt], ax
+seg030:01AB                 mov     [cs:XMS_Trans_tbl.Src_Handle], dx
+seg030:01B0                 lds     si, [bp+dst_handle]
+seg030:01B3                 lodsw
+seg030:01B4                 mov     [cs:XMS_Trans_tbl.Length_tt+0Ah], ax
+seg030:01B8                 lds     ax, [dword ptr bp+src_offset]
+seg030:01BB                 mov     dx, ds
+seg030:01BD                 mov     [cs:XMS_Trans_tbl.Dst_Handle], ax
+seg030:01C1
+seg030:01C1 loc_2EBD1:
+seg030:01C1                 mov     [cs:XMS_Trans_tbl.Dst_Offset], dx
+seg030:01C6                 push    cs
+seg030:01C7                 pop     ds
+seg030:01C8                 assume ds:seg030
+seg030:01C8                 mov     si, 8Ah
+seg030:01CB                 mov     ah, 0Bh
+seg030:01CD                 call    [cs:XMS_Driver]
+seg030:01D2                 pop     di
+seg030:01D3                 pop     si
+seg030:01D4                 pop     es
+seg030:01D5                 pop     ds
+seg030:01D6                 assume ds:nothing
+seg030:01D6
+seg030:01D6 loc_2EBE6:
+seg030:01D6                 pop     bp
+seg030:01D7                 retf    10h
+seg030:01D7 endp            XMS_CopyBlockToXMS_byOffset
+</pre> 
