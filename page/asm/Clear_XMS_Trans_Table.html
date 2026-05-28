@@ -1,0 +1,22 @@
+<pre> 
+
+0002EBEA proc            Clear_XMS_Trans_Table near
+0002EBEA                                         ; CODE XREF: XMS_CopyBlockToXMS+7↑p
+0002EBEA                                         ; XMS_CopyBlockToXMS_byOffset:loc_2EB97↑p
+0002EBEA                                         ; XMS_CopyBlockFromXMS+7↓p
+0002EBEA                                         ; XMS_CopyBlockFromXMS_toAddr+7↓p
+0002EBEA                                         ; sub_2ECDE:loc_2ECE5↓p
+0002EBEA                 push    cs
+0002EBEB                 pop     es
+0002EBEC                 assume es:seg030
+0002EBEC                 mov     di, 8Ah
+0002EBEF                 xor     ax, ax          ; Logical Exclusive OR
+0002EBF1                 mov     cx, 8
+0002EBF4
+0002EBF4 loc_2EBF4:
+0002EBF4                 cld                     ; Clear Direction Flag
+0002EBF5                 rep stosw               ; Store String
+0002EBF7                 retn                    ; Return Near from Procedure
+0002EBF7
+0002EBF7 endp            Clear_XMS_Trans_Table
+</pre> 
