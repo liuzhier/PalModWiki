@@ -1,0 +1,84 @@
+<pre> 
+
+0002EC47 ; =============== S U B R O U T I N E =======================================
+0002EC47
+0002EC47 ; Attributes: bp-based frame
+0002EC47
+0002EC47 ; int __stdcall __far XMS_CopyBlockFromXMS_toAddr(__int32 src_offset, __int32 src_handle, __int32 length, char dst_offset, int)
+0002EC47 proc            XMS_CopyBlockFromXMS_toAddr far
+0002EC47                                         ; CODE XREF: sub_494C+4C↑P
+0002EC47                                         ; process_Battle+184↑P
+0002EC47                                         ; process_Battle+38F↑P
+0002EC47                                         ; process_Battle+45E↑P
+0002EC47                                         ; process_Battle+4AD↑P
+0002EC47                                         ; summon_lasting?+41↑P
+0002EC47                                         ; summon_lasting?+1F9↑P
+0002EC47                                         ; show_status_bar+37↑P
+0002EC47                                         ; get_m_msg+4E↑P
+0002EC47                                         ; load_MagicEffect_to_decoded_pack+37↑P
+0002EC47                                         ; process_Script+E9↑P
+0002EC47                                         ; frame_menu+42↑P
+0002EC47                                         ; show_curr_money_num+37↑P
+0002EC47                                         ; show_number+37↑P
+0002EC47                                         ; dialog_string+EE↑P ...
+0002EC47
+0002EC47 src_offset      = dword ptr  6
+0002EC47 src_handle      = dword ptr  0Ah
+0002EC47 length          = dword ptr  0Eh
+0002EC47 dst_offset      = byte ptr  12h
+0002EC47
+0002EC47                 push    bp
+0002EC48                 mov     bp, sp
+0002EC4A                 push    ds
+0002EC4B                 push    es
+0002EC4C                 push    si
+0002EC4D                 push    di
+0002EC4E                 call    Clear_XMS_Trans_Table ; Call Procedure
+0002EC4E
+0002EC51                 lds     si, [bp+length] ; Load Full Pointer to DS:xx
+0002EC54                 lodsw                   ; Load String
+0002EC55
+0002EC55 loc_2EC55:
+0002EC55                 mov     dx, [si]
+0002EC57
+0002EC57 loc_2EC57:
+0002EC57                 test    al, 1           ; Logical Compare
+0002EC59                 jz      short Even_StartCopy ; Jump if Zero (ZF=1)
+0002EC59
+0002EC5B                 add     ax, 1           ; Add
+0002EC5E                 adc     dx, 0           ; Add with Carry
+0002EC5E
+0002EC61
+0002EC61 Even_StartCopy:                         ; CODE XREF: XMS_CopyBlockFromXMS_toAddr+12↑j
+0002EC61                 mov     [cs:XMS_Trans_tbl.Length_tt], ax
+0002EC65                 mov     [cs:XMS_Trans_tbl.Src_Handle], dx
+0002EC6A                 lds     si, [bp+src_handle] ; Load Full Pointer to DS:xx
+0002EC6D                 lodsw                   ; Load String
+0002EC6E                 mov     [cs:XMS_Trans_tbl.Src_Offset], ax
+0002EC72
+0002EC72 loc_2EC72:
+0002EC72                 lds     si, [bp+src_offset] ; Load Full Pointer to DS:xx
+0002EC75                 lodsw                   ; Load String
+0002EC76                 mov     [cs:XMS_Trans_tbl.Dst_Handle], ax
+0002EC7A                 lodsw                   ; Load String
+0002EC7B                 mov     [cs:XMS_Trans_tbl.Dst_Offset], ax
+0002EC7F                 lds     si, [dword ptr bp+dst_offset] ; Load Full Pointer to DS:xx
+0002EC82                 mov     [cs:XMS_Trans_tbl.Src_Handle+0Ah], si
+0002EC87                 mov     [cs:XMS_Trans_tbl.Src_Offset+0Ah], ds
+0002EC8C                 push    cs
+0002EC8D                 pop     ds
+0002EC8E                 assume ds:seg030
+0002EC8E                 mov     si, offset XMS_Trans_tbl
+0002EC91                 mov     ah, 0Bh
+0002EC93                 call    [cs:XMS_Driver] ; Indirect Call Far Procedure
+0002EC93
+0002EC98                 pop     di
+0002EC99                 pop     si
+0002EC9A                 pop     es
+0002EC9B                 pop     ds
+0002EC9C                 assume ds:nothing
+0002EC9C                 pop     bp
+0002EC9D                 retf    10h             ; Return Far from Procedure
+0002EC9D
+0002EC9D endp            XMS_CopyBlockFromXMS_toAddr
+</pre> 
