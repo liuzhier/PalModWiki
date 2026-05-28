@@ -1,47 +1,53 @@
 <pre> 
-seg000:BB4D ; =============== S U B R O U T I N E =======================================
-seg000:BB4D
-seg000:BB4D ; Attributes: bp-based frame
-seg000:BB4D
-seg000:BB4D proc            deyj1_fbp_subfile_to_screen_buf far
-seg000:BB4D                                         ; CODE XREF: inventory_Equip+37↑P
-seg000:BB4D                                         ; process_Battle+397↑P
-seg000:BB4D                                         ; show_fbp+4D↓P
-seg000:BB4D                                         ; get_fbp_two_scene_cat_to_glb_scrn+E↓P
-seg000:BB4D                                         ; sub_1B98A+3A↓P
-seg000:BB4D                                         ; show_role_status+2F↓P
-seg000:BB4D
-seg000:BB4D psdDest         = word ptr -16h
-seg000:BB4D arg_2           = word ptr  6
-seg000:BB4D
-seg000:BB4D                 mov     cx, 4
-seg000:BB50                 mov     bx, 1
-seg000:BB53                 call    far ptr B$ENRA  ; setup stack & other state info.
-seg000:BB58                 push    offset BSTR_CDriver_If_min_inst ; psd1_dst
-seg000:BB5B                 push    offset BSTR_FBP_mkf ; psd2
-seg000:BB5E                 call    B$SCT1          ; Concatenate strings
-seg000:BB63                 push    ax              ; psdSource
-seg000:BB64                 lea     ax, [bp+psdDest]
-seg000:BB67                 push    ax              ; psdDest
-seg000:BB68                 call    B$SAS1          ; String assignment
-seg000:BB6D                 lea     ax, [bp+psdDest]
-seg000:BB70                 push    ax
-seg000:BB71                 push    [bp+arg_2]
-seg000:BB74                 call    Read_subfile_to_glb_1
-seg000:BB79                 mov     si, offset DDIM_buf_glb_1_redraw
-seg000:BB7C                 xor     bx, bx
-seg000:BB7E                 add     bx, [si+0Ah]
-seg000:BB81                 mov     es, [word ptr si+2]
-seg000:BB84                 push    es              ; int
-seg000:BB85                 push    bx              ; src_ptr
-seg000:BB86                 mov     si, offset DDIM_screen_buf
-seg000:BB89                 xor     bx, bx
-seg000:BB8B                 add     bx, [si+0Ah]
-seg000:BB8E                 mov     es, [word ptr si+2]
-seg000:BB91                 push    es
-seg000:BB92                 push    bx              ; dest_ptr
-seg000:BB93                 call    DeYJ_1
-seg000:BB98                 call    B$EXSA          ; clear frame state info
-seg000:BB9D                 retf    2
-seg000:BB9D endp            deyj1_fbp_subfile_to_screen_buf
-</pre> 
+
+0000BB4D ; Attributes: bp-based frame
+0000BB4D
+0000BB4D proc            deyj1_fbp_subfile_to_screen_buf far
+0000BB4D                                         ; CODE XREF: inventory_Equip+37↑P
+0000BB4D                                         ; process_Battle+397↑P
+0000BB4D                                         ; show_fbp+4D↓P
+0000BB4D                                         ; get_fbp_two_scene_cat_to_glb_scrn+E↓P
+0000BB4D                                         ; sub_1B98A+3A↓P
+0000BB4D                                         ; show_role_status+2F↓P
+0000BB4D
+0000BB4D psdDest         = word ptr -16h
+0000BB4D arg_2           = word ptr  6
+0000BB4D
+0000BB4D                 mov     cx, 4
+0000BB50                 mov     bx, 1
+0000BB53                 call    far ptr B$ENRA  ; setup stack & other state info.
+0000BB53
+0000BB58                 push    offset BSTR_CDriver_If_min_inst ; psd1_dst
+0000BB5B                 push    offset BSTR_FBP_mkf ; psd2
+0000BB5E                 call    B$SCT1          ; Concatenate strings
+0000BB5E
+0000BB63                 push    ax              ; psdSource
+0000BB64                 lea     ax, [bp+psdDest] ; Load Effective Address
+0000BB67                 push    ax              ; psdDest
+0000BB68                 call    B$SAS1          ; String assignment
+0000BB68
+0000BB6D                 lea     ax, [bp+psdDest] ; Load Effective Address
+0000BB70                 push    ax
+0000BB71                 push    [bp+arg_2]
+0000BB74                 call    Read_subfile_to_glb_1 ; Call Procedure
+0000BB74
+0000BB79                 mov     si, offset DDIM_buf_glb_1_redraw
+0000BB7C                 xor     bx, bx          ; Logical Exclusive OR
+0000BB7E                 add     bx, [si+0Ah]    ; Add
+0000BB81                 mov     es, [word ptr si+2]
+0000BB84                 push    es              ; int
+0000BB85                 push    bx              ; src_ptr
+0000BB86                 mov     si, offset DDIM_screen_buf
+0000BB89                 xor     bx, bx          ; Logical Exclusive OR
+0000BB8B                 add     bx, [si+0Ah]    ; Add
+0000BB8E                 mov     es, [word ptr si+2]
+0000BB91                 push    es
+0000BB92                 push    bx              ; dest_ptr
+0000BB93                 call    DeYJ_1          ; Call Procedure
+0000BB93
+0000BB98                 call    B$EXSA          ; clear frame state info
+0000BB98
+0000BB9D                 retf    2               ; Return Far from Procedure
+0000BB9D
+0000BB9D endp            deyj1_fbp_subfile_to_screen_buf
+0000BB9D</pre> 

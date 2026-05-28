@@ -1,0 +1,89 @@
+<pre> 
+seg002:1CE1 ; clear frame state info
+seg002:1CE1 ; Attributes: library function
+seg002:1CE1
+seg002:1CE1 proc            B$EXSA far              ; CODE XREF: enemy_magical_attack+D70↑P
+seg002:1CE1                                         ; some_adjust_on_enemy_02468_unknown:loc_2B16↑P
+seg002:1CE1                                         ; sub_2B21:loc_2C23↑P
+seg002:1CE1                                         ; attack_make?:loc_2D0D↑P
+seg002:1CE1                                         ; get_enemy_alive+4D↑P
+seg002:1CE1                                         ; enemy_level_scaler+34↑P
+seg002:1CE1                                         ; enemy_phisical_attack_role:return↑P
+seg002:1CE1                                         ; sub_38D1+203↑P
+seg002:1CE1                                         ; sub_3ADF:loc_3CCD↑P
+seg002:1CE1                                         ; select_targeting_enemy+139↑P
+seg002:1CE1                                         ; select_thurgy+6D9↑P
+seg002:1CE1                                         ; sub_4500+B9↑P
+seg002:1CE1                                         ; menu_loop+6F↑P
+seg002:1CE1                                         ; menu_select+203↑P
+seg002:1CE1                                         ; menu_Magic_selecting+F5↑P ...
+seg002:1CE1                 cmp     [word ptr bp-10h], 0
+seg002:1CE5                 jnz     short loc_21044
+seg002:1CE7                 pop     [ds:CO_PROC_IP]
+seg002:1CEB                 pop     [ds:CO_PROC_CS]
+seg002:1CEF                 dec     [ds:flag_reenter]
+seg002:1CF3                 push    dx
+seg002:1CF4                 push    ax
+seg002:1CF5                 mov     al, [bp-9]
+seg002:1CF8                 cbw
+seg002:1CF9                 add     ax, ax
+seg002:1CFB                 jnz     short loc_2104A
+seg002:1CFD
+seg002:1CFD loc_2102D:                              ; CODE XREF: B$EXSA+49↓j
+seg002:1CFD                 mov     cx, [bp-0Ch]
+seg002:1D00                 or      cx, cx
+seg002:1D02                 jnz     short loc_21063
+seg002:1D04
+seg002:1D04 loc_21034:                              ; CODE XREF: B$EXSA+63↓j
+seg002:1D04                 pop     ax
+seg002:1D05                 pop     dx
+seg002:1D06                 lea     sp, [bp-6]
+seg002:1D09                 pop     di
+seg002:1D0A                 pop     si
+seg002:1D0B                 pop     [ds:ENTR_BP]
+seg002:1D0F                 pop     bp
+seg002:1D10                 jmp     [dword ptr ds:CO_PROC_IP]
+seg002:1D14 ; ---------------------------------------------------------------------------
+seg002:1D14
+seg002:1D14 loc_21044:                              ; CODE XREF: B$EXSA+4↑j
+seg002:1D14                                         ; B$EXFA+B↓j B$EXCY+B↓j
+seg002:1D14                 push    bp
+seg002:1D15                 mov     bp, sp
+seg002:1D17                 jmp     B$ERR_NR
+seg002:1D1A ; ---------------------------------------------------------------------------
+seg002:1D1A
+seg002:1D1A loc_2104A:                              ; CODE XREF: B$EXSA+1A↑j
+seg002:1D1A                 add     ax, 136Eh
+seg002:1D1D                 push    ax
+seg002:1D1E                 cmp     [byte ptr ds:word_308EB], 0
+seg002:1D23                 jnz     short loc_2105C
+seg002:1D25
+seg002:1D25 loc_21055:                              ; CODE XREF: B$EXSA+50↓j
+seg002:1D25                 call    B$FreeSb
+seg002:1D2A                 jmp     short loc_2102D
+seg002:1D2C ; ---------------------------------------------------------------------------
+seg002:1D2C
+seg002:1D2C loc_2105C:                              ; CODE XREF: B$EXSA+42↑j
+seg002:1D2C                 xor     dx, dx
+seg002:1D2E                 call    B$NearRetEvent
+seg002:1D31                 jmp     short loc_21055
+seg002:1D33 ; ---------------------------------------------------------------------------
+seg002:1D33
+seg002:1D33 loc_21063:                              ; CODE XREF: B$EXSA+21↑j
+seg002:1D33                 push    [ds:save_137c?]
+seg002:1D37                 push    cx
+seg002:1D38                 cmp     [byte ptr ds:word_308EB], 0
+seg002:1D3D                 jnz     short loc_21076
+seg002:1D3F
+seg002:1D3F loc_2106F:                              ; CODE XREF: B$EXSA+6D↓j
+seg002:1D3F                 call    B$FreeHandleBlock
+seg002:1D44                 jmp     short loc_21034
+seg002:1D46 ; ---------------------------------------------------------------------------
+seg002:1D46
+seg002:1D46 loc_21076:                              ; CODE XREF: B$EXSA+5C↑j
+seg002:1D46                 mov     ax, [ds:save_137c?]
+seg002:1D49                 mov     dx, cx
+seg002:1D4B                 call    B$NearRetEvent
+seg002:1D4E                 jmp     short loc_2106F
+seg002:1D4E endp            B$EXSA
+seg002:1D4E</pre> 

@@ -1,0 +1,59 @@
+<pre> 
+seg002:1C97 ; setup stack & other state info.
+seg002:1C97 ; Attributes: library function bp-based frame
+seg002:1C97
+seg002:1C97 proc            B$ENRA near             ; CODE XREF: enemy_magical_attack+6↑P
+seg002:1C97                                         ; some_adjust_on_enemy_02468_unknown+6↑P
+seg002:1C97                                         ; sub_2B21+6↑P
+seg002:1C97                                         ; attack_make?+6↑P
+seg002:1C97                                         ; get_enemy_alive+6↑P
+seg002:1C97                                         ; enemy_level_scaler+6↑P
+seg002:1C97                                         ; enemy_phisical_attack_role+6↑P
+seg002:1C97                                         ; sub_38D1+6↑P sub_3ADF+6↑P
+seg002:1C97                                         ; select_targeting_enemy+6↑P
+seg002:1C97                                         ; select_thurgy+6↑P
+seg002:1C97                                         ; sub_4500+6↑P menu_loop+6↑P
+seg002:1C97                                         ; menu_select+6↑P
+seg002:1C97                                         ; menu_Magic_selecting+6↑P ...
+seg002:1C97
+seg002:1C97 var_C           = word ptr -0Ch
+seg002:1C97
+seg002:1C97                 pop     [ds:CO_PROC_IP]
+seg002:1C9B                 pop     [ds:CO_PROC_CS]
+seg002:1C9F                 xor     ax, ax
+seg002:1CA1                 push    bp
+seg002:1CA2                 mov     bp, sp
+seg002:1CA4                 push    [ds:ENTR_BP]
+seg002:1CA8                 push    si
+seg002:1CA9                 push    di
+seg002:1CAA                 push    cx
+seg002:1CAB                 push    ax
+seg002:1CAC                 push    ax
+seg002:1CAD                 push    ax
+seg002:1CAE                 push    ax
+seg002:1CAF                 push    ax
+seg002:1CB0                 sub     sp, cx          ; 辟出CX*2字节的栈空间
+seg002:1CB2                 mov     [ds:ENTR_BP], bp ; 此地用于存储本次所辟堆栈桢还原用地址
+seg002:1CB6                 inc     [ds:flag_reenter]
+seg002:1CBA                 mov     di, sp
+seg002:1CBC                 push    es
+seg002:1CBD                 push    ds
+seg002:1CBE                 pop     es
+seg002:1CBF                 shr     cx, 1
+seg002:1CC1                 rep stosw
+seg002:1CC3                 pop     es              ; 清空辟出的空间
+seg002:1CC4                 or      bx, bx
+seg002:1CC6                 jnz     short CallB$HFirstAllocBlock
+seg002:1CC8
+seg002:1CC8 JumpBack:                               ; CODE XREF: B$ENRA+42↓j
+seg002:1CC8                 mov     [bp+var_C], ax
+seg002:1CCB                 jmp     [dword ptr ds:CO_PROC_IP]
+seg002:1CCF ; ---------------------------------------------------------------------------
+seg002:1CCF
+seg002:1CCF CallB$HFirstAllocBlock:                 ; CODE XREF: B$ENRA+2F↑j
+seg002:1CCF                 push    [ds:save_137c?] ; address
+seg002:1CD3                 push    bx              ; int
+seg002:1CD4                 call    B$HFirstAllocBlock
+seg002:1CD9                 jmp     short JumpBack
+seg002:1CD9 endp            B$ENRA
+seg002:1CD9</pre> 
