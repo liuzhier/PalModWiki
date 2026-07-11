@@ -1,0 +1,82 @@
+<pre> 
+seg001:856F ; =============== S U B R O U T I N E =======================================
+seg001:856F
+seg001:856F ; 0阻碍
+seg001:856F ; Attributes: bp-based frame
+seg001:856F
+seg001:856F ; int __stdcall __far barrier_check(int, int a_self, int a_y)
+seg001:856F proc            barrier_check far       ; CODE XREF: calc_team_walking+6F↑P
+seg001:856F                                         ; process_scripts+25A9↑P
+seg001:856F                                         ; GameLoop_OneCycle+420↓P
+seg001:856F                                         ; store_team_frame_data+1CB↓P
+seg001:856F
+seg001:856F var_16          = word ptr -16h
+seg001:856F result          = word ptr -14h
+seg001:856F a_self          = word ptr  6
+seg001:856F a_y             = word ptr  8
+seg001:856F a_x             = word ptr  0Ah
+seg001:856F
+seg001:856F                 mov     cx, 4
+seg001:8572                 mov     bx, 0
+seg001:8575                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:857A                 mov     bx, [bp+a_x]
+seg001:857D                 push    ds
+seg001:857E                 pop     es
+seg001:857F                 push    es
+seg001:8580                 push    bx              ; argu_x
+seg001:8581                 mov     bx, [bp+a_y]
+seg001:8584                 push    ds
+seg001:8585                 pop     es
+seg001:8586                 push    es
+seg001:8587                 push    bx              ; argu_y
+seg001:8588                 mov     si, offset DDIM_buf_glb_map
+seg001:858B                 xor     bx, bx
+seg001:858D                 add     bx, [si+0Ah]
+seg001:8590                 mov     es, [word ptr si+2]
+seg001:8593                 push    es
+seg001:8594                 push    bx              ; argu_base
+seg001:8595                 lea     bx, [bp+result]
+seg001:8598                 push    ds
+seg001:8599                 pop     es
+seg001:859A                 push    es
+seg001:859B                 push    bx              ; argu_return
+seg001:859C                 call    chk_map_Barrier ; 0阻碍
+seg001:85A1                 mov     ax, [bp+result]
+seg001:85A4                 and     ax, ax
+seg001:85A6                 jnz     short next
+seg001:85A8                 jmp     return
+seg001:85AB ; ---------------------------------------------------------------------------
+seg001:85AB
+seg001:85AB next:                                   ; CODE XREF: barrier_check+37↑j
+seg001:85AB                 push    [ds:evt_objs_curr_scene]
+seg001:85AF                 mov     si, [bp+a_self]
+seg001:85B2                 push    [word ptr si]
+seg001:85B4                 mov     si, [bp+a_x]
+seg001:85B7                 push    [word ptr si]
+seg001:85B9                 mov     si, [bp+a_y]
+seg001:85BC                 push    [word ptr si]
+seg001:85BE                 mov     si, offset DDIM_evt_obj_curr_scene
+seg001:85C1                 mov     bx, 20h ; ' '
+seg001:85C4                 add     bx, [si+0Ah]
+seg001:85C7                 mov     es, [word ptr si+2]
+seg001:85CA                 push    es
+seg001:85CB                 push    bx
+seg001:85CC                 lea     bx, [bp+result]
+seg001:85CF                 push    ds
+seg001:85D0                 pop     es
+seg001:85D1                 push    es
+seg001:85D2                 push    bx
+seg001:85D3                 call    chk_evt_can_trigger?
+seg001:85D8
+seg001:85D8 return:                                 ; CODE XREF: barrier_check+39↑j
+seg001:85D8                 mov     ax, [bp+result]
+seg001:85DB                 mov     [bp+var_16], ax
+seg001:85DE                 mov     ax, [bp+var_16]
+seg001:85E1                 call    B$EXSA          ; clear frame state info
+seg001:85E6                 retf    6
+seg001:85E6 endp            barrier_check
+seg001:85E6
+seg001:85E9 ; ---------------------------------------------------------------------------
+seg001:85E9
+seg001:85E9 loc_18049:                              ; CODE XREF: seg001:loc_17FCC↑j
+seg001:85E9                 jmp     loc_1847D</pre> 

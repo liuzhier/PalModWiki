@@ -1,0 +1,199 @@
+<pre> 
+seg023:01C5 ; =============== S U B R O U T I N E =======================================
+seg023:01C5
+seg023:01C5 ; Attributes: bp-based frame
+seg023:01C5
+seg023:01C5 proc            add_bricks_to_draw_array far
+seg023:01C5                                         ; CODE XREF: Redraw_Tiles_or_Fade_to_pic+4A↑P
+seg023:01C5
+seg023:01C5 var_x           = word ptr -6
+seg023:01C5 var_y           = word ptr -4
+seg023:01C5 var_16y_8h_7_minusY= word ptr -2
+seg023:01C5 arg_gop         = dword ptr  6
+seg023:01C5 arg_redraw      = dword ptr  0Ah
+seg023:01C5 arg_map         = dword ptr  0Eh
+seg023:01C5 arg_y           = dword ptr  12h
+seg023:01C5 arg_x           = dword ptr  16h
+seg023:01C5
+seg023:01C5                 push    bp
+seg023:01C6                 mov     bp, sp
+seg023:01C8                 sub     sp, 6
+seg023:01CB                 push    ds
+seg023:01CC                 push    es
+seg023:01CD                 push    si
+seg023:01CE                 push    di
+seg023:01CF                 cld
+seg023:01D0                 lds     si, [bp+arg_x]
+seg023:01D3                 lodsw
+seg023:01D4                 mov     [bp+var_x], ax
+seg023:01D7                 lds     si, [bp+arg_y]
+seg023:01DA                 lodsw
+seg023:01DB                 mov     [bp+var_y], ax
+seg023:01DE
+seg023:01DE loc_2BE9E:
+seg023:01DE                 les     di, [bp+arg_redraw]
+seg023:01E1                 mov     cx, 4000h
+seg023:01E4
+seg023:01E4 tile_redraw_test_loop:                  ; CODE XREF: add_bricks_to_draw_array:all_no↓j
+seg023:01E4                 xor     al, al
+seg023:01E6                 repe scasb
+seg023:01E8                 or      cx, cx
+seg023:01EA                 jnz     short goon_test
+seg023:01EC
+seg023:01EC loc_2BEAC:
+seg023:01EC                 jmp     return
+seg023:01EF ; ---------------------------------------------------------------------------
+seg023:01EF
+seg023:01EF goon_test:                              ; CODE XREF: add_bricks_to_draw_array+25↑j
+seg023:01EF                 mov     ax, di
+seg023:01F1                 dec     ax              ; 重画位置
+seg023:01F2                 mov     bx, ax
+seg023:01F4
+seg023:01F4 loc_2BEB4:
+seg023:01F4                 mov     dx, ax
+seg023:01F6                 and     dx, 1           ; dx:h
+seg023:01F9                 shr     ax, 7           ; ax:y
+seg023:01FC
+seg023:01FC loc_2BEBC:
+seg023:01FC                 and     bx, 7Eh
+seg023:01FF                 shr     bx, 1           ; bx:x
+seg023:0201                 add     ax, ax
+seg023:0203                 add     ax, dx
+seg023:0205
+seg023:0205 loc_2BEC5:
+seg023:0205                 shl     ax, 3
+seg023:0208
+seg023:0208 loc_2BEC8:
+seg023:0208                 sub     ax, [bp+var_y]
+seg023:020B                 add     ax, 7
+seg023:020E                 mov     [bp+var_16y_8h_7_minusY], ax
+seg023:0211                 add     bx, bx
+seg023:0213                 add     bx, dx
+seg023:0215                 shl     bx, 4
+seg023:0218
+seg023:0218 loc_2BED8:
+seg023:0218                 sub     bx, [bp+var_x]
+seg023:021B                 sub     bx, 10h
+seg023:021E                 mov     [cs:_32x_16h_m16_minusX], bx
+seg023:0223
+seg023:0223 loc_2BEE3:
+seg023:0223                 test    [byte ptr es:di-1], 1
+seg023:0228                 jz      short h_redraw
+seg023:022A                 lds     si, [bp+arg_map]
+seg023:022D                 mov     si, di
+seg023:022F                 dec     si
+seg023:0230                 add     si, si
+seg023:0232                 add     si, si
+seg023:0234
+seg023:0234 loc_2BEF4:
+seg023:0234                 mov     al, [si+1]
+seg023:0237                 and     ax, 0Fh
+seg023:023A                 shl     ax, 3
+seg023:023D                 mov     [cs:layer_multi8_or_multi8a1], ax
+seg023:0241
+seg023:0241 loc_2BF01:
+seg023:0241                 mov     bx, [bp+var_16y_8h_7_minusY]
+seg023:0244                 add     bx, ax
+seg023:0246                 mov     [cs:_16y_8h_7_alayer_minusY], bx
+seg023:024B                 mov     bx, [si]
+seg023:024D                 and     bh, 10h
+seg023:0250                 shr     bh, 4
+seg023:0253                 add     bx, bx
+seg023:0255                 lds     si, [bp+arg_gop]
+seg023:0258                 push    cx
+seg023:0259                 push    cs
+seg023:025A                 push    offset _32x_16h_m16_minusX ; a_x
+seg023:025D                 push    cs
+seg023:025E                 push    offset _16y_8h_7_alayer_minusY ; a_y
+seg023:0261                 push    cs
+seg023:0262                 push    offset layer_multi8_or_multi8a1 ; a_layer
+seg023:0265                 push    ds
+seg023:0266                 push    bx              ; __int32
+seg023:0267                 call    add_brick_to_draw_list
+seg023:026C                 pop     cx
+seg023:026D
+seg023:026D h_redraw:                               ; CODE XREF: add_bricks_to_draw_array+63↑j
+seg023:026D                 test    [byte ptr es:di-1], 2
+seg023:0272                 jz      short all_no
+seg023:0274                 lds     si, [bp+arg_map]
+seg023:0277                 mov     si, di
+seg023:0279                 dec     si
+seg023:027A                 add     si, si
+seg023:027C                 add     si, si
+seg023:027E                 add     si, 2
+seg023:0281                 mov     al, [si+1]
+seg023:0284                 and     ax, 0Fh
+seg023:0287                 shl     ax, 3
+seg023:028A                 inc     ax
+seg023:028B                 mov     [cs:layer_multi8_or_multi8a1], ax
+seg023:028F                 mov     bx, [bp+var_16y_8h_7_minusY]
+seg023:0292                 add     bx, ax
+seg023:0294                 mov     [cs:_16y_8h_7_alayer_minusY], bx
+seg023:0299                 mov     bx, [si]
+seg023:029B                 and     bh, 10h
+seg023:029E                 shr     bh, 4
+seg023:02A1                 dec     bx
+seg023:02A2
+seg023:02A2 loc_2BF62:
+seg023:02A2                 add     bx, bx
+seg023:02A4                 lds     si, [bp+arg_gop]
+seg023:02A7                 push    cx
+seg023:02A8                 push    cs
+seg023:02A9                 push    offset _32x_16h_m16_minusX ; a_x
+seg023:02AC                 push    cs
+seg023:02AD                 push    offset _16y_8h_7_alayer_minusY ; a_y
+seg023:02B0                 push    cs
+seg023:02B1                 push    offset layer_multi8_or_multi8a1 ; a_layer
+seg023:02B4                 push    ds
+seg023:02B5                 push    bx              ; __int32
+seg023:02B6
+seg023:02B6 loc_2BF76:
+seg023:02B6                 call    add_brick_to_draw_list
+seg023:02BB                 pop     cx
+seg023:02BC
+seg023:02BC all_no:                                 ; CODE XREF: add_bricks_to_draw_array+AD↑j
+seg023:02BC                 jmp     tile_redraw_test_loop
+seg023:02BF ; ---------------------------------------------------------------------------
+seg023:02BF
+seg023:02BF return:                                 ; CODE XREF: add_bricks_to_draw_array:loc_2BEAC↑j
+seg023:02BF                 pop     di
+seg023:02C0                 pop     si
+seg023:02C1                 pop     es
+seg023:02C2                 pop     ds
+seg023:02C3                 add     sp, 6
+seg023:02C6                 pop     bp
+seg023:02C7
+seg023:02C7 locret_2BF87:
+seg023:02C7                 retf    14h
+seg023:02C7 endp            add_bricks_to_draw_array
+seg023:02C7
+seg023:02C7 ; ---------------------------------------------------------------------------
+seg023:02CA max_column      dw 0                    ; DATA XREF: calc_redraw_flags+B↑w
+seg023:02CA                                         ; calc_redraw_flags+64↑r
+seg023:02CA                                         ; calc_redraw_flags+8D↑r
+seg023:02CC _32x_16h_m16_minusX dw 0                ; DATA XREF: add_bricks_to_draw_array+59↑w
+seg023:02CC                                         ; add_bricks_to_draw_array+95↑o
+seg023:02CC                                         ; add_bricks_to_draw_array+E4↑o
+seg023:02CE _16y_8h_7_alayer_minusY dw 0            ; DATA XREF: add_bricks_to_draw_array+81↑w
+seg023:02CE                                         ; add_bricks_to_draw_array+99↑o
+seg023:02CE                                         ; add_bricks_to_draw_array+CF↑w
+seg023:02CE                                         ; add_bricks_to_draw_array+E8↑o
+seg023:02D0 layer_multi8_or_multi8a1 dw 0           ; DATA XREF: add_bricks_to_draw_array+78↑w
+seg023:02D0                                         ; add_bricks_to_draw_array+9D↑o
+seg023:02D0                                         ; add_bricks_to_draw_array+C6↑w
+seg023:02D0                                         ; add_bricks_to_draw_array+EC↑o
+seg023:02D2 h_block         dw 0                    ; DATA XREF: chk_map_Barrier:loc_2BCE2↑o
+seg023:02D2                                         ; chk_map_Barrier+35↑r
+seg023:02D2                                         ; chk_map_Barrier+3A↑r
+seg023:02D2                                         ; calc_redraw_flags:loc_2BE05↑w
+seg023:02D2                                         ; calc_redraw_flags+57↑r
+seg023:02D2                                         ; calc_redraw_flags+80↑r
+seg023:02D4 x_block         dw 0                    ; DATA XREF: chk_map_Barrier:loc_2BCD5↑w
+seg023:02D4                                         ; chk_map_Barrier:loc_2BCE6↑o
+seg023:02D4                                         ; chk_map_Barrier+2B↑r
+seg023:02D6 y_block         dw 0                    ; DATA XREF: chk_map_Barrier:loc_2BCDD↑w
+seg023:02D6                                         ; chk_map_Barrier:loc_2BCEA↑o
+seg023:02D6                                         ; chk_map_Barrier+25↑r
+seg023:02D6                                         ; calc_redraw_flags+13↑w
+seg023:02D6                                         ; calc_redraw_flags+4F↑r
+seg023:02D6                                         ; calc_redraw_flags+78↑r</pre> 

@@ -1,0 +1,126 @@
+<pre> 
+seg027:01EC ; =============== S U B R O U T I N E =======================================
+seg027:01EC
+seg027:01EC ; Attributes: bp-based frame
+seg027:01EC
+seg027:01EC proc            Parse_key far           ; CODE XREF: select_targeting_enemy+87↑P
+seg027:01EC                                         ; sub_4500+43↑P
+seg027:01EC                                         ; process_Key+1F↑P
+seg027:01EC                                         ; bout_selection+32↑P
+seg027:01EC                                         ; WaitForKey_internal+30↑P
+seg027:01EC                                         ; draw_oneline_m_text+19D↑P
+seg027:01EC                                         ; begin_scene+1CE↑P
+seg027:01EC                                         ; wait_key+2E↑P
+seg027:01EC
+seg027:01EC arg_0           = dword ptr  6
+seg027:01EC arg_4           = dword ptr  0Ah
+seg027:01EC
+seg027:01EC                 push    bp
+seg027:01ED
+seg027:01ED loc_2D28D:
+seg027:01ED                 mov     bp, sp
+seg027:01EF                 push    ds
+seg027:01F0
+seg027:01F0 loc_2D290:
+seg027:01F0                 cld
+seg027:01F1                 lds     ax, [bp+arg_0]
+seg027:01F4                 push    ds
+seg027:01F5                 push    ax
+seg027:01F6
+seg027:01F6 loc_2D296:
+seg027:01F6                 push    cs
+seg027:01F7                 call    near ptr get_key
+seg027:01FA                 mov     cx, 14h
+seg027:01FD
+seg027:01FD loc_2D29D:
+seg027:01FD                 xor     ax, ax
+seg027:01FF                 lds     dx, [bp+arg_0]
+seg027:0202
+seg027:0202 loc_2D2A2:
+seg027:0202                 mov     bx, offset key_trans_table
+seg027:0205
+seg027:0205 test_key_loop:                          ; CODE XREF: Parse_key+2E↓j
+seg027:0205                 mov     si, [cs:bx]
+seg027:0208
+seg027:0208 loc_2D2A8:
+seg027:0208                 add     si, si
+seg027:020A                 add     si, dx
+seg027:020C                 cmp     [word ptr si], 2
+seg027:020F
+seg027:020F loc_2D2AF:
+seg027:020F                 jnz     short not_press
+seg027:0211
+seg027:0211 loc_2D2B1:
+seg027:0211                 mov     ax, [cs:bx+2]
+seg027:0215                 jmp     short got
+seg027:0217 ; ---------------------------------------------------------------------------
+seg027:0217
+seg027:0217 not_press:                              ; CODE XREF: Parse_key:loc_2D2AF↑j
+seg027:0217                 add     bx, 4
+seg027:021A                 loop    test_key_loop
+seg027:021C
+seg027:021C got:                                    ; CODE XREF: Parse_key+29↑j
+seg027:021C                 les     di, [bp+arg_4]
+seg027:021F                 stosw
+seg027:0220
+seg027:0220 loc_2D2C0:
+seg027:0220                 pop     ds
+seg027:0221                 pop     bp
+seg027:0222
+seg027:0222 locret_2D2C2:
+seg027:0222                 retf    8
+seg027:0222 endp            Parse_key
+seg027:0222
+seg027:0222 ; ---------------------------------------------------------------------------
+seg027:0225 key_trans_table dw 1                    ; DATA XREF: Parse_key:loc_2D2A2↑o
+seg027:0225                                         ; ESC
+seg027:0227                 dw 1
+seg027:0229                 dw 52h                  ; insert
+seg027:022B                 dw 1
+seg027:022D                 dw 38h                  ; alt
+seg027:022F word_2D2CF      dw 1
+seg027:0231                 dw 1Ch                  ; enter
+seg027:0233 word_2D2D3      dw 2
+seg027:0235 word_2D2D5      dw 39h                  ; space
+seg027:0237 word_2D2D7      dw 2
+seg027:0239 word_2D2D9      dw 1Dh                  ; ctrl
+seg027:023B                 dw 2
+seg027:023D word_2D2DD      dw 48h                  ; 上
+seg027:023F word_2D2DF      dw 3
+seg027:0241 word_2D2E1      dw 50h                  ; 下
+seg027:0243 word_2D2E3      dw 4
+seg027:0245 word_2D2E5      dw 4Bh                  ; 左
+seg027:0247 word_2D2E7      dw 5
+seg027:0249 word_2D2E9      dw 4Dh                  ; 右
+seg027:024B word_2D2EB      dw 6
+seg027:024D word_2D2ED      dw 49h                  ; PGUP
+seg027:024F word_2D2EF      dw 7
+seg027:0251 word_2D2F1      dw 51h                  ; PGDN
+seg027:0253 word_2D2F3      dw 8
+seg027:0255 word_2D2F5      dw 13h                  ; R
+seg027:0257 word_2D2F7      dw 9
+seg027:0259 word_2D2F9      dw 1Eh                  ; A
+seg027:025B word_2D2FB      dw 0Ah
+seg027:025D                 dw 20h                  ; D
+seg027:025F                 dw 0Bh
+seg027:0261                 dw 12h                  ; E
+seg027:0263                 dw 0Ch
+seg027:0265 word_2D305      dw 11h                  ; W
+seg027:0267                 dw 0Dh
+seg027:0269 word_2D309      dw 10h                  ; Q
+seg027:026B                 dw 0Eh
+seg027:026D                 dw 1Fh                  ; S
+seg027:026F word_2D30F      dw 0Fh
+seg027:0271 word_2D311      dw 21h                  ; F
+seg027:0273 word_2D313      dw 10h
+seg027:0273 ends            seg027
+seg027:0273
+seg028:0005 ; ===========================================================================
+seg028:0005
+seg028:0005 ; Segment type: Pure code
+seg028:0005 segment         seg028 byte public 'CODE' use16
+seg028:0005                 assume cs:seg028
+seg028:0005                 ;org 5
+seg028:0005                 assume es:nothing, ss:nothing, ds:nothing, fs:nothing, gs:nothing
+seg028:0005                 align 2
+seg028:0006 ; [00000023 BYTES: COLLAPSED FUNCTION DOS_CreateFile]</pre> 

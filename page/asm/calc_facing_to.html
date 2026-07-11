@@ -1,0 +1,103 @@
+<pre> 
+seg020:003A ; =============== S U B R O U T I N E =======================================
+seg020:003A
+seg020:003A ; Attributes: bp-based frame
+seg020:003A
+seg020:003A ; int __stdcall __far calc_facing_to(__int32 argu_y_diff, __int32 argu_x_diff, __int32 argu_face_to)
+seg020:003A proc            calc_facing_to far      ; CODE XREF: calc_team_walking+B1↑P
+seg020:003A                                         ; process_scripts+37D↑P
+seg020:003A                                         ; process_scripts+2068↑P
+seg020:003A                                         ; process_scripts+24E8↑P
+seg020:003A                                         ; process_scripts+3974↑P
+seg020:003A                                         ; GameLoop_OneCycle+18C↑P
+seg020:003A
+seg020:003A argu_y_diff     = dword ptr  6
+seg020:003A argu_x_diff     = dword ptr  0Ah
+seg020:003A argu_face_to    = dword ptr  0Eh
+seg020:003A
+seg020:003A                 push    bp
+seg020:003B
+seg020:003B loc_2B2FB:
+seg020:003B                 mov     bp, sp
+seg020:003D                 push    ds
+seg020:003E                 push    es
+seg020:003F                 push    si
+seg020:0040                 push    di
+seg020:0041                 cld
+seg020:0042                 lds     si, [bp+argu_x_diff]
+seg020:0045
+seg020:0045 loc_2B305:
+seg020:0045                 mov     cx, [si]
+seg020:0047                 lds     si, [bp+argu_y_diff]
+seg020:004A                 mov     dx, [si]
+seg020:004C                 xor     ax, ax
+seg020:004E                 cmp     dx, ax
+seg020:0050
+seg020:0050 loc_2B310:
+seg020:0050                 jnz     short loc_2B317
+seg020:0052
+seg020:0052 loc_2B312:
+seg020:0052                 mov     bx, 3
+seg020:0055                 jmp     short loc_2B320
+seg020:0057 ; ---------------------------------------------------------------------------
+seg020:0057
+seg020:0057 loc_2B317:                              ; CODE XREF: calc_facing_to:loc_2B310↑j
+seg020:0057                 jg      short loc_2B31D
+seg020:0059                 xor     bx, bx
+seg020:005B
+seg020:005B loc_2B31B:
+seg020:005B                 jmp     short loc_2B320
+seg020:005D ; ---------------------------------------------------------------------------
+seg020:005D
+seg020:005D loc_2B31D:                              ; CODE XREF: calc_facing_to:loc_2B317↑j
+seg020:005D                 mov     bx, 6
+seg020:0060
+seg020:0060 loc_2B320:                              ; CODE XREF: calc_facing_to+1B↑j
+seg020:0060                                         ; calc_facing_to:loc_2B31B↑j
+seg020:0060                 cmp     cx, ax
+seg020:0062                 jnz     short loc_2B329
+seg020:0064
+seg020:0064 loc_2B324:
+seg020:0064                 add     bx, 1
+seg020:0067                 jmp     short loc_2B32E
+seg020:0069 ; ---------------------------------------------------------------------------
+seg020:0069
+seg020:0069 loc_2B329:                              ; CODE XREF: calc_facing_to+28↑j
+seg020:0069                 jl      short loc_2B32E
+seg020:006B
+seg020:006B loc_2B32B:
+seg020:006B                 add     bx, 2
+seg020:006E
+seg020:006E loc_2B32E:                              ; CODE XREF: calc_facing_to+2D↑j
+seg020:006E                                         ; calc_facing_to:loc_2B329↑j
+seg020:006E                 cmp     bx, 4
+seg020:0071
+seg020:0071 loc_2B331:
+seg020:0071                 jz      short loc_2B33E
+seg020:0073                 mov     al, [cs:facing+bx]
+seg020:0078                 xor     ah, ah
+seg020:007A                 les     di, [bp+argu_face_to]
+seg020:007D                 stosw
+seg020:007E
+seg020:007E loc_2B33E:                              ; CODE XREF: calc_facing_to:loc_2B331↑j
+seg020:007E                 pop     di
+seg020:007F                 pop     si
+seg020:0080                 pop     es
+seg020:0081                 pop     ds
+seg020:0082                 mov     sp, bp
+seg020:0084                 pop     bp
+seg020:0085                 retf    0Ch
+seg020:0085 endp            calc_facing_to
+seg020:0085
+seg020:0085 ; ---------------------------------------------------------------------------
+seg020:0088 facing          db 1, 2 dup(2), 1, 0, 3, 2 dup(0)
+seg020:0088                                         ; DATA XREF: calc_facing_to+39↑r
+seg020:0088 ends            seg020
+seg020:0088
+seg021:0000 ; ===========================================================================
+seg021:0000
+seg021:0000 ; Segment type: Pure code
+seg021:0000 segment         seg021 byte public 'CODE' use16
+seg021:0000                 assume cs:seg021
+seg021:0000                 assume es:nothing, ss:nothing, ds:nothing, fs:nothing, gs:nothing
+seg021:0000 byte_2B350      db 3</pre> 

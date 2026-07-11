@@ -1,0 +1,130 @@
+<pre> 
+seg017:000A ; =============== S U B R O U T I N E =======================================
+seg017:000A
+seg017:000A ; Attributes: bp-based frame
+seg017:000A
+seg017:000A proc            ensure_role_in_map_boundary far
+seg017:000A                                         ; CODE XREF: calc_team_walking+112↑P
+seg017:000A                                         ; select_thurgy+2CD↑P
+seg017:000A                                         ; process_scripts+21D8↑P
+seg017:000A
+seg017:000A arg_0           = dword ptr  6
+seg017:000A arg_4           = dword ptr  0Ah
+seg017:000A arg_8           = dword ptr  0Eh
+seg017:000A arg_C           = dword ptr  12h
+seg017:000A
+seg017:000A                 push    bp
+seg017:000B
+seg017:000B loc_2964B:
+seg017:000B                 mov     bp, sp
+seg017:000D
+seg017:000D loc_2964D:
+seg017:000D                 push    ds
+seg017:000E
+seg017:000E loc_2964E:
+seg017:000E                 push    es
+seg017:000F                 push    si
+seg017:0010
+seg017:0010 loc_29650:
+seg017:0010                 push    di
+seg017:0011
+seg017:0011 loc_29651:
+seg017:0011                 lds     si, [bp+arg_4]
+seg017:0014
+seg017:0014 loc_29654:                              ; 6A0?
+seg017:0014                 mov     cx, [si]
+seg017:0016
+seg017:0016 loc_29656:
+seg017:0016                 lds     si, [bp+arg_0]
+seg017:0019
+seg017:0019 loc_29659:                              ; 730?
+seg017:0019                 mov     dx, [si]
+seg017:001B
+seg017:001B loc_2965B:
+seg017:001B                 lds     si, [bp+arg_C]
+seg017:001E
+seg017:001E loc_2965E:
+seg017:001E                 lodsw
+seg017:001F
+seg017:001F loc_2965F:
+seg017:001F                 lds     si, [bp+arg_8]
+seg017:0022
+seg017:0022 loc_29662:
+seg017:0022                 mov     bx, [si]
+seg017:0024
+seg017:0024 loc_29664:
+seg017:0024                 cmp     ax, 0
+seg017:0027
+seg017:0027 loc_29667:
+seg017:0027                 jge     short valid_x_min
+seg017:0029                 xor     ax, ax
+seg017:002B
+seg017:002B valid_x_min:                            ; CODE XREF: ensure_role_in_map_boundary:loc_29667↑j
+seg017:002B                 cmp     ax, cx
+seg017:002D                 jle     short valid_x_max
+seg017:002F                 mov     ax, cx
+seg017:0031
+seg017:0031 valid_x_max:                            ; CODE XREF: ensure_role_in_map_boundary+23↑j
+seg017:0031                 cmp     bx, 0
+seg017:0034                 jge     short valid_y_min
+seg017:0036                 xor     bx, bx
+seg017:0038
+seg017:0038 valid_y_min:                            ; CODE XREF: ensure_role_in_map_boundary+2A↑j
+seg017:0038                 cmp     bx, dx
+seg017:003A                 jle     short valid_y_max
+seg017:003C                 mov     bx, dx
+seg017:003E
+seg017:003E valid_y_max:                            ; CODE XREF: ensure_role_in_map_boundary+30↑j
+seg017:003E                 les     di, [bp+arg_C]
+seg017:0041                 stosw
+seg017:0042                 lds     si, [bp+arg_8]
+seg017:0045                 mov     [si], bx
+seg017:0047                 pop     di
+seg017:0048                 pop     si
+seg017:0049                 pop     es
+seg017:004A                 pop     ds
+seg017:004B                 pop     bp
+seg017:004C                 retf    10h
+seg017:004C endp            ensure_role_in_map_boundary
+seg017:004C
+seg017:004C ; ---------------------------------------------------------------------------
+seg017:004F byte_2968F      db 2 dup(0)
+seg017:0051 derle_y         dw 0                    ; DATA XREF: draw_sprites+41↓w
+seg017:0051                                         ; draw_sprites+46↓o
+seg017:0051                                         ; Team:6,NPC:7
+seg017:0053 effective_scrn_height dw 200            ; DATA XREF: set_effective_Y+9↓w
+seg017:0053                                         ; draw_sprites+4F↓o
+seg017:0055 spirite_array_offset dw 0               ; DATA XREF: clear_spirite_array+2↓w
+seg017:0055                                         ; addto_drawing_array+8↓r
+seg017:0055                                         ; addto_drawing_array+3E↓w
+seg017:0055                                         ; draw_sprites+8↓r
+seg017:0055                                         ; draw_sprites:loc_2AB9B↓w
+seg017:0057 scrn_x          dw 0                    ; DATA XREF: addto_drawing_array+1A↓w
+seg017:0057                                         ; draw_sprites+1F↓o
+seg017:0057                                         ; sprites_sort:xchg2_loop↓r
+seg017:0057                                         ; sprites_sort+2C↓w
+seg017:0057                                         ; sprites_sort+51↓r
+seg017:0057                                         ; sprites_sort+56↓w
+seg017:0057                                         ; sprites_sort+5B↓w
+seg017:0059 scrn_y          dw 0                    ; DATA XREF: addto_drawing_array+23↓w
+seg017:0059                                         ; sprites_sort:loc_2ABB4↓r
+seg017:0059                                         ; sprites_sort:xchg_loop↓r
+seg017:0059                                         ; sprites_sort+4A↓r
+seg017:0059                                         ; sprites_sort+60↓r
+seg017:0059                                         ; sprites_sort+65↓w
+seg017:0059                                         ; sprites_sort+6A↓w
+seg017:005B scrn_layer      dw 0                    ; DATA XREF: addto_drawing_array+2C↓w
+seg017:005B                                         ; sprites_sort+6F↓r
+seg017:005B                                         ; sprites_sort+74↓w
+seg017:005B                                         ; sprites_sort+79↓w
+seg017:005D pic_seg         dw 0                    ; DATA XREF: addto_drawing_array+31↓w
+seg017:005D                                         ; sprites_sort+7E↓r
+seg017:005D                                         ; sprites_sort+83↓w
+seg017:005D                                         ; sprites_sort+88↓w
+seg017:005F pic_off         dw 0                    ; DATA XREF: addto_drawing_array+36↓w
+seg017:005F                                         ; sprites_sort+8D↓r
+seg017:005F                                         ; sprites_sort+92↓w
+seg017:005F                                         ; sprites_sort+97↓w
+seg017:0061 next_scrn_x     dw 0                    ; DATA XREF: sprites_sort+27↓w
+seg017:0063 next_scrn_y     dw 0                    ; DATA XREF: sprites_sort:loc_2ABB8↓r
+seg017:0065 byte_296A5      db 13F2h dup(0)</pre> 

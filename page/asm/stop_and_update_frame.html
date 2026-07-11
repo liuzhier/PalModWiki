@@ -1,0 +1,159 @@
+<pre> 
+seg001:E82A ; =============== S U B R O U T I N E =======================================
+seg001:E82A
+seg001:E82A ; Attributes: bp-based frame
+seg001:E82A
+seg001:E82A proc            stop_and_update_frame far
+seg001:E82A                                         ; CODE XREF: calc_team_walking:not_through↑P
+seg001:E82A                                         ; process_Script:update_frames↑P
+seg001:E82A                                         ; GameLoop_OneCycle:frames_not_0↑P
+seg001:E82A
+seg001:E82A var_1A          = word ptr -1Ah
+seg001:E82A role_id         = word ptr -18h
+seg001:E82A team_number     = word ptr -16h
+seg001:E82A frames_per_direction= word ptr -14h
+seg001:E82A
+seg001:E82A                 mov     cx, 8
+seg001:E82D                 mov     bx, 0
+seg001:E830                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:E835                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg001:E838                 xor     bx, bx
+seg001:E83A                 add     bx, [si+0Ah]
+seg001:E83D                 mov     es, [word ptr si+2]
+seg001:E840                 mov     ax, [es:bx]     ; 第一人
+seg001:E843                 mov     cx, [ds:DDIM_data@3_our_data.Dimension2.Elements]
+seg001:E847                 shl     cx, 1
+seg001:E849                 shl     cx, 1
+seg001:E84B                 shl     cx, 1
+seg001:E84D                 shl     cx, 1
+seg001:E84F                 shl     cx, 1
+seg001:E851                 shl     cx, 1
+seg001:E853                 add     cx, ax
+seg001:E855                 shl     cx, 1           ; 一组零?no,这里是每方向frame数。
+seg001:E857                 mov     bx, cx
+seg001:E859                 mov     si, offset DDIM_data@3_our_data
+seg001:E85C                 add     bx, [si+0Ah]
+seg001:E85F                 mov     es, [word ptr si+2]
+seg001:E862                 mov     ax, [es:bx]
+seg001:E865                 mov     [bp+frames_per_direction], ax
+seg001:E868                 or      ax, ax
+seg001:E86A                 jnz     short defined
+seg001:E86C                 mov     [bp+frames_per_direction], 3
+seg001:E871
+seg001:E871 defined:                                ; CODE XREF: stop_and_update_frame+40↑j
+seg001:E871                 mov     ax, [bp+frames_per_direction]
+seg001:E874                 imul    [ds:RPG_team_direction]
+seg001:E878                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg001:E87B                 xor     bx, bx
+seg001:E87D                 add     bx, [si+0Ah]
+seg001:E880                 mov     es, [word ptr si+2]
+seg001:E883                 add     bx, 6
+seg001:E886                 mov     [es:bx], ax
+seg001:E889                 mov     ax, [ds:RPG_team_number]
+seg001:E88C                 mov     [bp+team_number], ax
+seg001:E88F                 mov     ax, 1
+seg001:E892                 jmp     begin
+seg001:E895 ; ---------------------------------------------------------------------------
+seg001:E895                 nop
+seg001:E896
+seg001:E896 direction_loop:                         ; CODE XREF: stop_and_update_frame+E7↓j
+seg001:E896                 mov     bx, 0Ah
+seg001:E899                 imul    bx
+seg001:E89B                 mov     bx, ax
+seg001:E89D                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg001:E8A0                 add     bx, [si+0Ah]
+seg001:E8A3                 mov     es, [word ptr si+2]
+seg001:E8A6                 mov     ax, [es:bx]
+seg001:E8A9                 mov     cx, [ds:DDIM_data@3_our_data.Dimension2.Elements]
+seg001:E8AD                 shl     cx, 1
+seg001:E8AF                 shl     cx, 1
+seg001:E8B1                 shl     cx, 1
+seg001:E8B3                 shl     cx, 1
+seg001:E8B5                 shl     cx, 1
+seg001:E8B7                 shl     cx, 1
+seg001:E8B9                 add     cx, ax
+seg001:E8BB                 shl     cx, 1
+seg001:E8BD                 mov     bx, cx
+seg001:E8BF                 mov     si, offset DDIM_data@3_our_data
+seg001:E8C2                 add     bx, [si+0Ah]
+seg001:E8C5                 mov     es, [word ptr si+2]
+seg001:E8C8                 mov     ax, [es:bx]
+seg001:E8CB                 mov     [bp+frames_per_direction], ax
+seg001:E8CE                 or      ax, ax
+seg001:E8D0                 jnz     short f_defined
+seg001:E8D2                 mov     [bp+frames_per_direction], 3
+seg001:E8D7
+seg001:E8D7 f_defined:                              ; CODE XREF: stop_and_update_frame+A6↑j
+seg001:E8D7                 mov     si, offset DDIM_RPG_team_trace ; 每人6字节,0:X,2:Y,4:方向
+seg001:E8DA                 mov     bx, 0Ch
+seg001:E8DD                 add     bx, [si+0Ah]
+seg001:E8E0                 mov     es, [word ptr si+2]
+seg001:E8E3                 add     bx, 4
+seg001:E8E6                 mov     ax, [es:bx]
+seg001:E8E9                 imul    [bp+frames_per_direction]
+seg001:E8EC                 mov     bx, ax
+seg001:E8EE                 mov     ax, 0Ah
+seg001:E8F1                 imul    [bp+role_id]
+seg001:E8F4                 mov     dx, bx
+seg001:E8F6                 mov     bx, ax
+seg001:E8F8                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg001:E8FB                 add     bx, [si+0Ah]
+seg001:E8FE                 mov     es, [word ptr si+2]
+seg001:E901                 add     bx, 6
+seg001:E904                 mov     [es:bx], dx
+seg001:E907                 mov     ax, [bp+role_id]
+seg001:E90A                 inc     ax
+seg001:E90B
+seg001:E90B begin:                                  ; CODE XREF: stop_and_update_frame+68↑j
+seg001:E90B                 mov     [bp+role_id], ax
+seg001:E90E                 cmp     ax, [bp+team_number]
+seg001:E911                 jle     short direction_loop
+seg001:E913                 mov     ax, [ds:RPG_other_peoples]
+seg001:E916                 mov     [bp+var_1A], ax
+seg001:E919                 mov     ax, 1
+seg001:E91C                 jmp     begin2
+seg001:E91F ; ---------------------------------------------------------------------------
+seg001:E91F                 nop
+seg001:E920
+seg001:E920 other_loop:                             ; CODE XREF: stop_and_update_frame+141↓j
+seg001:E920                 mov     cx, 6
+seg001:E923                 imul    cx
+seg001:E925                 add     ax, 0Ch
+seg001:E928                 mov     bx, ax
+seg001:E92A                 mov     si, offset DDIM_RPG_team_trace ; 每人6字节,0:X,2:Y,4:方向
+seg001:E92D                 add     bx, [si+0Ah]
+seg001:E930                 mov     es, [word ptr si+2]
+seg001:E933                 add     bx, 4
+seg001:E936                 mov     ax, [es:bx]     ; direction frame
+seg001:E939                 mov     dx, 3
+seg001:E93C                 imul    dx
+seg001:E93E                 mov     dx, [bp+role_id]
+seg001:E941                 add     dx, [ds:RPG_team_number]
+seg001:E945                 mov     bx, ax
+seg001:E947                 mov     ax, dx
+seg001:E949                 mov     cx, 0Ah
+seg001:E94C                 imul    cx
+seg001:E94E                 mov     dx, bx
+seg001:E950                 mov     bx, ax
+seg001:E952                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg001:E955                 add     bx, [si+0Ah]
+seg001:E958                 mov     es, [word ptr si+2]
+seg001:E95B                 add     bx, 6
+seg001:E95E                 mov     [es:bx], dx
+seg001:E961                 mov     ax, [bp+role_id]
+seg001:E964                 inc     ax
+seg001:E965
+seg001:E965 begin2:                                 ; CODE XREF: stop_and_update_frame+F2↑j
+seg001:E965                 mov     [bp+role_id], ax
+seg001:E968                 cmp     ax, [bp+var_1A]
+seg001:E96B                 jle     short other_loop
+seg001:E96D                 mov     ax, [ds:this_step_frame]
+seg001:E970                 and     ax, 2
+seg001:E973                 xor     ax, 2
+seg001:E976                 mov     [ds:this_step_frame], ax
+seg001:E979                 call    B$EXSA          ; clear frame state info
+seg001:E97E                 retf    0
+seg001:E97E endp            stop_and_update_frame
+seg001:E97E
+seg001:E97E ; ---------------------------------------------------------------------------
+seg001:E981                 db 0E9h, 3Bh, 6</pre> 

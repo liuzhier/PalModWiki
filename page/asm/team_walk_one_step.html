@@ -1,0 +1,46 @@
+<pre> 
+seg001:C2F1 ; =============== S U B R O U T I N E =======================================
+seg001:C2F1
+seg001:C2F1 ; Attributes: bp-based frame
+seg001:C2F1
+seg001:C2F1 proc            team_walk_one_step far  ; CODE XREF: calc_team_walking:donot_need_sync_x↑P
+seg001:C2F1                                         ; process_scripts:loc_15A03↑P
+seg001:C2F1                                         ; process_scripts+39C1↑P
+seg001:C2F1                 mov     cx, 0
+seg001:C2F4                 mov     bx, 0
+seg001:C2F7                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:C2FC                 mov     ax, [ds:RPG_viewport_x]
+seg001:C2FF                 add     ax, [ds:x_scrn_offset]
+seg001:C303                 mov     [ds:team_abstract_x], ax
+seg001:C306                 mov     cx, [ds:RPG_viewport_y]
+seg001:C30A                 add     cx, [ds:y_scrn_offset]
+seg001:C30E                 mov     [ds:team_abstract_y], cx
+seg001:C312                 cmp     ax, [ds:abstract_x_bak]
+seg001:C316                 jnz     short walked
+seg001:C318                 cmp     cx, [ds:abstract_y_bak]
+seg001:C31C                 jnz     short walked
+seg001:C31E                 jmp     programmed_walk
+seg001:C321 ; ---------------------------------------------------------------------------
+seg001:C321
+seg001:C321 walked:                                 ; CODE XREF: team_walk_one_step+25↑j
+seg001:C321                                         ; team_walk_one_step+2B↑j
+seg001:C321                 call    calc_trace_frames
+seg001:C326                 jmp     next
+seg001:C329 ; ---------------------------------------------------------------------------
+seg001:C329
+seg001:C329 programmed_walk:                        ; CODE XREF: team_walk_one_step+2D↑j
+seg001:C329                 mov     [ds:step_frame_follower], 0
+seg001:C32F                 mov     [ds:step_frame_role], 0
+seg001:C335                 mov     ax, [ds:this_step_frame]
+seg001:C338                 and     ax, 10b
+seg001:C33B                 xor     ax, 10b
+seg001:C33E                 mov     [ds:this_step_frame], ax
+seg001:C341
+seg001:C341 next:                                   ; CODE XREF: team_walk_one_step+35↑j
+seg001:C341                 call    store_team_frame_data
+seg001:C346                 call    B$EXSA          ; clear frame state info
+seg001:C34B                 retf    0
+seg001:C34B endp            team_walk_one_step
+seg001:C34B
+seg001:C34B ; ---------------------------------------------------------------------------
+seg001:C34E                 db 0E9h, 8Bh, 3</pre> 
