@@ -1,0 +1,81 @@
+<pre> 
+seg017:1567 ; =============== S U B R O U T I N E =======================================
+seg017:1567
+seg017:1567
+seg017:1567 proc            sprites_sort near       ; CODE XREF: draw_sprites+19↑p
+seg017:1567                 cmp     cx, 1
+seg017:156A                 jg      short more_than_1
+seg017:156C                 jmp     return
+seg017:156F ; ---------------------------------------------------------------------------
+seg017:156F
+seg017:156F more_than_1:                            ; CODE XREF: sprites_sort+3↑j
+seg017:156F                 cmp     cx, 2
+seg017:1572                 jg      short more_than_two
+seg017:1574
+seg017:1574 loc_2ABB4:
+seg017:1574                 mov     ax, [cs:scrn_y]
+seg017:1578
+seg017:1578 loc_2ABB8:
+seg017:1578                 mov     bx, [cs:next_scrn_y]
+seg017:157D                 cmp     ax, bx
+seg017:157F                 jg      short loc_2ABC4
+seg017:1581                 jmp     return
+seg017:1584 ; ---------------------------------------------------------------------------
+seg017:1584
+seg017:1584 loc_2ABC4:                              ; CODE XREF: sprites_sort+18↑j
+seg017:1584                 mov     cx, 5
+seg017:1587                 xor     bx, bx
+seg017:1589
+seg017:1589 xchg2_loop:                             ; CODE XREF: sprites_sort+34↓j
+seg017:1589                 mov     ax, [cs:scrn_x+bx]
+seg017:158E                 xchg    ax, [cs:next_scrn_x+bx]
+seg017:1593                 mov     [cs:scrn_x+bx], ax
+seg017:1598                 add     bx, 2
+seg017:159B                 loop    xchg2_loop
+seg017:159D                 jmp     short return
+seg017:159F ; ---------------------------------------------------------------------------
+seg017:159F
+seg017:159F more_than_two:                          ; CODE XREF: sprites_sort+B↑j
+seg017:159F                 dec     cx
+seg017:15A0                 mov     dx, cx
+seg017:15A2                 xor     di, di
+seg017:15A4
+seg017:15A4 outer_loop:                             ; CODE XREF: sprites_sort+A6↓j
+seg017:15A4                 push    cx
+seg017:15A5                 mov     si, di
+seg017:15A7                 add     si, 0Ah
+seg017:15AA                 mov     cx, dx
+seg017:15AC
+seg017:15AC xchg_loop:                              ; CODE XREF: sprites_sort+9F↓j
+seg017:15AC                 mov     ax, [cs:scrn_y+di]
+seg017:15B1                 cmp     ax, [cs:scrn_y+si]
+seg017:15B6                 jle     short lesser
+seg017:15B8                 mov     ax, [cs:scrn_x+di]
+seg017:15BD                 xchg    ax, [cs:scrn_x+si]
+seg017:15C2                 mov     [cs:scrn_x+di], ax
+seg017:15C7                 mov     ax, [cs:scrn_y+di]
+seg017:15CC                 xchg    ax, [cs:scrn_y+si]
+seg017:15D1                 mov     [cs:scrn_y+di], ax
+seg017:15D6                 mov     ax, [cs:scrn_layer+di]
+seg017:15DB                 xchg    ax, [cs:scrn_layer+si]
+seg017:15E0                 mov     [cs:scrn_layer+di], ax
+seg017:15E5                 mov     ax, [cs:pic_seg+di]
+seg017:15EA                 xchg    ax, [cs:pic_seg+si]
+seg017:15EF                 mov     [cs:pic_seg+di], ax
+seg017:15F4                 mov     ax, [cs:pic_off+di]
+seg017:15F9                 xchg    ax, [cs:pic_off+si]
+seg017:15FE                 mov     [cs:pic_off+di], ax
+seg017:1603
+seg017:1603 lesser:                                 ; CODE XREF: sprites_sort+4F↑j
+seg017:1603                 add     si, 0Ah
+seg017:1606                 loop    xchg_loop
+seg017:1608                 dec     dx
+seg017:1609                 add     di, 0Ah
+seg017:160C                 pop     cx
+seg017:160D                 loop    outer_loop
+seg017:160F
+seg017:160F return:                                 ; CODE XREF: sprites_sort+5↑j
+seg017:160F                                         ; sprites_sort+1A↑j
+seg017:160F                                         ; sprites_sort+36↑j
+seg017:160F                 retn
+seg017:160F endp            sprites_sort</pre> 

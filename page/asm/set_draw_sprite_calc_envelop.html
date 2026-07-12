@@ -1,0 +1,581 @@
+<pre> 
+seg001:85EC ; =============== S U B R O U T I N E =======================================
+seg001:85EC
+seg001:85EC ; Attributes: bp-based frame
+seg001:85EC
+seg001:85EC ; int __stdcall __far set_draw_sprite_calc_envelop(int, int a_switch, int a_frame, int a_no, int a_layer, int a_y)
+seg001:85EC proc            set_draw_sprite_calc_envelop far
+seg001:85EC                                         ; CODE XREF: our_team_setdraw+78↑P
+seg001:85EC                                         ; visible_NPC_movment_setdraw+172↓P
+seg001:85EC
+seg001:85EC var_4C          = dword ptr -4Ch
+seg001:85EC var_48          = dword ptr -48h
+seg001:85EC var_44          = dword ptr -44h
+seg001:85EC a_h             = dword ptr -40h
+seg001:85EC var_3A          = dword ptr -3Ah
+seg001:85EC var_36          = dword ptr -36h
+seg001:85EC yb_max          = word ptr -32h
+seg001:85EC viewpoint_H_block= word ptr -30h
+seg001:85EC viewpoint_Y_block= word ptr -2Eh
+seg001:85EC viewpoint_X_block= word ptr -2Ch
+seg001:85EC width_blocks    = word ptr -2Ah
+seg001:85EC viewpoint_y_pixel= word ptr -28h
+seg001:85EC height_blocks   = word ptr -26h
+seg001:85EC layer_npc       = word ptr -24h
+seg001:85EC scrn_y_npc      = word ptr -22h
+seg001:85EC scrn_x_npc      = word ptr -20h
+seg001:85EC layer           = word ptr -1Eh
+seg001:85EC scrn_y          = word ptr -1Ch
+seg001:85EC scrn_x          = word ptr -1Ah
+seg001:85EC height          = word ptr -18h
+seg001:85EC width           = word ptr -16h
+seg001:85EC frame_offset    = word ptr -14h
+seg001:85EC a_switch        = word ptr  6           ; team:0,NPC:1
+seg001:85EC a_frame         = word ptr  8
+seg001:85EC a_no            = word ptr  0Ah
+seg001:85EC a_layer         = word ptr  0Ch
+seg001:85EC a_y             = word ptr  0Eh
+seg001:85EC a_x             = word ptr  10h
+seg001:85EC
+seg001:85EC                 mov     cx, 3Ah ; ':'
+seg001:85EF                 mov     bx, 0
+seg001:85F2                 call    far ptr B$ENRA  ; setup stack & other state info.
+seg001:85F7                 mov     si, [bp+a_switch] ; team:0,NPC:1
+seg001:85FA                 cmp     [word ptr si], 0
+seg001:85FD                 jz      short role
+seg001:85FF                 jmp     NPC
+seg001:8602 ; ---------------------------------------------------------------------------
+seg001:8602
+seg001:8602 role:                                   ; CODE XREF: set_draw_sprite_calc_envelop+11↑j
+seg001:8602                 mov     si, [bp+a_frame]
+seg001:8605                 mov     bx, [si]
+seg001:8607                 mov     di, [bp+a_no]
+seg001:860A                 mov     ax, [di]
+seg001:860C                 mov     cx, 0Ah
+seg001:860F                 imul    cx
+seg001:8611                 mov     dx, bx
+seg001:8613                 mov     bx, ax
+seg001:8615                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg001:8618                 add     bx, [si+0Ah]
+seg001:861B                 mov     es, [word ptr si+2]
+seg001:861E                 add     bx, 8
+seg001:8621                 add     dx, [es:bx]
+seg001:8624                 shl     dx, 1
+seg001:8626                 mov     bx, dx
+seg001:8628                 mov     si, offset DDIM_role_mgo_decoded_pack_or_battle_ico ; MKF,随需构建
+seg001:862B                 add     bx, [si+0Ah]
+seg001:862E                 mov     es, [word ptr si+2]
+seg001:8631                 mov     cx, [es:bx]
+seg001:8634                 mov     bx, ax
+seg001:8636                 mov     si, offset DDIM_RPG_team_positions ; 每人10字节,0:号,2:posX,4:posY,6:方向桢,8:MGO_MemMKF_offset
+seg001:8639                 add     bx, [si+0Ah]
+seg001:863C                 mov     es, [word ptr si+2]
+seg001:863F                 add     bx, 8
+seg001:8642                 add     cx, [es:bx]
+seg001:8645                 mov     [bp+frame_offset], cx
+seg001:8648                 shl     cx, 1
+seg001:864A                 mov     bx, cx
+seg001:864C                 mov     si, offset DDIM_role_mgo_decoded_pack_or_battle_ico ; MKF,随需构建
+seg001:864F                 add     bx, [si+0Ah]
+seg001:8652                 mov     es, [word ptr si+2]
+seg001:8655                 mov     ax, [es:bx]
+seg001:8658                 mov     [bp+width], ax
+seg001:865B                 add     cx, 2
+seg001:865E                 mov     bx, cx
+seg001:8660                 add     bx, [si+0Ah]
+seg001:8663                 mov     es, [word ptr si+2]
+seg001:8666                 mov     ax, [es:bx]
+seg001:8669                 mov     [bp+height], ax
+seg001:866C                 mov     si, [bp+a_x]
+seg001:866F                 mov     ax, [si]
+seg001:8671                 mov     cx, 2
+seg001:8674                 mov     bx, ax
+seg001:8676                 mov     ax, [bp+width]
+seg001:8679                 cwd
+seg001:867A                 idiv    cx
+seg001:867C                 sub     bx, ax
+seg001:867E                 mov     [bp+scrn_x], bx
+seg001:8681                 mov     si, [bp+a_y]
+seg001:8684                 mov     ax, [si]
+seg001:8686                 mov     di, [bp+a_layer]
+seg001:8689                 add     ax, [di]
+seg001:868B                 add     ax, 0Ah
+seg001:868E                 mov     [bp+scrn_y], ax
+seg001:8691                 mov     ax, [di]
+seg001:8693                 add     ax, 6
+seg001:8696                 mov     [bp+layer], ax
+seg001:8699                 lea     bx, [bp+scrn_x]
+seg001:869C                 push    ds
+seg001:869D                 pop     es
+seg001:869E                 push    es
+seg001:869F                 push    bx              ; a_x
+seg001:86A0                 lea     bx, [bp+scrn_y]
+seg001:86A3                 push    ds
+seg001:86A4                 pop     es
+seg001:86A5                 push    es
+seg001:86A6                 push    bx              ; a_y
+seg001:86A7                 lea     bx, [bp+layer]
+seg001:86AA                 push    ds
+seg001:86AB                 pop     es
+seg001:86AC                 push    es
+seg001:86AD                 push    bx              ; a_layer
+seg001:86AE                 mov     bx, [bp+frame_offset]
+seg001:86B1                 shl     bx, 1
+seg001:86B3                 mov     si, offset DDIM_role_mgo_decoded_pack_or_battle_ico ; MKF,随需构建
+seg001:86B6                 add     bx, [si+0Ah]
+seg001:86B9                 mov     es, [word ptr si+2]
+seg001:86BC                 push    es
+seg001:86BD                 push    bx              ; a_addr
+seg001:86BE                 call    addto_drawing_array
+seg001:86C3                 jmp     next
+seg001:86C6 ; ---------------------------------------------------------------------------
+seg001:86C6
+seg001:86C6 NPC:                                    ; CODE XREF: set_draw_sprite_calc_envelop+13↑j
+seg001:86C6                 mov     si, [bp+a_frame]
+seg001:86C9                 mov     bx, [si]
+seg001:86CB                 mov     di, [bp+a_no]
+seg001:86CE                 mov     ax, [di]
+seg001:86D0                 shl     ax, 1
+seg001:86D2                 shl     ax, 1
+seg001:86D4                 shl     ax, 1
+seg001:86D6                 shl     ax, 1
+seg001:86D8                 shl     ax, 1
+seg001:86DA                 mov     dx, bx
+seg001:86DC                 mov     bx, ax
+seg001:86DE                 mov     si, offset DDIM_evt_obj_curr_scene
+seg001:86E1                 add     bx, [si+0Ah]
+seg001:86E4                 mov     es, [word ptr si+2]
+seg001:86E7                 add     bx, 1Ah
+seg001:86EA                 add     dx, [es:bx]
+seg001:86ED                 shl     dx, 1
+seg001:86EF                 mov     bx, dx
+seg001:86F1                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:86F4                 add     bx, [si+0Ah]
+seg001:86F7                 mov     es, [word ptr si+2]
+seg001:86FA                 mov     cx, [es:bx]
+seg001:86FD                 mov     bx, ax
+seg001:86FF                 mov     si, offset DDIM_evt_obj_curr_scene
+seg001:8702                 add     bx, [si+0Ah]
+seg001:8705                 mov     es, [word ptr si+2]
+seg001:8708                 add     bx, 1Ah
+seg001:870B                 add     cx, [es:bx]
+seg001:870E                 mov     [bp+frame_offset], cx
+seg001:8711                 shl     cx, 1
+seg001:8713                 mov     bx, cx
+seg001:8715                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:8718                 add     bx, [si+0Ah]
+seg001:871B                 mov     es, [word ptr si+2]
+seg001:871E                 mov     ax, [es:bx]
+seg001:8721                 mov     [bp+width], ax
+seg001:8724                 add     cx, 2
+seg001:8727                 mov     bx, cx
+seg001:8729                 add     bx, [si+0Ah]
+seg001:872C                 mov     es, [word ptr si+2]
+seg001:872F                 mov     ax, [es:bx]
+seg001:8732                 mov     [bp+height], ax
+seg001:8735                 mov     si, [bp+a_x]
+seg001:8738                 mov     ax, [si]
+seg001:873A                 mov     cx, 2
+seg001:873D                 mov     bx, ax
+seg001:873F                 mov     ax, [bp+width]
+seg001:8742                 cwd
+seg001:8743                 idiv    cx
+seg001:8745                 sub     bx, ax
+seg001:8747                 mov     [bp+scrn_x_npc], bx
+seg001:874A                 mov     si, [bp+a_y]
+seg001:874D                 mov     ax, [si]
+seg001:874F                 mov     di, [bp+a_layer]
+seg001:8752                 add     ax, [di]
+seg001:8754                 add     ax, 9
+seg001:8757                 mov     [bp+scrn_y_npc], ax
+seg001:875A                 add     cx, [di]
+seg001:875C                 mov     [bp+layer_npc], cx
+seg001:875F                 lea     bx, [bp+scrn_x_npc]
+seg001:8762                 push    ds
+seg001:8763                 pop     es
+seg001:8764                 push    es
+seg001:8765                 push    bx              ; a_x
+seg001:8766                 lea     bx, [bp+scrn_y_npc]
+seg001:8769                 push    ds
+seg001:876A                 pop     es
+seg001:876B                 push    es
+seg001:876C                 push    bx              ; a_y
+seg001:876D                 lea     bx, [bp+layer_npc]
+seg001:8770                 push    ds
+seg001:8771                 pop     es
+seg001:8772                 push    es
+seg001:8773                 push    bx              ; a_layer
+seg001:8774                 mov     bx, [bp+frame_offset]
+seg001:8777                 shl     bx, 1
+seg001:8779                 mov     si, offset DDIM_NPC_mgo_decoded_pack
+seg001:877C                 add     bx, [si+0Ah]
+seg001:877F                 mov     es, [word ptr si+2]
+seg001:8782                 push    es
+seg001:8783                 push    bx              ; a_addr
+seg001:8784                 call    addto_drawing_array
+seg001:8789
+seg001:8789 next:                                   ; CODE XREF: set_draw_sprite_calc_envelop+D7↑j
+seg001:8789                 cmp     [ds:redraw_flag], 0 ; 0:生成,1:停工,2:淡入gop暂存屏
+seg001:878E                 jz      short whole
+seg001:8790                 jmp     return
+seg001:8793 ; ---------------------------------------------------------------------------
+seg001:8793
+seg001:8793 whole:                                  ; CODE XREF: set_draw_sprite_calc_envelop+1A2↑j
+seg001:8793                 mov     si, [bp+a_layer]
+seg001:8796                 cmp     [word ptr si], 72
+seg001:8799                 jl      short valid_layer
+seg001:879B                 jmp     return
+seg001:879E ; ---------------------------------------------------------------------------
+seg001:879E
+seg001:879E valid_layer:                            ; CODE XREF: set_draw_sprite_calc_envelop+1AD↑j
+seg001:879E                 mov     ax, [bp+height]
+seg001:87A1                 add     ax, 0Fh
+seg001:87A4                 mov     cx, 10h
+seg001:87A7                 cwd
+seg001:87A8                 idiv    cx
+seg001:87AA                 mov     [bp+height_blocks], ax
+seg001:87AD                 mov     si, [bp+a_y]
+seg001:87B0                 mov     ax, [si]
+seg001:87B2                 add     ax, [ds:RPG_viewport_y]
+seg001:87B6                 mov     [bp+viewpoint_y_pixel], ax
+seg001:87B9                 mov     cx, 40h ; '@'
+seg001:87BC                 mov     ax, [bp+width]
+seg001:87BF                 cwd
+seg001:87C0                 idiv    cx
+seg001:87C2                 mov     [bp+width_blocks], ax
+seg001:87C5                 mov     si, [bp+a_x]
+seg001:87C8                 mov     ax, [si]
+seg001:87CA                 add     ax, [ds:RPG_viewport_x]
+seg001:87CE                 mov     [bp+viewpoint_X_block], ax
+seg001:87D1                 mov     ax, [bp+viewpoint_y_pixel]
+seg001:87D4                 mov     [bp+viewpoint_Y_block], ax
+seg001:87D7                 lea     bx, [bp+viewpoint_H_block]
+seg001:87DA                 push    ds
+seg001:87DB                 pop     es
+seg001:87DC                 push    es
+seg001:87DD                 push    bx              ; a_H
+seg001:87DE                 lea     bx, [bp+viewpoint_X_block]
+seg001:87E1                 push    ds
+seg001:87E2                 pop     es
+seg001:87E3                 push    es
+seg001:87E4                 push    bx              ; a_X
+seg001:87E5                 lea     bx, [bp+viewpoint_Y_block]
+seg001:87E8                 push    ds
+seg001:87E9                 pop     es
+seg001:87EA                 push    es
+seg001:87EB                 push    bx              ; a_Y
+seg001:87EC                 call    convert_xy_to_rch
+seg001:87F1                 mov     ax, [bp+viewpoint_Y_block]
+seg001:87F4                 mov     [bp+yb_max], ax
+seg001:87F7                 sub     ax, [bp+height_blocks]
+seg001:87FA                 jmp     begin
+seg001:87FD ; ---------------------------------------------------------------------------
+seg001:87FD                 nop
+seg001:87FE
+seg001:87FE line_loop:                              ; CODE XREF: set_draw_sprite_calc_envelop+426↓j
+seg001:87FE                 mov     ax, [bp+width_blocks]
+seg001:8801                 add     ax, [bp+viewpoint_X_block]
+seg001:8804                 mov     [word ptr bp+var_36+2], ax
+seg001:8807                 mov     ax, [bp+viewpoint_X_block]
+seg001:880A                 sub     ax, [bp+width_blocks]
+seg001:880D                 jmp     begin_column
+seg001:8810 ; ---------------------------------------------------------------------------
+seg001:8810
+seg001:8810 column_loop:                            ; CODE XREF: set_draw_sprite_calc_envelop+417↓j
+seg001:8810                 lea     bx, [bp+viewpoint_y_pixel]
+seg001:8813                 push    ds
+seg001:8814                 pop     es
+seg001:8815                 push    es
+seg001:8816                 push    bx              ; a_yp
+seg001:8817                 lea     bx, [bp+viewpoint_H_block]
+seg001:881A                 push    ds
+seg001:881B                 pop     es
+seg001:881C                 push    es
+seg001:881D                 push    bx              ; a_h
+seg001:881E                 lea     bx, [bp+var_36]
+seg001:8821                 push    ds
+seg001:8822                 pop     es
+seg001:8823                 push    es
+seg001:8824                 push    bx              ; a_x
+seg001:8825                 lea     bx, [bp+var_3A+2]
+seg001:8828                 push    ds
+seg001:8829                 pop     es
+seg001:882A                 push    es
+seg001:882B                 push    bx              ; a_y
+seg001:882C                 mov     si, offset DDIM_buf_glb_map
+seg001:882F                 xor     bx, bx
+seg001:8831                 add     bx, [si+0Ah]
+seg001:8834                 mov     es, [word ptr si+2]
+seg001:8837                 push    es
+seg001:8838                 push    bx              ; a_map
+seg001:8839                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:883C                 xor     bx, bx
+seg001:883E                 add     bx, [si+0Ah]
+seg001:8841                 mov     es, [word ptr si+2]
+seg001:8844                 push    es
+seg001:8845                 push    bx              ; a_DDIM
+seg001:8846                 call    calc_redraw_flags
+seg001:884B                 mov     ax, [word ptr bp+var_36]
+seg001:884E                 dec     ax
+seg001:884F                 mov     [word ptr bp+var_3A], ax
+seg001:8852                 lea     bx, [bp+viewpoint_y_pixel]
+seg001:8855                 push    ds
+seg001:8856                 pop     es
+seg001:8857                 push    es
+seg001:8858                 push    bx              ; a_yp
+seg001:8859                 lea     bx, [bp+viewpoint_H_block]
+seg001:885C                 push    ds
+seg001:885D                 pop     es
+seg001:885E                 push    es
+seg001:885F                 push    bx              ; a_h
+seg001:8860                 lea     bx, [bp+var_3A]
+seg001:8863                 push    ds
+seg001:8864                 pop     es
+seg001:8865                 push    es
+seg001:8866                 push    bx              ; a_x
+seg001:8867                 lea     bx, [bp+var_3A+2]
+seg001:886A                 push    ds
+seg001:886B                 pop     es
+seg001:886C                 push    es
+seg001:886D                 push    bx              ; a_y
+seg001:886E                 mov     si, offset DDIM_buf_glb_map
+seg001:8871                 xor     bx, bx
+seg001:8873                 add     bx, [si+0Ah]
+seg001:8876                 mov     es, [word ptr si+2]
+seg001:8879                 push    es
+seg001:887A                 push    bx              ; a_map
+seg001:887B                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:887E                 xor     bx, bx
+seg001:8880                 add     bx, [si+0Ah]
+seg001:8883                 mov     es, [word ptr si+2]
+seg001:8886                 push    es
+seg001:8887                 push    bx              ; a_DDIM
+seg001:8888                 call    calc_redraw_flags
+seg001:888D                 mov     ax, [word ptr bp+var_36]
+seg001:8890                 inc     ax
+seg001:8891                 mov     [bp-3Ch], ax
+seg001:8894                 lea     bx, [bp+viewpoint_y_pixel]
+seg001:8897                 push    ds
+seg001:8898                 pop     es
+seg001:8899                 push    es
+seg001:889A                 push    bx              ; a_yp
+seg001:889B                 lea     bx, [bp+viewpoint_H_block]
+seg001:889E                 push    ds
+seg001:889F                 pop     es
+seg001:88A0                 push    es
+seg001:88A1                 push    bx              ; a_h
+seg001:88A2                 lea     bx, [bp-3Ch]
+seg001:88A5                 push    ds
+seg001:88A6                 pop     es
+seg001:88A7                 push    es
+seg001:88A8                 push    bx              ; a_x
+seg001:88A9                 lea     bx, [bp+var_3A+2]
+seg001:88AC                 push    ds
+seg001:88AD                 pop     es
+seg001:88AE                 push    es
+seg001:88AF                 push    bx              ; a_y
+seg001:88B0                 mov     si, offset DDIM_buf_glb_map
+seg001:88B3                 xor     bx, bx
+seg001:88B5                 add     bx, [si+0Ah]
+seg001:88B8                 mov     es, [word ptr si+2]
+seg001:88BB                 push    es
+seg001:88BC                 push    bx              ; a_map
+seg001:88BD                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:88C0                 xor     bx, bx
+seg001:88C2                 add     bx, [si+0Ah]
+seg001:88C5                 mov     es, [word ptr si+2]
+seg001:88C8                 push    es
+seg001:88C9                 push    bx              ; a_DDIM
+seg001:88CA                 call    calc_redraw_flags
+seg001:88CF                 cmp     [bp+viewpoint_H_block], 0
+seg001:88D3                 jz      short whole_step
+seg001:88D5                 jmp     not_whole
+seg001:88D8 ; ---------------------------------------------------------------------------
+seg001:88D8
+seg001:88D8 whole_step:                             ; CODE XREF: set_draw_sprite_calc_envelop+2E7↑j
+seg001:88D8                 mov     [word ptr bp+a_h+2], 1
+seg001:88DD                 lea     bx, [bp+viewpoint_y_pixel]
+seg001:88E0                 push    ds
+seg001:88E1                 pop     es
+seg001:88E2                 push    es
+seg001:88E3                 push    bx              ; a_yp
+seg001:88E4                 lea     bx, [bp+a_h+2]
+seg001:88E7                 push    ds
+seg001:88E8                 pop     es
+seg001:88E9                 push    es
+seg001:88EA                 push    bx              ; a_h
+seg001:88EB                 lea     bx, [bp+var_36]
+seg001:88EE                 push    ds
+seg001:88EF                 pop     es
+seg001:88F0                 push    es
+seg001:88F1                 push    bx              ; a_x
+seg001:88F2                 lea     bx, [bp+var_3A+2]
+seg001:88F5                 push    ds
+seg001:88F6                 pop     es
+seg001:88F7                 push    es
+seg001:88F8                 push    bx              ; a_y
+seg001:88F9                 mov     si, offset DDIM_buf_glb_map
+seg001:88FC                 xor     bx, bx
+seg001:88FE                 add     bx, [si+0Ah]
+seg001:8901                 mov     es, [word ptr si+2]
+seg001:8904                 push    es
+seg001:8905                 push    bx              ; a_map
+seg001:8906                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:8909                 xor     bx, bx
+seg001:890B                 add     bx, [si+0Ah]
+seg001:890E                 mov     es, [word ptr si+2]
+seg001:8911                 push    es
+seg001:8912                 push    bx              ; a_DDIM
+seg001:8913                 call    calc_redraw_flags
+seg001:8918                 mov     [word ptr bp+a_h], 1
+seg001:891D                 mov     ax, [word ptr bp+var_36]
+seg001:8920                 dec     ax
+seg001:8921                 mov     [word ptr bp+var_44+2], ax
+seg001:8924                 lea     bx, [bp+viewpoint_y_pixel]
+seg001:8927                 push    ds
+seg001:8928                 pop     es
+seg001:8929                 push    es
+seg001:892A                 push    bx              ; a_yp
+seg001:892B                 lea     bx, [bp+a_h]
+seg001:892E                 push    ds
+seg001:892F                 pop     es
+seg001:8930                 push    es
+seg001:8931                 push    bx              ; a_h
+seg001:8932                 lea     bx, [bp+var_44+2]
+seg001:8935                 push    ds
+seg001:8936                 pop     es
+seg001:8937                 push    es
+seg001:8938                 push    bx              ; a_x
+seg001:8939                 lea     bx, [bp+var_3A+2]
+seg001:893C                 push    ds
+seg001:893D                 pop     es
+seg001:893E                 push    es
+seg001:893F                 push    bx              ; a_y
+seg001:8940                 mov     si, offset DDIM_buf_glb_map
+seg001:8943                 xor     bx, bx
+seg001:8945                 add     bx, [si+0Ah]
+seg001:8948                 mov     es, [word ptr si+2]
+seg001:894B                 push    es
+seg001:894C                 push    bx              ; a_map
+seg001:894D                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:8950                 xor     bx, bx
+seg001:8952                 add     bx, [si+0Ah]
+seg001:8955                 mov     es, [word ptr si+2]
+seg001:8958                 push    es
+seg001:8959                 push    bx              ; a_DDIM
+seg001:895A                 call    calc_redraw_flags
+seg001:895F                 jmp     continue
+seg001:8962 ; ---------------------------------------------------------------------------
+seg001:8962
+seg001:8962 not_whole:                              ; CODE XREF: set_draw_sprite_calc_envelop+2E9↑j
+seg001:8962                 mov     [word ptr bp+var_44], 0
+seg001:8967                 mov     ax, [word ptr bp+var_36]
+seg001:896A                 inc     ax
+seg001:896B                 mov     [word ptr bp+var_48+2], ax
+seg001:896E                 mov     ax, [word ptr bp+var_3A+2]
+seg001:8971                 inc     ax
+seg001:8972                 mov     [word ptr bp+var_48], ax
+seg001:8975                 lea     bx, [bp+viewpoint_y_pixel]
+seg001:8978                 push    ds
+seg001:8979                 pop     es
+seg001:897A                 push    es
+seg001:897B                 push    bx              ; a_yp
+seg001:897C                 lea     bx, [bp+var_44]
+seg001:897F                 push    ds
+seg001:8980                 pop     es
+seg001:8981                 push    es
+seg001:8982                 push    bx              ; a_h
+seg001:8983                 lea     bx, [bp+var_48+2]
+seg001:8986                 push    ds
+seg001:8987                 pop     es
+seg001:8988                 push    es
+seg001:8989                 push    bx              ; a_x
+seg001:898A                 lea     bx, [bp+var_48]
+seg001:898D                 push    ds
+seg001:898E                 pop     es
+seg001:898F                 push    es
+seg001:8990                 push    bx              ; a_y
+seg001:8991                 mov     si, offset DDIM_buf_glb_map
+seg001:8994                 xor     bx, bx
+seg001:8996                 add     bx, [si+0Ah]
+seg001:8999                 mov     es, [word ptr si+2]
+seg001:899C                 push    es
+seg001:899D                 push    bx              ; a_map
+seg001:899E                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:89A1                 xor     bx, bx
+seg001:89A3                 add     bx, [si+0Ah]
+seg001:89A6                 mov     es, [word ptr si+2]
+seg001:89A9                 push    es
+seg001:89AA                 push    bx              ; a_DDIM
+seg001:89AB                 call    calc_redraw_flags
+seg001:89B0                 mov     [word ptr bp+var_4C+2], 0
+seg001:89B5                 mov     ax, [word ptr bp+var_3A+2]
+seg001:89B8                 inc     ax
+seg001:89B9                 mov     [word ptr bp+var_4C], ax
+seg001:89BC                 lea     bx, [bp+viewpoint_y_pixel]
+seg001:89BF                 push    ds
+seg001:89C0                 pop     es
+seg001:89C1                 push    es
+seg001:89C2                 push    bx              ; a_yp
+seg001:89C3                 lea     bx, [bp+var_4C+2]
+seg001:89C6                 push    ds
+seg001:89C7                 pop     es
+seg001:89C8                 push    es
+seg001:89C9                 push    bx              ; a_h
+seg001:89CA                 lea     bx, [bp+var_36]
+seg001:89CD                 push    ds
+seg001:89CE                 pop     es
+seg001:89CF                 push    es
+seg001:89D0                 push    bx              ; a_x
+seg001:89D1                 lea     bx, [bp+var_4C]
+seg001:89D4                 push    ds
+seg001:89D5                 pop     es
+seg001:89D6                 push    es
+seg001:89D7                 push    bx              ; a_y
+seg001:89D8                 mov     si, offset DDIM_buf_glb_map
+seg001:89DB                 xor     bx, bx
+seg001:89DD                 add     bx, [si+0Ah]
+seg001:89E0                 mov     es, [word ptr si+2]
+seg001:89E3                 push    es
+seg001:89E4                 push    bx              ; a_map
+seg001:89E5                 mov     si, offset DDIM_buf_glb_1_redraw
+seg001:89E8                 xor     bx, bx
+seg001:89EA                 add     bx, [si+0Ah]
+seg001:89ED                 mov     es, [word ptr si+2]
+seg001:89F0                 push    es
+seg001:89F1                 push    bx              ; a_DDIM
+seg001:89F2                 call    calc_redraw_flags
+seg001:89F7
+seg001:89F7 continue:                               ; CODE XREF: set_draw_sprite_calc_envelop+373↑j
+seg001:89F7                 mov     ax, [word ptr bp+var_36]
+seg001:89FA                 inc     ax
+seg001:89FB
+seg001:89FB begin_column:                           ; CODE XREF: set_draw_sprite_calc_envelop+221↑j
+seg001:89FB                 mov     [word ptr bp+var_36], ax
+seg001:89FE                 cmp     ax, [word ptr bp+var_36+2]
+seg001:8A01                 jg      short y_continue
+seg001:8A03                 jmp     column_loop
+seg001:8A06 ; ---------------------------------------------------------------------------
+seg001:8A06
+seg001:8A06 y_continue:                             ; CODE XREF: set_draw_sprite_calc_envelop+415↑j
+seg001:8A06                 mov     ax, [word ptr bp+var_3A+2]
+seg001:8A09                 inc     ax
+seg001:8A0A
+seg001:8A0A begin:                                  ; CODE XREF: set_draw_sprite_calc_envelop+20E↑j
+seg001:8A0A                 mov     [word ptr bp+var_3A+2], ax
+seg001:8A0D                 cmp     ax, [bp+yb_max]
+seg001:8A10                 jg      short return
+seg001:8A12                 jmp     line_loop
+seg001:8A15 ; ---------------------------------------------------------------------------
+seg001:8A15
+seg001:8A15 return:                                 ; CODE XREF: set_draw_sprite_calc_envelop+1A4↑j
+seg001:8A15                                         ; set_draw_sprite_calc_envelop+1AF↑j
+seg001:8A15                                         ; set_draw_sprite_calc_envelop+424↑j
+seg001:8A15                 call    B$EXSA          ; clear frame state info
+seg001:8A1A                 retf    0Ch
+seg001:8A1A endp            set_draw_sprite_calc_envelop
+seg001:8A1A
+seg001:8A1D ; ---------------------------------------------------------------------------
+seg001:8A1D
+seg001:8A1D loc_1847D:                              ; CODE XREF: seg001:loc_18049↑j
+seg001:8A1D                 jmp     near ptr byte_184F0</pre> 

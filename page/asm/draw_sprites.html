@@ -1,0 +1,89 @@
+<pre> 
+seg017:14F1 ; =============== S U B R O U T I N E =======================================
+seg017:14F1
+seg017:14F1 ; Attributes: bp-based frame
+seg017:14F1
+seg017:14F1 ; int __stdcall __far draw_sprites(__int32 a_DDIM, __int32 a_return, __int32 a_relative_x)
+seg017:14F1 proc            draw_sprites far        ; CODE XREF: draw_battle_scene+12C↑P
+seg017:14F1                                         ; scanline_draw_normal_scene+C4↑P
+seg017:14F1
+seg017:14F1 a_DDIM          = dword ptr  6
+seg017:14F1 a_return        = dword ptr  0Ah
+seg017:14F1 a_relative_x    = dword ptr  0Eh
+seg017:14F1
+seg017:14F1                 push    bp
+seg017:14F2                 mov     bp, sp
+seg017:14F4                 push    ds
+seg017:14F5                 push    es
+seg017:14F6                 push    si
+seg017:14F7                 push    di
+seg017:14F8                 cld
+seg017:14F9                 mov     ax, [cs:spirite_array_offset]
+seg017:14FD                 mov     dl, 0Ah
+seg017:14FF                 div     dl
+seg017:1501                 xor     ah, ah
+seg017:1503                 or      al, al
+seg017:1505
+seg017:1505 loc_2AB45:
+seg017:1505                 jz      short nothing_to_draw
+seg017:1507                 mov     cx, ax
+seg017:1509                 push    cx
+seg017:150A                 call    sprites_sort
+seg017:150D                 pop     cx
+seg017:150E                 push    cs
+seg017:150F                 pop     ds
+seg017:1510                 assume ds:seg017
+seg017:1510                 mov     si, offset scrn_x
+seg017:1513
+seg017:1513 sprites_draw_loop:                      ; CODE XREF: draw_sprites+66↓j
+seg017:1513                 les     bx, [bp+a_return]
+seg017:1516                 cmp     [word ptr es:bx], 0ABE0h
+seg017:151B                 jnb     short nothing_to_draw
+seg017:151D                 push    cx
+seg017:151E                 push    ds
+seg017:151F                 push    si              ; argu_scrn_x
+seg017:1520                 add     si, 2
+seg017:1523                 lodsw
+seg017:1524                 sub     ax, [si]
+seg017:1526                 add     si, 2
+seg017:1529                 mov     es, [word ptr si]
+seg017:152B                 mov     bx, [si+2]
+seg017:152E                 sub     ax, [es:bx+2]
+seg017:1532                 mov     [cs:derle_y], ax ; Team:6,NPC:7
+seg017:1536                 push    cs
+seg017:1537                 push    offset derle_y  ; argu_scrn_y
+seg017:153A                 les     ax, [bp+a_relative_x]
+seg017:153D                 push    es
+seg017:153E                 push    ax              ; argu_splice_len
+seg017:153F                 push    cs
+seg017:1540                 push    offset effective_scrn_height ; argu_eff_y
+seg017:1543                 les     ax, [bp+a_return]
+seg017:1546                 push    es
+seg017:1547                 push    ax              ; argu_return
+seg017:1548                 lodsw
+seg017:1549                 push    ax
+seg017:154A                 lodsw
+seg017:154B                 push    ax              ; argu_RLEsrc
+seg017:154C                 les     ax, [bp+a_DDIM]
+seg017:154F                 push    es
+seg017:1550                 push    ax              ; argu_DDIM
+seg017:1551                 call    DeRLE_scanline
+seg017:1556                 pop     cx
+seg017:1557                 loop    sprites_draw_loop
+seg017:1559
+seg017:1559 nothing_to_draw:                        ; CODE XREF: draw_sprites:loc_2AB45↑j
+seg017:1559                                         ; draw_sprites+2A↑j
+seg017:1559                 xor     ax, ax
+seg017:155B
+seg017:155B loc_2AB9B:
+seg017:155B                 mov     [cs:spirite_array_offset], ax
+seg017:155F                 pop     di
+seg017:1560                 pop     si
+seg017:1561                 pop     es
+seg017:1562                 pop     ds
+seg017:1563                 assume ds:nothing
+seg017:1563                 pop     bp
+seg017:1564
+seg017:1564 locret_2ABA4:
+seg017:1564                 retf    0Ch
+seg017:1564 endp            draw_sprites</pre> 

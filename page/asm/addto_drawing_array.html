@@ -1,0 +1,55 @@
+<pre> 
+seg017:1473 ; =============== S U B R O U T I N E =======================================
+seg017:1473
+seg017:1473 ; Attributes: bp-based frame
+seg017:1473
+seg017:1473 ; int __stdcall __far addto_drawing_array(__int32 a_addr, __int32 a_layer, __int32 a_y, __int32 a_x)
+seg017:1473 proc            addto_drawing_array far ; CODE XREF: sub_E116+240↑P
+seg017:1473                                         ; sub_E43B+127↑P
+seg017:1473                                         ; sub_E581+133↑P
+seg017:1473                                         ; sub_E581+1AF↑P
+seg017:1473                                         ; sub_E581+221↑P
+seg017:1473                                         ; sub_E7C0+66↑P
+seg017:1473                                         ; sub_E836+A7↑P
+seg017:1473                                         ; set_draw_sprite_calc_envelop+D2↑P
+seg017:1473                                         ; set_draw_sprite_calc_envelop+198↑P
+seg017:1473                                         ; add_brick_to_draw_list+2B↓p
+seg017:1473
+seg017:1473 a_addr          = dword ptr  6
+seg017:1473 a_layer         = dword ptr  0Ah
+seg017:1473 a_y             = dword ptr  0Eh
+seg017:1473 a_x             = dword ptr  12h
+seg017:1473
+seg017:1473                 push    bp
+seg017:1474                 mov     bp, sp
+seg017:1476                 push    ds
+seg017:1477                 push    es
+seg017:1478                 push    si
+seg017:1479                 push    di
+seg017:147A                 cld
+seg017:147B                 mov     bx, [cs:spirite_array_offset]
+seg017:1480                 cmp     bx, 0A00h
+seg017:1484                 jge     short array_overflow
+seg017:1486                 les     di, [bp+a_addr]
+seg017:1489                 lds     si, [bp+a_x]
+seg017:148C                 lodsw
+seg017:148D                 mov     [cs:scrn_x+bx], ax
+seg017:1492                 lds     si, [bp+a_y]
+seg017:1495                 lodsw
+seg017:1496                 mov     [cs:scrn_y+bx], ax
+seg017:149B                 lds     si, [bp+a_layer]
+seg017:149E                 lodsw
+seg017:149F                 mov     [cs:scrn_layer+bx], ax
+seg017:14A4                 mov     [cs:pic_seg+bx], es
+seg017:14A9                 mov     [cs:pic_off+bx], di
+seg017:14AE                 add     bx, 0Ah
+seg017:14B1                 mov     [cs:spirite_array_offset], bx
+seg017:14B6
+seg017:14B6 array_overflow:                         ; CODE XREF: addto_drawing_array+11↑j
+seg017:14B6                 pop     di
+seg017:14B7                 pop     si
+seg017:14B8                 pop     es
+seg017:14B9                 pop     ds
+seg017:14BA                 pop     bp
+seg017:14BB                 retf    10h
+seg017:14BB endp            addto_drawing_array</pre> 
